@@ -6,7 +6,7 @@
 #-------------
 
 """
-Module for various verb functions 
+Module for various verb functions
 """
 #----------------------
 #	Modules Import
@@ -28,18 +28,18 @@ def say(noun = None):
 def examine(noun = 'nothing'):
 	"""Examine an object or enemy"""
 	if (noun != None):
-		if noun in CM.GameObject.objects:
-			return CM.GameObject.objects[noun].getDesc()
+		if noun in CM.GameCharacter.objects:
+			return CM.GameCharacter.objects[noun].getDesc()
 		else:
 			return "There is no {} here".format(noun)
 	else:
 		return "Need target to examine."
-# looks for an object wth name noun in GameObjects object		
+# looks for an object wth name noun in GameObjects object
 def hit(noun = None):
 	"""Hit an enemy"""
 	if (noun != None):
-		if noun in CM.GameObject.objects:
-			thing = CM.GameObject.objects[noun]
+		if noun in CM.GameCharacter.objects:
+			thing = CM.GameCharacter.objects[noun]
 			thing.health = thing.health -1
 			if thing.health <= 0:
 				msg = "You killed the {}!".format(thing.className)
@@ -58,7 +58,7 @@ def help(vHelp = None):
 	if(vHelp != None):				# asking for help on a specific verb
 		if(vHelp in verbDict):		# verb found in dictionary, return docstring
 			helpMsg = helpStr.format(vHelp,verbDict[vHelp].__doc__)
-		else:						
+		else:
 		# verb not found in dictionary, return verbs with same first letter
 			helpMsg = 'No specific action "{}"'.format(vHelp)+'\n'
 			for key in verbDict:
@@ -68,7 +68,11 @@ def help(vHelp = None):
 		for key in verbDict:
 			helpMsg += helpStr.format(key,verbDict[key].__doc__)
 	return helpMsg.strip()	# removes trailing newline character
-	
+
+def take(takeItem = None):
+"""Pick up item and add to inventory"""
+	return
+
 def getInput():
 	command = input(": ").split()
 	verbIn = command[0]
@@ -81,11 +85,12 @@ def getInput():
 		nounIn = command[1]
 		print(verb(nounIn))
 	else:
-		print(verb())		
+		print(verb())
 # Verb Dictionary
 verbDict = {
 	"say": say,
 	"examine": examine,
 	"hit": hit,
-	"help":help,
+	"help": help,
+	"take": take,
 }

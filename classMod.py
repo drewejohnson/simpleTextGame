@@ -9,30 +9,25 @@
 Creation of various game objects and creatures
 """
 
-class GameObject:
+class GameCharacter:
 	className = ""
 	desc = ""
 	objects = {}
-	
+
 	def __init__(self,name):
 		self.name = name
 		GameObject.objects[self.className] = self
-		
+
 	def getDesc(self):
 		return self.className+"\n"+self.desc
 
-class PlayerItems:
-	hands = {}
-	chest = {}
-	head = {}
-		
-class Goblin(GameObject):
+class Goblin(GameCharacter):
 	def __init__(self,name):
 		self.className = "goblin"
 		self.health = 3
 		super().__init__(name)
 		self._desc = "A foul creature called "+self.name
-		
+
 	@property
 	def desc(self):	# function for modifying the health line
 		if self.health >= 3:
@@ -44,14 +39,19 @@ class Goblin(GameObject):
 		elif self.health <= 0:
 			healthLine = "It is dead."
 		return self._desc+"\n"+healthLine
-	
+
 	@desc.setter
 	def desc(self,value):
 		self._desc = value
-		
+
 class Adventurer(GameObject):
 	def __init__(self,name):
 		self.className = "Adventurer"
 		self.health = 5
 		super().__init__(name)
 		self._desc = "A brave adventurer named"+self.name
+# Items for hands, legs, head, and backpack
+		self.hands = []
+		self.legs = []
+		self.head = []
+		self.pack = []
