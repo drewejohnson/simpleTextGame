@@ -5,7 +5,8 @@
 # A Simple Text-Based Game
 #---------------------
 """
-A simple text-based game where you explore a maze, fight monsters, and obtain gear.
+A simple text-based game where you explore a maze,
+fight monsters, and obtain gear.
 """
 
 #----------------------
