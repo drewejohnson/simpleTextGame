@@ -62,3 +62,24 @@ def help(vHelp = None):
 			return "{0:10s}{1:20s}".format('examine',examine.__doc__)
 	else:
 		return 'Arbitrary help to come later'
+
+def getInput():
+	command = input(": ").split()
+	verbIn = command[0]
+	if verbIn in verbDict:
+		verb = verbDict[verbIn]
+	else:
+		print("Unknown verb {}".format(verbIn))
+		return
+	if len(command)>=2:
+		nounIn = command[1]
+		print(verb(nounIn))
+	else:
+		print(verb())		
+# Verb List
+verbDict = {
+	"say": say,
+	"examine": examine,
+	"hit": hit,
+	"help":help,
+}
