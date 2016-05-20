@@ -26,7 +26,7 @@ class Goblin(GameCharacter):
 		self.className = "goblin"
 		self.health = 3
 		super().__init__(name)
-		self._desc = "A foul creature called "+self.name
+		self._desc = "A foul goblin called "+self.name
 
 	@property
 	def desc(self):	# function for modifying the health line
@@ -49,9 +49,9 @@ class Adventurer(GameCharacter):
 		self.className = "Adventurer"
 		self.health = 5
 		super().__init__(name)
-		self._desc = "A brave adventurer named"+self.name
+		self.desc = "A brave adventurer named"+self.name
 # Items for hands, legs, head, and backpack
-		self.hands = []
-		self.legs = []
-		self.head = []
-		self.pack = []
+		self.hands = None
+		self.legs = None
+		self.head = None
+		self.pack = {}

@@ -20,14 +20,15 @@ import itemMod as IM
 #------------
 # Creatures
 #------------
-goblin = CM.Goblin("Gobbly")
+gobbly = CM.Goblin("Gobbly")
 #------------
 # Game
 #------------
 pName = input("What is your name, brave adventurer: \n")
 player = CM.Adventurer(pName)
 startSword = IM.Sword("trusty")
-print("And so, "+pName+", armed with their",startSword.itemName.strip(),\
-	startSword.itemType.strip(),"parted on their brave quest into the unknown!")
+print(VFM.take(startSword.itemName))
+print("And so, "+pName+" and their",startSword.itemName,startSword.itemType,\
+	"began their brave quest into the unknown!")
 while True:
 	VFM.getInput()
