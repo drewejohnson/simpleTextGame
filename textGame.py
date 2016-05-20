@@ -14,7 +14,13 @@ A simple text-based game where you explore a maze, fight monsters, and obtain ge
 
 import verbFuncMod as VFM
 import classMod as CM
+import launch
 
+#--------------
+# Launch screen
+#--------------
+gameSpace = 40
+launch.prettyIntro(gameSpace,__doc__)
 #------------
 # Creatures
 #------------
@@ -22,7 +28,7 @@ goblin = CM.Goblin("Gobbly")
 #------------
 # Game
 #------------
-pName = input("What is your name, brave adventurer: \n")
+pName = input("What is your name, brave adventurer?\n: ")
 player = CM.Adventurer(pName)
 print("And so, "+pName+' departed on their brave quest into the unknown!')
 while True:
