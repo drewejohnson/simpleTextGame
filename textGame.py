@@ -26,8 +26,7 @@ def getInput():
 	else:
 		print("Unknown verb {}".format(verbIn))
 		return
-	
-	if len(command)> 1:
+	if len(command)>=2:
 		nounIn = command[1]
 		print(verb(nounIn))
 	else:
@@ -37,6 +36,7 @@ verbDict = {
 	"say": VFM.say,
 	"examine": VFM.examine,
 	"hit": VFM.hit,
+	"help":VFM.help,
 }
 
 #------------
@@ -46,5 +46,8 @@ goblin = CM.Goblin("Gobbly")
 #------------
 # Game
 #------------
+pName = input("What is your name, brave adventurer: \n")
+player = CM.Adventurer(pName)
+print("And so, "+pName+' departed on their brave quest into the unknown!')
 while True:
 	getInput()

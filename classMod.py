@@ -20,6 +20,11 @@ class GameObject:
 		
 	def getDesc(self):
 		return self.className+"\n"+self.desc
+
+class PlayerItems:
+	hands = {}
+	chest = {}
+	head = {}
 		
 class Goblin(GameObject):
 	def __init__(self,name):
@@ -43,3 +48,10 @@ class Goblin(GameObject):
 	@desc.setter
 	def desc(self,value):
 		self._desc = value
+		
+class Adventurer(GameObject):
+	def __init__(self,name):
+		self.className = "Adventurer"
+		self.health = 5
+		super().__init__(name)
+		self._desc = "A brave adventurer named"+self.name
