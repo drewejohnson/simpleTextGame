@@ -1,6 +1,6 @@
 #-----------
 # Andrew Johnson
-# 19 May 2016
+# 20 May 2016
 #
 # Simple Text based Game
 #-----------
@@ -16,7 +16,7 @@ class GameCharacter:
 
 	def __init__(self,name):
 		self.name = name
-		GameObject.objects[self.className] = self
+		GameCharacter.objects[self.className] = self
 
 	def getDesc(self):
 		return self.className+"\n"+self.desc
@@ -44,7 +44,7 @@ class Goblin(GameCharacter):
 	def desc(self,value):
 		self._desc = value
 
-class Adventurer(GameObject):
+class Adventurer(GameCharacter):
 	def __init__(self,name):
 		self.className = "Adventurer"
 		self.health = 5

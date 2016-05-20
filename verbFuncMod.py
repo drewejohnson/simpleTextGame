@@ -1,6 +1,6 @@
 #-------------
 # Andrew Johnson
-# 19 May, 2016
+# 20 May, 2016
 #
 # Simple Text based Game
 #-------------
@@ -70,7 +70,7 @@ def help(vHelp = None):
 	return helpMsg.strip()	# removes trailing newline character
 
 def take(takeItem = None):
-"""Pick up item and add to inventory"""
+	"""Pick up item and add to inventory"""
 	return
 
 def getInput():
