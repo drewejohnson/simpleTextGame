@@ -12,6 +12,7 @@ Module for various verb functions
 #	Modules Import
 #----------------------
 import classMod as CM
+import string
 
 #----------------------
 #	Verb Functions
@@ -51,18 +52,23 @@ def hit(noun = None):
 	return msg
 
 def help(vHelp = None):
-	"""Give help on specific actions"""
-	vList = ['say','help','examine']
-	if(vHelp != None):
-		if(vHelp[0] == 's'):
-			return "{0:10s}{1:20s}".format('say',say.__doc__)
-		elif(vHelp[0] == 'h'):
-			return "{0:10s}{1:20s}".format('hit',hit.__doc__)
-		elif(vHelp[0] == 'e'):
-			return "{0:10s}{1:20s}".format('examine',examine.__doc__)
+	"""Return descriptions on various actions"""
+	helpMsg = ""
+	helpStr = "{0:10s}{1:20s}\n"
+	if(vHelp != None):				# asking for help on a specific verb
+		if(vHelp in verbDict):		# verb found in dictionary, return docstring
+			helpMsg = helpStr.format(vHelp,verbDict[vHelp].__doc__)
+		else:						
+		# verb not found in dictionary, return verbs with same first letter
+			helpMsg = 'No specific action "{}"'.format(vHelp)+'\n'
+			for key in verbDict:
+				if(vHelp[0]==key[0]):
+					helpMsg += helpStr.format(key,verbDict[key].__doc__)
 	else:
-		return 'Arbitrary help to come later'
-
+		for key in verbDict:
+			helpMsg += helpStr.format(key,verbDict[key].__doc__)
+	return helpMsg.strip()	# removes trailing newline character
+	
 def getInput():
 	command = input(": ").split()
 	verbIn = command[0]
@@ -76,7 +82,7 @@ def getInput():
 		print(verb(nounIn))
 	else:
 		print(verb())		
-# Verb List
+# Verb Dictionary
 verbDict = {
 	"say": say,
 	"examine": examine,
