@@ -4,12 +4,21 @@
 #
 # A Simple Text-Based Game
 #---------------------
-
-# Create simple game to demonstrate the power of objects
+"""
+A simple text-based game where you explore a maze, fight monsters, and obtain gear.
+"""
 
 #----------------------
-# Creation of various game objects and creatures
+#		Module Import
 #----------------------
+
+import verbFuncMod as VFM
+
+#----------------------
+# 	Creation of various game 
+#	objects and creatures
+#----------------------
+
 class GameObject:
 	className = ""
 	desc = ""
@@ -62,31 +71,10 @@ def getInput():
 	else:
 		print(verb())
 		
-def say(noun):
-	return 'You said "{}"'.format(noun)
-
-def examine(noun):
-	if noun in GameObject.objects:
-		return GameObject.objects[noun].getDesc()
-	else:
-		return "There is no {} here".format(noun)
-# looks for an object wth name noun in GameObjects object		
-def hit(noun):
-	if noun in GameObject.objects:
-		thing = GameObject.objects[noun]
-		thing.health = thing.health -1
-		if thing.health <= 0:
-			msg = "You killed the {}!".format(thing.className)
-		else:
-			msg = "You hit the {}".format(thing.className)
-	else:
-		msg = "There is no {} here.".format(noun)
-	return msg
-		
 verbDict = {
-	"say": say,
-	"examine": examine,
-	"hit": hit,
+	"say": VFM.say,
+	"examine": VFM.examine,
+	"hit": VFM.hit,
 }
 
 #------------
