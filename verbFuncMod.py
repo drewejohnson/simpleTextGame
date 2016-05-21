@@ -59,7 +59,7 @@ def take(takeItem = None):
 	if(takeItem != None):
 		if takeItem in IM.RoomItem.objects:
 			thing = IM.RoomItem.objects[takeItem]
-			CM.Adventurer.pack[takeItem] = thing
+			CM.Player.pack[takeItem] = thing
 			takeMsg = "You picked up the {0} {1}".format(takeItem,\
 				thing.itemType)
 		else:
