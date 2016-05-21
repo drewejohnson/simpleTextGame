@@ -77,7 +77,7 @@ def getInput():
 		print("Unknown verb {}".format(verbIn))
 		return
 	if len(command)>=2:
-		nounIn = command[1]
+		nounIn = command[1].lower()
 		print(verb(nounIn))
 	else:
 		print(verb())
@@ -100,6 +100,44 @@ def help(vHelp = None):
 			helpMsg += helpStr.format(key,verbDict[key].__doc__)
 	return helpMsg.strip()	# removes trailing newline character
 
+def equip(equipObj = None):
+	"""Equip an object from your pack"""
+	if(equipObj == None):
+		return 'Need target to equip'
+	else:
+		if equipObj in CM.Player.pack:
+			thing = CM.Player.pack[equipObj]
+			if (thing.equipSlot[0] == 'a'):
+				if (len(CM.Player.arms)<=2):
+					CM.Player.arms[equipObj] = thing
+					del(CM.Player.pack[equipObj])
+					return "You equipped the {0} {1} to arms.".\
+						format(thing.itemName,thing.itemType)
+				else:
+					return equipFull('arms')
+			elif(thing.equipSlot[0] == 'l'):
+				if(len(CM.Player.legs)<=2):
+					CM.Player.legs[equipObj] = thing
+					del(CM.Player.pack[equipObj])
+					return "You equipped the {0} {1} to legs.".\
+						format(thing.itemName,thing.itemType)
+				else:
+					return equipFull('legs')
+			elif(thing.equipSlot[0] == 'h'):
+				if(len(CM.Player.head)<=1):
+					CM.Player.head[equipObj] = thing
+					del(CM.Player.pack[equipObj])
+					return "You equipped the {0} {1} to head.".\
+						format(thing.itemName,thing.itemType)
+				else:
+					return equipFull('head')
+		else:
+			return "No item {} in pack.".format(equipObj)
+
+def equipFull(equipSlot):
+	"""Error message for equipping an item to a full slot"""
+	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
+
 # Verb Dictionary
 verbDict = {
 	"say": say,
@@ -107,4 +145,5 @@ verbDict = {
 	"hit": hit,
 	"help": help,
 	"take": take,
+	"equip":equip
 }

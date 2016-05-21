@@ -24,5 +24,5 @@ class RoomItem:
 class Sword(RoomItem):
     def __init__(self,name):
         self.itemType = "sword"
-        self.equipSlot = "hand"
+        self.equipSlot = "arms"
         super().__init__(name)

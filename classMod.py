@@ -47,18 +47,53 @@ class Goblin(GameCharacter):
 		self._desc = value
 
 class Player(GameCharacter):
-	hands = {}
+	arms = {}
 	legs = {}
 	head = {}
 	pack = {}
-
+# Items for hands, legs, head, and backpack
 	def __init__(self,name):
 		self.className = "Adventurer"
 		self.health = 5
 		super().__init__(name)
-		self.desc = "A brave adventurer named "+self.name.capitalize()
-# Items for hands, legs, head, and backpack
+		self._desc = "A brave adventurer named "+self.name.capitalize()
 
 
-	def packUpdate(self,itemName):
-		Adventurer.pack[self.itemName] = self
+	@property
+	def desc(self):
+		"""Returns a string with the inventory of the player"""
+# Maye put the parsing through dictionaries into a class method at some point
+		inventory = "Inventory:\n"
+		inventory += "Arms: "
+		if(len(self.arms)==0):
+			inventory +="Nothing\n"
+		else:
+			for item in self.arms:
+				inventory += "{0} {1}\n".format(self.arms[item].itemName,\
+					self.arms[item].itemType)
+		inventory += "Legs: "
+		if(len(self.legs)==0):
+			inventory +="Nothing\n"
+		else:
+			for item in self.legs:
+				inventory += "{0} {1}\n".format(self.legs[item].itemName,\
+					self.legs[item].itemType)
+		inventory += "Head: "
+		if(len(self.head)==0):
+			inventory +="Nothing\n"
+		else:
+			for item in self.head:
+				inventory += "{0} {1}\n".format(self.head[item].itemName,\
+					self.head[item].itemType)
+		inventory += "Pack: "
+		if(len(self.pack)==0):
+			inventory += "Nothing\n"
+		else:
+			for item in self.pack:
+				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
+					self.pack[item].itemType)
+		return self._desc+"\n"+inventory.rstrip()
+
+	@desc.setter
+	def desc(self,value):
+			self._desc = value
