@@ -24,11 +24,13 @@ def say(noun = None):
 	else:
 		return 'You said nothing.'
 
-def examine(noun = 'nothing'):
-	"""Examine an object or enemy"""
+def examine(noun = None):
+	"""Examine an object, enemy, or player"""
 	if (noun != None):
 		if noun in CM.GameCharacter.objects:
 			return CM.GameCharacter.objects[noun].getDesc()
+#		elif noun in IM.RoomItem.objects:
+#			return IM.RoomItem.objects[noun]
 		else:
 			return "There is no {} here".format(noun)
 	else:
@@ -57,9 +59,8 @@ def take(takeItem = None):
 	if(takeItem != None):
 		if takeItem in IM.RoomItem.objects:
 			thing = IM.RoomItem.objects[takeItem]
-			print('Thing: ',thing)
-			print('takeItem: ',takeItem)
-			takeMsg = "You picked up the {0} {1}".format(thing.itemName,\
+			CM.Adventurer.pack[takeItem] = thing
+			takeMsg = "You picked up the {0} {1}".format(takeItem,\
 				thing.itemType)
 		else:
 			takeMsg = "There is no {} here".format(takeItem)
@@ -69,7 +70,7 @@ def take(takeItem = None):
 
 def getInput():
 	command = input(": ").split()
-	verbIn = command[0]
+	verbIn = command[0].lower()
 	if verbIn in verbDict:
 		verb = verbDict[verbIn]
 	else:

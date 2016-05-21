@@ -16,7 +16,8 @@ class GameCharacter:
 
 	def __init__(self,name):
 		self.name = name
-		GameCharacter.objects[self.className] = self
+		GameCharacter.objects[self.name] = self
+		# self.name stores keys as character names, not classNames
 
 	def getDesc(self):
 		return self.className+"\n"+self.desc
@@ -30,28 +31,34 @@ class Goblin(GameCharacter):
 
 	@property
 	def desc(self):	# function for modifying the health line
+		healthLine = "Health: {}".format(self.health)
 		if self.health >= 3:
-			return self._desc
+			statusLine = "Full strength."
 		elif self.health == 2:
-			healthLine = "It has a wound on its knee."
+			statusLine = "It has a wound on its knee."
 		elif self.health == 1:
-			healthLine = "Its left arm has been cut off!"
+			statusLine = "Its left arm has been cut off!"
 		elif self.health <= 0:
-			healthLine = "It is dead."
-		return self._desc+"\n"+healthLine
+			statusLine = "It is dead."
+		return self._desc+"\n"+healthLine+"\n"+statusLine
 
 	@desc.setter
 	def desc(self,value):
 		self._desc = value
 
 class Adventurer(GameCharacter):
+	hands = {}
+	legs = {}
+	head = {}
+	pack = {}
+
 	def __init__(self,name):
 		self.className = "Adventurer"
 		self.health = 5
 		super().__init__(name)
-		self.desc = "A brave adventurer named"+self.name
+		self.desc = "A brave adventurer named "+self.name
 # Items for hands, legs, head, and backpack
-		self.hands = None
-		self.legs = None
-		self.head = None
-		self.pack = {}
+
+
+	def packUpdate(self,itemName):
+		Adventurer.pack[self.itemName] = self
