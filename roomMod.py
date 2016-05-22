@@ -9,6 +9,27 @@
 This module contains functions for populating rooms with monsters
 and gear, and will include the generation of the map
 """
+
+roomsX = 5
+roomsY = 5
+
+class RoomClass:
+    """Class for a given room. Dictionaries are for items
+        and enemies that are found in the room
+    """
+    items = {}
+    enemies = {}
+    location = []
+
+#------------
+# Basic Rooms
+#------------
+
+class startRoom(RoomClass):
+    """First room. Mainly for testing features"""
+    def __init__(self):
+        self.location = [roomsX//2,1]
+# Assume game space is a 5x5 grid. Start at center edge (5,0)
 #------------------------------
 # Functions for room populating
 #------------------------------

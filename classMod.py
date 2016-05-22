@@ -5,6 +5,10 @@
 # Simple Text based Game
 #-----------
 
+#------------
+# Imports
+#------------
+#Import roomMod as RM
 """
 Creation of various game objects and creatures
 """
@@ -13,8 +17,9 @@ class GameCharacter:
 	className = ""
 	desc = ""
 	objects = {}
+	location = []
 
-	def __init__(self,name):
+	def __init__(self,name,locX,locY):
 		self.name = name
 		GameCharacter.objects[self.name] = self
 		# self.name stores keys as character names, not classNames
@@ -23,10 +28,10 @@ class GameCharacter:
 		return "Class: "+self.className+"\n"+self.desc
 
 class Goblin(GameCharacter):
-	def __init__(self,name):
+	def __init__(self,name,locX,locY):
 		self.className = "goblin"
 		self.health = 3
-		super().__init__(name)
+		super().__init__(name,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
 	@property
@@ -52,17 +57,20 @@ class Player(GameCharacter):
 	head = {}
 	pack = {}
 # Items for hands, legs, head, and backpack
-	def __init__(self,name):
+#	location = [3,1]
+# Assume game space is a 5x5 grid. Start at center edge (5,0)
+
+	def __init__(self,name,locX,locY):
 		self.className = "Adventurer"
 		self.health = 5
-		super().__init__(name)
+		super().__init__(name,locX,locY)
 		self._desc = "A brave adventurer named "+self.name.capitalize()
 
 
 	@property
 	def desc(self):
 		"""Returns a string with the inventory of the player"""
-# Maye put the parsing through dictionaries into a class method at some point
+# Maybe put the parsing through dictionaries into a class method at some point
 		inventory = "Inventory:\n"
 		inventory += "Arms: "
 		if(len(self.arms)==0):
