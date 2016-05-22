@@ -15,11 +15,8 @@ fight monsters, and obtain gear.
 
 import verbFuncMod as VFM
 import classMod as CM
-<<<<<<< HEAD
 import itemMod as IM
-=======
 import launch
->>>>>>> refs/remotes/origin/master
 
 #--------------
 # Launch screen
