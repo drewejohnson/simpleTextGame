@@ -45,9 +45,9 @@ def hit(noun = None):
 # thing is the class of noun
 			thing.health = thing.health -1
 			if thing.health <= 0:
-				msg = "You killed the {}!".format(thing.className)
+				msg = "You killed {}!".format(thing.name)
 			else:
-				msg = "You hit the {}".format(thing.className)
+				msg = "You hit {}".format(thing.name)
 		else:
 			msg = "There is no {} here.".format(noun)
 	else:
