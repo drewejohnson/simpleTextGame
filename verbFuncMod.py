@@ -1,19 +1,18 @@
 #-------------
 # Andrew Johnson
-# 19 May, 2016
+# 20 May, 2016
 #
 # Simple Text based Game
 #-------------
 
 """
-Module for various verb functions 
+Module for various verb functions
 """
 #----------------------
 #	Modules Import
 #----------------------
 import classMod as CM
-import string
-
+import itemMod as IM
 #----------------------
 #	Verb Functions
 #----------------------
@@ -25,31 +24,63 @@ def say(noun = None):
 	else:
 		return 'You said nothing.'
 
-def examine(noun = 'nothing'):
-	"""Examine an object or enemy"""
+def examine(noun = None):
+	"""Examine an object, enemy, or player"""
 	if (noun != None):
-		if noun in CM.GameObject.objects:
-			return CM.GameObject.objects[noun].getDesc()
+		if noun in CM.GameCharacter.objects:
+			return CM.GameCharacter.objects[noun].getDesc()
+#		elif noun in IM.RoomItem.objects:
+#			return IM.RoomItem.objects[noun]
 		else:
 			return "There is no {} here".format(noun)
 	else:
 		return "Need target to examine."
-# looks for an object wth name noun in GameObjects object		
+# looks for an object wth name noun in GameCharacter
 def hit(noun = None):
 	"""Hit an enemy"""
 	if (noun != None):
-		if noun in CM.GameObject.objects:
-			thing = CM.GameObject.objects[noun]
+		if noun in CM.GameCharacter.objects:
+# there is a noun to hit
+			thing = CM.GameCharacter.objects[noun]
+# thing is the class of noun
 			thing.health = thing.health -1
 			if thing.health <= 0:
-				msg = "You killed the {}!".format(thing.className)
+				msg = "You killed {}!".format(thing.name)
 			else:
-				msg = "You hit the {}".format(thing.className)
+				msg = "You hit {}".format(thing.name)
 		else:
 			msg = "There is no {} here.".format(noun)
 	else:
 		msg = 'Need target to hit'
 	return msg
+
+def take(takeItem = None):
+	"""Pick up item and add to inventory"""
+	if(takeItem != None):
+		if takeItem in IM.RoomItem.objects:
+			thing = IM.RoomItem.objects[takeItem]
+			CM.Player.pack[takeItem] = thing
+			takeMsg = "You picked up the {0} {1}".format(takeItem,\
+				thing.itemType)
+		else:
+			takeMsg = "There is no {} here".format(takeItem)
+	else:
+		takeMsg = "Need target to take"
+	return takeMsg
+
+def getInput():
+	command = input(": ").split()
+	verbIn = command[0].lower()
+	if verbIn in verbDict:
+		verb = verbDict[verbIn]
+	else:
+		print("Unknown verb {}".format(verbIn))
+		return
+	if len(command)>=2:
+		nounIn = command[1].lower()
+		print(verb(nounIn))
+	else:
+		print(verb())
 
 def help(vHelp = None):
 	"""Return descriptions on various actions"""
@@ -58,7 +89,7 @@ def help(vHelp = None):
 	if(vHelp != None):				# asking for help on a specific verb
 		if(vHelp in verbDict):		# verb found in dictionary, return docstring
 			helpMsg = helpStr.format(vHelp,verbDict[vHelp].__doc__)
-		else:						
+		else:
 		# verb not found in dictionary, return verbs with same first letter
 			helpMsg = 'No specific action "{}"'.format(vHelp)+'\n'
 			for key in verbDict:
@@ -68,24 +99,51 @@ def help(vHelp = None):
 		for key in verbDict:
 			helpMsg += helpStr.format(key,verbDict[key].__doc__)
 	return helpMsg.strip()	# removes trailing newline character
-	
-def getInput():
-	command = input(": ").split()
-	verbIn = command[0]
-	if verbIn in verbDict:
-		verb = verbDict[verbIn]
+
+def equip(equipObj = None):
+	"""Equip an object from your pack"""
+	if(equipObj == None):
+		return 'Need target to equip'
 	else:
-		print("Unknown verb {}".format(verbIn))
-		return
-	if len(command)>=2:
-		nounIn = command[1]
-		print(verb(nounIn))
-	else:
-		print(verb())		
+		if equipObj in CM.Player.pack:
+			thing = CM.Player.pack[equipObj]
+			if (thing.equipSlot[0] == 'a'):
+				if (len(CM.Player.arms)<=2):
+					CM.Player.arms[equipObj] = thing
+					del(CM.Player.pack[equipObj])
+					return "You equipped the {0} {1} to arms.".\
+						format(thing.itemName,thing.itemType)
+				else:
+					return equipFull('arms')
+			elif(thing.equipSlot[0] == 'l'):
+				if(len(CM.Player.legs)<=2):
+					CM.Player.legs[equipObj] = thing
+					del(CM.Player.pack[equipObj])
+					return "You equipped the {0} {1} to legs.".\
+						format(thing.itemName,thing.itemType)
+				else:
+					return equipFull('legs')
+			elif(thing.equipSlot[0] == 'h'):
+				if(len(CM.Player.head)<=1):
+					CM.Player.head[equipObj] = thing
+					del(CM.Player.pack[equipObj])
+					return "You equipped the {0} {1} to head.".\
+						format(thing.itemName,thing.itemType)
+				else:
+					return equipFull('head')
+		else:
+			return "No item {} in pack.".format(equipObj)
+
+def equipFull(equipSlot):
+	"""Error message for equipping an item to a full slot"""
+	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
+
 # Verb Dictionary
 verbDict = {
 	"say": say,
 	"examine": examine,
 	"hit": hit,
-	"help":help,
+	"help": help,
+	"take": take,
+	"equip":equip
 }
