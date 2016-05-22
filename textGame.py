@@ -33,7 +33,7 @@ gobbly = CM.Goblin("gobbly")
 #------------
 # Game
 #------------
-<<<<<<< HEAD
+
 pName = input("What is your name, brave adventurer: \n")
 player = CM.Player(pName.lower())
 startSword = IM.Sword("trusty")
@@ -41,10 +41,5 @@ print(VFM.take(startSword.itemName))
 print("And so, "+pName.capitalize()+" and their",\
 	startSword.itemName,startSword.itemType,\
 	"began their brave quest into the unknown!")
-=======
-pName = input("What is your name, brave adventurer?\n: ")
-player = CM.Adventurer(pName)
-print("And so, "+pName+' departed on their brave quest into the unknown!')
->>>>>>> refs/remotes/origin/master
 while True:
 	VFM.getInput()
