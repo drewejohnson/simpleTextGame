@@ -1,6 +1,5 @@
 #-----------------------
 # Andrew Johnson
-# 20 May, 2016
 
 # Text Based Python Game
 #-----------------------
