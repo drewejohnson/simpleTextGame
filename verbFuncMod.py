@@ -83,7 +83,7 @@ def getInput():
 
 def help(vHelp = None):
 	"""Return descriptions on various actions"""
-	helpMsg = ""
+	helpMsg = " "
 	helpStr = "{0:10s} -{1:20s}\n"
 	if(vHelp != None):
 		if(vHelp in verbDict):
@@ -98,22 +98,6 @@ def help(vHelp = None):
 		for key in sortedVerbs:
 			helpMsg += helpStr.format(key,verbDict[key].__doc__)
 	return helpMsg.strip()
-
-
-def getInput():
-	command = input(": ").split()
-	verbIn = command[0]
-	if verbIn in verbDict:
-		verb = verbDict[verbIn]
-	else:
-		print("Unknown verb {}".format(verbIn))
-		return
-	if len(command)>=2:
-		nounIn = command[1]
-		print(verb(nounIn))
-	else:
-		print(verb())
-	return helpMsg.strip()	# removes trailing newline character
 
 def equip(equipObj = None):
 	"""Equip an object from your pack"""
@@ -158,11 +142,6 @@ verbDict = {
 	"say": say,
 	"examine": examine,
 	"hit": hit,
-	"help":help,
+	"help": help,
 }
 sortedVerbs = sorted(verbDict)
-
-	"help": help,
-	"take": take,
-	"equip":equip
-}
