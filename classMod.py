@@ -1,6 +1,5 @@
 #-----------
 # Andrew Johnson
-# 20 May 2016
 #
 # Simple Text based Game
 #-----------

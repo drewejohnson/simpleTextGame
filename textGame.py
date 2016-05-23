@@ -1,6 +1,5 @@
 #-------------------
 # Andrew Johnson
-# 20 May, 2016
 #
 # A Simple Text-Based Game
 #---------------------
@@ -22,7 +21,7 @@ import launch
 # Launch screen
 #--------------
 gameSpace = 40
-launch.prettyIntro(gameSpace,__doc__)
+launch.launchScreen(gameSpace,__doc__)
 #------------
 # Creatures
 #------------
