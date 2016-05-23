@@ -6,7 +6,7 @@
 #-------------
 
 """
-Module for various verb functions 
+Module for various verb functions
 """
 #----------------------
 #	Modules Import
@@ -34,7 +34,7 @@ def examine(noun = 'nothing'):
 			return "There is no {} here".format(noun)
 	else:
 		return "Need target to examine."
-# looks for an object wth name noun in GameObjects object		
+# looks for an object wth name noun in GameObjects object
 def hit(noun = None):
 	"""Hit an enemy"""
 	if (noun != None):
@@ -54,21 +54,21 @@ def hit(noun = None):
 def help(vHelp = None):
 	"""Return descriptions on various actions"""
 	helpMsg = ""
-	helpStr = "{0:10s}{1:20s}\n"
-	if(vHelp != None):				# asking for help on a specific verb
-		if(vHelp in verbDict):		# verb found in dictionary, return docstring
+	helpStr = "{0:10s} -{1:20s}\n"
+	if(vHelp != None):
+		if(vHelp in verbDict):
 			helpMsg = helpStr.format(vHelp,verbDict[vHelp].__doc__)
-		else:						
-		# verb not found in dictionary, return verbs with same first letter
+		else:
 			helpMsg = 'No specific action "{}"'.format(vHelp)+'\n'
-			for key in verbDict:
+			for key in sortedVerbs:
 				if(vHelp[0]==key[0]):
 					helpMsg += helpStr.format(key,verbDict[key].__doc__)
 	else:
-		for key in verbDict:
+		for key in sortedVerbs:
 			helpMsg += helpStr.format(key,verbDict[key].__doc__)
-	return helpMsg.strip()	# removes trailing newline character
-	
+	return helpMsg.strip()
+
+
 def getInput():
 	command = input(": ").split()
 	verbIn = command[0]
@@ -81,7 +81,7 @@ def getInput():
 		nounIn = command[1]
 		print(verb(nounIn))
 	else:
-		print(verb())		
+		print(verb())
 # Verb Dictionary
 verbDict = {
 	"say": say,
@@ -89,3 +89,4 @@ verbDict = {
 	"hit": hit,
 	"help":help,
 }
+sortedVerbs = sorted(verbDict)
