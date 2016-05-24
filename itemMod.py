@@ -7,7 +7,7 @@
 
 """
 This module contains classes for item creation plus
-a bunch of spawn-able items
+adjectives for enhancing objects
 """
 
 class RoomItem:
@@ -44,3 +44,33 @@ class Helmet(RoomItem):
         self.itemType = 'helmet'
         self.equipSlot = 'head'
         super().__init__(name)
+
+lowRareAdj = {
+    "simple":"a1"
+    "sturdy":"d1"
+    "pointy":"a2"
+    "durable":"d2"
+    "shiny":"d2"
+    "crooked":"a1"
+    "decent":"a3"
+    "adequate":"h1"
+    "lucky":"d2a2h2"
+    "smart":"h2"
+}
+
+medRareAdj = {
+    "sharp":"a5"
+    "protective":"d4a3h2"
+    "viscious":"a5d4"
+    "perceptive":"h4d3"
+    "strong":"d5"
+    "dangerous":"a6"
+    "intimidating":"h"
+
+}
+highRareAdj = {
+    "legendary":"a7d5h5"
+    "wise":"h7d5"
+    "robust":"d7a5"
+    "deadly":"a6d5"
+}

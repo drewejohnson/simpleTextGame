@@ -4,7 +4,7 @@
 #-----------------------
 
 
-"""module containing items and adjectives for spawning items"""
+"""module containing items and methods for spawning items"""
 
 #---------------
 # Module Import
