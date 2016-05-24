@@ -28,8 +28,6 @@ def examine(noun = None):
 	if (noun != None):
 		if noun in CM.GameCharacter.objects:
 			return CM.GameCharacter.objects[noun].getDesc()
-#		elif noun in IM.RoomItem.objects:
-#			return IM.RoomItem.objects[noun]
 		else:
 			return "There is no {} here".format(noun)
 	else:
@@ -101,6 +99,7 @@ def help(vHelp = None):
 
 def equip(equipObj = None):
 	"""Equip an object from your pack"""
+	equipStr = "You equiped the "
 	if(equipObj == None):
 		return 'Need target to equip'
 	else:
@@ -110,7 +109,7 @@ def equip(equipObj = None):
 				if (len(CM.Player.arms)<=2):
 					CM.Player.arms[equipObj] = thing
 					del(CM.Player.pack[equipObj])
-					return "You equipped the {0} {1} to arms.".\
+					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
 				else:
 					return equipFull('arms')
@@ -118,7 +117,7 @@ def equip(equipObj = None):
 				if(len(CM.Player.legs)<=2):
 					CM.Player.legs[equipObj] = thing
 					del(CM.Player.pack[equipObj])
-					return "You equipped the {0} {1} to legs.".\
+					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
 				else:
 					return equipFull('legs')
@@ -126,7 +125,7 @@ def equip(equipObj = None):
 				if(len(CM.Player.head)<=1):
 					CM.Player.head[equipObj] = thing
 					del(CM.Player.pack[equipObj])
-					return "You equipped the {0} {1} to head.".\
+					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
 				else:
 					return equipFull('head')
@@ -143,5 +142,7 @@ verbDict = {
 	"examine": examine,
 	"hit": hit,
 	"help": help,
+	"take": take,
+	"equip": equip,
 }
 sortedVerbs = sorted(verbDict)
