@@ -1,6 +1,5 @@
 #-------------------
 # Andrew Johnson
-# 20 May, 2016
 #
 # A Simple Text-Based Game
 #---------------------
@@ -15,17 +14,14 @@ fight monsters, and obtain gear.
 
 import verbFuncMod as VFM
 import classMod as CM
-<<<<<<< HEAD
 import itemMod as IM
-=======
 import launch
->>>>>>> refs/remotes/origin/master
 
 #--------------
 # Launch screen
 #--------------
 gameSpace = 40
-launch.prettyIntro(gameSpace,__doc__)
+launch.launchScreen(gameSpace,__doc__)
 #------------
 # Creatures
 #------------

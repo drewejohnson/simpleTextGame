@@ -1,6 +1,5 @@
 #-------------
 # Andrew Johnson
-# 20 May, 2016
 #
 # Simple Text based Game
 #-------------
@@ -84,21 +83,21 @@ def getInput():
 
 def help(vHelp = None):
 	"""Return descriptions on various actions"""
-	helpMsg = ""
-	helpStr = "{0:10s}{1:20s}\n"
-	if(vHelp != None):				# asking for help on a specific verb
-		if(vHelp in verbDict):		# verb found in dictionary, return docstring
+	helpMsg = " "
+	helpStr = "{0:10s} -{1:20s}\n"
+	if(vHelp != None):
+		if(vHelp in verbDict):
 			helpMsg = helpStr.format(vHelp,verbDict[vHelp].__doc__)
 		else:
 		# verb not found in dictionary, return verbs with same first letter
 			helpMsg = 'No specific action "{}"'.format(vHelp)+'\n'
-			for key in verbDict:
+			for key in sortedVerbs:
 				if(vHelp[0]==key[0]):
 					helpMsg += helpStr.format(key,verbDict[key].__doc__)
 	else:
-		for key in verbDict:
+		for key in sortedVerbs:
 			helpMsg += helpStr.format(key,verbDict[key].__doc__)
-	return helpMsg.strip()	# removes trailing newline character
+	return helpMsg.strip()
 
 def equip(equipObj = None):
 	"""Equip an object from your pack"""
@@ -144,6 +143,5 @@ verbDict = {
 	"examine": examine,
 	"hit": hit,
 	"help": help,
-	"take": take,
-	"equip":equip
 }
+sortedVerbs = sorted(verbDict)
