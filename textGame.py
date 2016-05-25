@@ -14,7 +14,7 @@ fight monsters, and obtain gear.
 
 import verbFuncMod as VFM
 import classMod as CM
-#import itemMod as IM
+import itemMod as IM
 import launch
 import Items
 
@@ -23,6 +23,10 @@ import Items
 #--------------
 gameSpace = 60
 launch.launchScreen(gameSpace,__doc__)
+Items.buildItems()
+print(IM.Sword.lowRare)
+print(IM.Sword.medRare)
+print(IM.Sword.highRare)
 #------------
 # Creatures
 #------------
