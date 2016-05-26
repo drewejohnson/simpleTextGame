@@ -13,6 +13,7 @@ and gear, and will include the generation of the map
 roomsX = 5
 roomsY = 5
 
+rooms = {}
 class RoomClass:
     """Class for a given room. Dictionaries are for items
         and enemies that are found in the room
@@ -20,6 +21,9 @@ class RoomClass:
     items = {}
     enemies = {}
     location = []
+
+    def __init__(self,sweep):
+        self.location = sweep
 
 #------------
 # Basic Rooms
@@ -33,3 +37,9 @@ class startRoom(RoomClass):
 #------------------------------
 # Functions for room populating
 #------------------------------
+sweep = {}
+for y in range(1,roomsY+1):
+    for x in range(1,roomsX+1):
+        sweepLoc = x+y*roomsX
+        sweep[sweepLoc] = (x,y)
+        rooms[sweepLoc] = RoomClass(sweepLoc)

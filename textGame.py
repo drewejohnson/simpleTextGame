@@ -23,10 +23,18 @@ import launch
 #--------------
 gameSpace = 40
 launch.launchScreen(gameSpace,__doc__)
+
+#------------
+# Build rooms
+#------------
+print(RM.sweep)
+print(RM.rooms)
 #------------
 # Creatures
 #------------
 gobbly = CM.Goblin("gobbly",RM.roomsX//2+1,1)
+
+
 #------------
 # Game
 #------------
