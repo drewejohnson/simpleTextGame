@@ -27,8 +27,7 @@ launch.launchScreen(gameSpace,__doc__)
 #------------
 # Build rooms
 #------------
-print(RM.sweep)
-print(RM.rooms)
+
 #------------
 # Creatures
 #------------

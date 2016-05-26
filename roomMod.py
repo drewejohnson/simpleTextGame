@@ -37,9 +37,23 @@ class startRoom(RoomClass):
 #------------------------------
 # Functions for room populating
 #------------------------------
+def sweepFunc(inX,inY = None):
+    """Returns sweep value for two arguments, or tuple of coordinates for one"""
+    if inY != None:
+        return inX + (inY-1)*roomsX
+    else:
+        outY = inX // roomsX
+        if inX % roomsX != 0:       # sweep value not perfectly divisible by roomsX
+            outX = inX % roomsX
+            outY += 1
+        else:
+            outX = roomsX
+        return (outX,outY)
+
+
+
 sweep = {}
 for y in range(1,roomsY+1):
     for x in range(1,roomsX+1):
-        sweepLoc = x+y*roomsX
-        sweep[sweepLoc] = (x,y)
-        rooms[sweepLoc] = RoomClass(sweepLoc)
+        sweep[sweepFunc(x,y)] = (x,y)
+        rooms[sweepFunc(x,y)] = RoomClass(sweepFunc(sweepFunc(x,y)))
