@@ -16,8 +16,13 @@ import itemMod as IM
 #----------
 
 def buildItems():
-    """Overarching method for creating all weapons in the game"""
+    """Driver method for creating all weapons in the game"""
     populateItemAdj()
+    # Generate starting items
+    # createItem(IM.Sword,"trusty")
+    # createItem(IM.Shield,'reliable')
+    print(IM.RoomItem.objects)
+
 
 def populateItemAdj():
     """Submethod for populating lists of adjectives based on flags"""
@@ -31,8 +36,30 @@ def populateItemAdj():
     IM.Shield.lowRare = IM.adjPopulate(IM.lowRareAdj,'d')
     IM.Shield.medRare = IM.adjPopulate(IM.medRareAdj,'d')
     IM.Shield.highRare = IM.adjPopulate(IM.highRareAdj,'d')
-#------------
-# Starting items
-#-------------
-startSword = IM.Sword("trusty")
-startShield = IM.Shield("reliable")
+    IM.Helmet.lowRare = IM.adjPopulate(IM.lowRareAdj,'h')
+    IM.Helmet.medRare = IM.adjPopulate(IM.medRareAdj,'h')
+    IM.Helmet.highRare = IM.adjPopulate(IM.highRareAdj,'h')
+
+
+def inClass(itemClass,itemAdj):
+    """If itemAdj in a rarity dictionary of itemClass, return that dictionary"""
+    if itemAdj in itemClass.lowRare:
+        return itemClass.lowRare
+    elif itemAdj in itemClass.medRare:
+        return itemClass.medRare
+    elif itemAdj in itemClass.highRare:
+        return itemClass.highRare
+    else:
+        return None
+
+
+def createItem(itemClass,itemAdj):
+    """Creates and returns an object in class itemClass with the adjective itemAdj"""
+    inRareDict = inClass(itemClass,itemAdj)
+    if inRareDict != None:
+        newItemName = itemClass(itemAdj)
+        # create new item in itemClass
+        del inRareDict[itemAdj]     # remove adjective from dictionary
+        return newItemName
+    else:
+        return None

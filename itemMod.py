@@ -13,7 +13,7 @@ class RoomItem:
     itemName = ""
     itemType = ""
     equipSlot = ""
-    desc = ""
+    enhance = ""
     objects = {}
     lowRare = {}
     medRare = {}
@@ -69,8 +69,8 @@ def adjPopulate(adjDict,adjFlag):
 # Adjectives
 #-----------
 lowRareAdj = {
-    "simple":"a1",
-    "sturdy":"d1",
+    "trusty":"a1",
+    "reliable":"d1",
     "pointy":"a2",
     "durable":"d2",
     "shiny":"d2",
@@ -82,13 +82,14 @@ lowRareAdj = {
 }
 
 medRareAdj = {
-    "sharp":"a5",
+    "sharp":"a4",
+    "sturdy":'d3',
     "protective":"d4a3h2",
-    "viscious":"a5d4",
+    "viscious":"a4d4",
     "perceptive":"h4d2",
     "strong":"d5",
-    "dangerous":"a6",
-    "intimidating":"h6"
+    "dangerous":"a5",
+    "intimidating":"h5"
 }
 
 highRareAdj = {

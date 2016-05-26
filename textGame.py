@@ -24,9 +24,6 @@ import Items
 gameSpace = 60
 launch.launchScreen(gameSpace,__doc__)
 Items.buildItems()
-print(IM.Sword.lowRare)
-print(IM.Sword.medRare)
-print(IM.Sword.highRare)
 #------------
 # Creatures
 #------------
@@ -37,14 +34,16 @@ gobbly = CM.Goblin("gobbly")
 
 pName = input("What is your name, brave adventurer: \n")
 player = CM.Player(pName.lower())
-#startSword = IM.Sword("trusty")
-VFM.take(Items.startSword.itemName)
-VFM.take(Items.startShield.itemName)
-print(VFM.equip(Items.startSword.itemName))
-print(VFM.equip(Items.startShield.itemName))
-startStr = "Armed with their "+Items.startSword.itemName+' '+\
-	Items.startSword.itemType+' and '+Items.startShield.itemName+' '+\
-	Items.startShield.itemType+', '+pName.capitalize()+\
+# Generate starting items
+startSword = Items.createItem(IM.Sword,"trusty")
+startShield = Items.createItem(IM.Shield,'reliable')
+VFM.take(startSword.itemName)
+VFM.take(startShield.itemName)
+print(VFM.equip(startSword.itemName))
+print(VFM.equip(startShield.itemName))
+startStr = "Armed with their "+startSword.itemName+' '+\
+	startSword.itemType+' and '+startShield.itemName+' '+\
+	startShield.itemType+', '+pName.capitalize()+\
 	' departed into the darkness of the dungeon.'
 launch.prettyPrint(gameSpace,startStr)
 while True:
