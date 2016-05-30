@@ -18,13 +18,13 @@ class RoomItem:
     objects = {}
     location = []
 # what type of item is it, where does it go, and a brief description
-    def __init__(self,name,locX,locY):
+    def __init__(self,name):#,locX,locY):
         self.itemName = name
         RoomItem.objects[self.itemName] = self
-        self.location = [locX,locY]
+#        self.location = [locX,locY]
 
 class Sword(RoomItem):
-    def __init__(self,name,locX,locY):
+    def __init__(self,name):#,locX,locY):
         self.itemType = "sword"
         self.equipSlot = "arms"
-        super().__init__(name,locX,locY)
+        super().__init__(name)#,locX,locY)

@@ -27,24 +27,29 @@ launch.launchScreen(gameSpace,__doc__)
 #------------
 # Build rooms
 #------------
-
+print(RM.rooms[10].enemies)
 #------------
 # Creatures
 #------------
-gobbly = CM.Goblin("gobbly",RM.roomsX//2+1,1)
-
+gobbly = CM.Goblin("gobbly")#,RM.roomsX//2+1,1)
+RM.addToRoom('gobbly',10)
 
 #------------
 # Game
 #------------
 
 pName = input("What is your name, brave adventurer: \n")
-player = CM.Player(pName.lower(),RM.roomsX//2+1,1)
-startSword = IM.Sword("trusty",RM.roomsX//2+1,1)
+player = CM.Player(pName.lower())#,RM.roomsX//2+1,1)
+RM.addToRoom(pName,10)
+for x in range(1,25):
+	print(x,'\t',RM.rooms[x].enemies)
+
+
+startSword = IM.Sword("trusty")#,RM.roomsX//2+1,1)
 # Assume game space is a 5x5 grid. Start at center edge (5,0)
 print(VFM.take(startSword.itemName))
-print("And so, "+pName.capitalize()+" and their",\
-	startSword.itemName,startSword.itemType,\
-	"began their brave quest into the unknown!")
+print("And so, "+pName.capitalize()+" and their "+\
+	startSword.itemName+' '+startSword.itemType+\
+	" began their brave quest into the unknown!")
 while True:
 	VFM.getInput()

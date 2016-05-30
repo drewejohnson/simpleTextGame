@@ -16,9 +16,9 @@ class GameCharacter:
 	className = ""
 	desc = ""
 	objects = {}
-	location = []
+#	location = []
 
-	def __init__(self,name,locX,locY):
+	def __init__(self,name):#,locX,locY):
 		self.name = name
 		GameCharacter.objects[self.name] = self
 		# self.name stores keys as character names, not classNames
@@ -27,10 +27,10 @@ class GameCharacter:
 		return "Class: "+self.className+"\n"+self.desc
 
 class Goblin(GameCharacter):
-	def __init__(self,name,locX,locY):
+	def __init__(self,name):#,locX,locY):
 		self.className = "goblin"
 		self.health = 3
-		super().__init__(name,locX,locY)
+		super().__init__(name)#,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
 	@property
@@ -59,10 +59,10 @@ class Player(GameCharacter):
 #	location = [3,1]
 # Assume game space is a 5x5 grid. Start at center edge (5,0)
 
-	def __init__(self,name,locX,locY):
+	def __init__(self,name):#,locX,locY):
 		self.className = "Adventurer"
 		self.health = 5
-		super().__init__(name,locX,locY)
+		super().__init__(name)#,locX,locY)
 		self._desc = "A brave adventurer named "+self.name.capitalize()
 
 
@@ -103,4 +103,4 @@ class Player(GameCharacter):
 
 	@desc.setter
 	def desc(self,value):
-			self._desc = value
+		self._desc = value

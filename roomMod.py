@@ -9,11 +9,16 @@
 This module contains functions for populating rooms with monsters
 and gear, and will include the generation of the map
 """
+#--------
+# Imports
+#--------
 
-roomsX = 5
-roomsY = 5
+import classMod as CM
+import itemMod as IM
 
-rooms = {}
+#--------
+# classes
+#--------
 class RoomClass:
     """Class for a given room. Dictionaries are for items
         and enemies that are found in the room
@@ -25,6 +30,8 @@ class RoomClass:
     def __init__(self,sweep):
         self.location = sweep
 
+#    @items.setter
+#    def items(self,item,type):
 #------------
 # Basic Rooms
 #------------
@@ -51,7 +58,24 @@ def sweepFunc(inX,inY = None):
         return (outX,outY)
 
 
+def addToRoom(item,sweep):
+    """Adds an item or an enemy to the appropriate dictionary for room sweep"""
+#    print(item,type(item))
+    if (item in IM.RoomItem.objects):
+        print('Adding '+str(item))
+        rooms[sweep].items[item] = IM.RoomItem.objects[item]
+    elif (item in CM.GameCharacter.objects):
+        print('Adding '+str(item))
+        rooms[sweep].enemies[item] = CM.GameCharacter.objects[item]
+    return None
 
+
+#--------------------------
+# Initialize the game space
+#--------------------------
+roomsX = 5
+roomsY = 5
+rooms = {}
 sweep = {}
 for y in range(1,roomsY+1):
     for x in range(1,roomsX+1):
