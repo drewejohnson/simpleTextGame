@@ -12,35 +12,25 @@ and gear, and will include the generation of the map
 #--------
 # Imports
 #--------
-
 import classMod as CM
 import itemMod as IM
-
 #--------
 # classes
 #--------
 class RoomClass:
-    """Class for a given room. Dictionaries are for items
-        and enemies that are found in the room
-    """
-    items = {}
-    enemies = {}
-    location = []
+    """Class for a given room with itemsand enemies for that room"""
 
     def __init__(self,sweep):
         self.location = sweep
+        self.items = {}
+        self.enemies = {}
 
-#    @items.setter
-#    def items(self,item,type):
-#------------
-# Basic Rooms
-#------------
 
-class startRoom(RoomClass):
-    """First room. Mainly for testing features"""
-    def __init__(self):
-        self.location = [roomsX//2,1]
-# Assume game space is a 5x5 grid. Start at center edge (5,0)
+class Room(RoomClass):
+    """Generic room. Thought it would be helpful. Can be safely removed"""
+
+    def __init__(self,sweep):
+        super().__init__(sweep)
 #------------------------------
 # Functions for room populating
 #------------------------------
@@ -60,12 +50,11 @@ def sweepFunc(inX,inY = None):
 
 def addToRoom(item,sweep):
     """Adds an item or an enemy to the appropriate dictionary for room sweep"""
-#    print(item,type(item))
     if (item in IM.RoomItem.objects):
-        print('Adding '+str(item))
+        print('Adding '+str(item)+' to items')
         rooms[sweep].items[item] = IM.RoomItem.objects[item]
     elif (item in CM.GameCharacter.objects):
-        print('Adding '+str(item))
+        print('Adding '+str(item)+' to characters')
         rooms[sweep].enemies[item] = CM.GameCharacter.objects[item]
     return None
 
@@ -76,8 +65,7 @@ def addToRoom(item,sweep):
 roomsX = 5
 roomsY = 5
 rooms = {}
-sweep = {}
+#sweep = {}
 for y in range(1,roomsY+1):
     for x in range(1,roomsX+1):
-        sweep[sweepFunc(x,y)] = (x,y)
-        rooms[sweepFunc(x,y)] = RoomClass(sweepFunc(sweepFunc(x,y)))
+        rooms[sweepFunc(x,y)] = RoomClass(sweepFunc(x,y))

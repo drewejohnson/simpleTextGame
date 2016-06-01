@@ -16,7 +16,6 @@ class GameCharacter:
 	className = ""
 	desc = ""
 	objects = {}
-#	location = []
 
 	def __init__(self,name):#,locX,locY):
 		self.name = name
