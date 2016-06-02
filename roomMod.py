@@ -6,7 +6,7 @@
 #-------------
 
 """
-This module contains functions for populating rooms with monsters
+Functions for populating rooms with monsters
 and gear, and will include the generation of the map
 """
 #--------
@@ -18,7 +18,7 @@ import itemMod as IM
 # classes
 #--------
 class RoomClass:
-    """Class for a given room with itemsand enemies for that room"""
+    """Class for a given room with items and enemies for that room"""
 
     def __init__(self,sweep):
         self.location = sweep
@@ -51,12 +51,36 @@ def sweepFunc(inX,inY = None):
 def addToRoom(item,sweep):
     """Adds an item or an enemy to the appropriate dictionary for room sweep"""
     if (item in IM.RoomItem.objects):
-        print('Adding '+str(item)+' to items')
+#        print('Adding '+str(item)+' to items')
         rooms[sweep].items[item] = IM.RoomItem.objects[item]
+        return 0
     elif (item in CM.GameCharacter.objects):
-        print('Adding '+str(item)+' to characters')
+#        print('Adding '+str(item)+' to characters')
         rooms[sweep].enemies[item] = CM.GameCharacter.objects[item]
-    return None
+        return 0
+    else:
+        return 1
+
+
+def delFromRoom(item,sweep):
+    """Removes and item from the room dictionary"""
+    if (item in IM.RoomItem.objects):
+        if item in rooms[sweep].items:
+            del rooms[sweep].items[item]
+            return 0
+        else:
+            print('No item in room {0} to remove'.format(sweep))
+            return 2
+    elif item in CM.GameCharacter.objects:
+        if item in rooms[sweep].enemies:
+            del rooms[sweep].enemies[item]
+            return 0
+        else:
+            print('No item in room {0} to remove'.format(sweep))
+            return 2
+    else:
+        print('Bad item {}'.format(item))
+        return 1
 
 
 #--------------------------

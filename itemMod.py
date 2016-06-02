@@ -5,10 +5,7 @@
 # Simple Text-Based Game
 #-------------
 
-"""
-This module contains classes for item creation plus
-a bunch of spawn-able items
-"""
+"""Classes for item creation plus a bunch of spawn-able items"""
 
 import roomMod as RM
 
