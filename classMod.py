@@ -32,6 +32,7 @@ class Goblin(GameCharacter):
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
 	@property
+	def desc(self):	
 		healthLine = "Health: {}".format(self.health)
 		return self._desc+"\n"+healthLine#+statusLine
 
