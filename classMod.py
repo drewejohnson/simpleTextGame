@@ -53,6 +53,7 @@ class Player(GameCharacter):
 	legs = {}
 	head = {}
 	pack = {}
+	pos = {}
 # Items for hands, legs, head, and backpack
 #	location = [3,1]
 # Assume game space is a 5x5 grid. Start at center edge (5,0)
@@ -61,6 +62,7 @@ class Player(GameCharacter):
 		self.className = "Adventurer"
 		self.health = 5
 		super().__init__(name,sweep)#,locX,locY)
+		self.pos[sweep] = RM.rooms[sweep]
 		self._desc = "A brave adventurer named "+self.name.capitalize()
 
 
@@ -102,3 +104,11 @@ class Player(GameCharacter):
 	@desc.setter
 	def desc(self,value):
 		self._desc = value
+
+#----------
+# Functions
+#----------
+
+def getLoc(player):
+	"""Returns the location of the player"""
+	return list(Player.pos.keys())[0]

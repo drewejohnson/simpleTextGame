@@ -6,7 +6,7 @@
 #-------------
 
 """
-This module contains functions for populating rooms with monsters
+Functions for populating rooms with monsters
 and gear, and will include the generation of the map
 """
 #--------
@@ -18,7 +18,7 @@ import itemMod as IM
 # classes
 #--------
 class RoomClass:
-    """Class for a given room with itemsand enemies for that room"""
+    """Class for a given room with items and enemies for that room"""
 
     def __init__(self,sweep):
         self.location = sweep
