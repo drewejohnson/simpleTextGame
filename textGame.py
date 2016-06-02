@@ -31,19 +31,20 @@ launch.launchScreen(gameSpace,__doc__)
 #------------
 # Creatures
 #------------
-gobbly = CM.Goblin("gobbly")
-RM.addToRoom('gobbly',10)
+gobbly = CM.Goblin("gobbly",10)
+#RM.addToRoom('gobbly',10)
 
 #------------
 # Game
 #------------
 
 pName = input("What is your name, brave adventurer: \n")
-player = CM.Player(pName.lower())
-RM.addToRoom(pName,10)
-startSword = IM.Sword("trusty")
-RM.addToRoom(startSword,10)
-
+player = CM.Player(pName.lower(),10)
+#RM.addToRoom(pName,10)
+startSword = IM.Sword("trusty",10)
+#RM.addToRoom(startSword,10)
+for x in range(1,26):
+	print(x,RM.rooms[x].enemies,RM.rooms[x].items)
 
 print(VFM.take(startSword.itemName))
 print("And so, "+pName.capitalize()+" and their "+\

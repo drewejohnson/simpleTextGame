@@ -3,33 +3,32 @@
 #
 # Simple Text based Game
 #-----------
-
+"""Creation of various game objects and creatures"""
 #------------
 # Imports
 #------------
-#Import roomMod as RM
-"""
-Creation of various game objects and creatures
-"""
+import roomMod as RM
+
 
 class GameCharacter:
 	className = ""
 	desc = ""
 	objects = {}
 
-	def __init__(self,name):#,locX,locY):
+	def __init__(self,name,sweep):#,locX,locY):
 		self.name = name
 		GameCharacter.objects[self.name] = self
+		RM.addToRoom(name,sweep)
 		# self.name stores keys as character names, not classNames
 
 	def getDesc(self):
 		return "Class: "+self.className+"\n"+self.desc
 
 class Goblin(GameCharacter):
-	def __init__(self,name):#,locX,locY):
+	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "goblin"
 		self.health = 3
-		super().__init__(name)#,locX,locY)
+		super().__init__(name,sweep)#,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
 	@property
@@ -58,10 +57,10 @@ class Player(GameCharacter):
 #	location = [3,1]
 # Assume game space is a 5x5 grid. Start at center edge (5,0)
 
-	def __init__(self,name):#,locX,locY):
+	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
 		self.health = 5
-		super().__init__(name)#,locX,locY)
+		super().__init__(name,sweep)#,locX,locY)
 		self._desc = "A brave adventurer named "+self.name.capitalize()
 
 
