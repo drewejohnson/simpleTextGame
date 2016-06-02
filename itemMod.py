@@ -30,3 +30,21 @@ class Sword(RoomItem):
         self.itemType = "sword"
         self.equipSlot = "arms"
         super().__init__(name,sweep)
+
+class Axe(RoomItem):
+    def __init__(self,name,sweep):
+        self.itemType = "axe"
+        self.equipSlot = "arms"
+        super().__init__(name,sweep)
+
+class Shield(RoomItem):
+    def __init__(self,name,sweep):
+        self.itemType = "shield"
+        self.equipSlot = "arms"
+        super().__init__(name,sweep)
+
+class Helmet(RoomItem):
+    def __init__(self,name):
+        self.itemType = 'helmet'
+        self.equipSlot = 'head'
+        super().__init__(name,sweep)

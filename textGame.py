@@ -17,11 +17,12 @@ import classMod as CM
 import itemMod as IM
 import roomMod as RM
 import launch
+import Items
 
 #--------------
 # Launch screen
 #--------------
-gameSpace = 40
+gameSpace = 60
 launch.launchScreen(gameSpace,__doc__)
 
 #------------
@@ -40,15 +41,17 @@ gobbly = CM.Goblin("gobbly",10)
 
 pName = input("What is your name, brave adventurer: \n")
 player = CM.Player(pName.lower(),10)
-#RM.addToRoom(pName,10)
-startSword = IM.Sword("trusty",10)
-#RM.addToRoom(startSword,10)
 for x in range(1,26):
 	print(x,RM.rooms[x].enemies,RM.rooms[x].items)
 
-print(VFM.take(startSword.itemName))
-print("And so, "+pName.capitalize()+" and their "+\
-	startSword.itemName+' '+startSword.itemType+\
-	" began their brave quest into the unknown!")
+VFM.take(Items.startSword.itemName)
+VFM.take(Items.startShield.itemName)
+print(VFM.equip(Items.startSword.itemName))
+print(VFM.equip(Items.startShield.itemName))
+startStr = "Armed with their "+Items.startSword.itemName+' '+\
+	Items.startSword.itemType+' and '+Items.startShield.itemName+' '+\
+	Items.startShield.itemType+', '+pName.capitalize()+\
+	' departed into the darkness of the dungeon.'
+launch.prettyPrint(gameSpace,startStr)
 while True:
 	VFM.getInput()
