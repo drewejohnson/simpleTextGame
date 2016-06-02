@@ -32,17 +32,8 @@ class Goblin(GameCharacter):
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
 	@property
-	def desc(self):	# function for modifying the health line
 		healthLine = "Health: {}".format(self.health)
-		if self.health >= 3:
-			statusLine = "Full strength."
-		elif self.health == 2:
-			statusLine = "It has a wound on its knee."
-		elif self.health == 1:
-			statusLine = "Its left arm has been cut off!"
-		elif self.health <= 0:
-			statusLine = "It is dead."
-		return self._desc+"\n"+healthLine+"\n"+statusLine
+		return self._desc+"\n"+healthLine#+statusLine
 
 	@desc.setter
 	def desc(self,value):
@@ -99,7 +90,7 @@ class Player(GameCharacter):
 			for item in self.pack:
 				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
 					self.pack[item].itemType)
-		return self._desc+"\n"+inventory.rstrip()
+		return self._desc+'\nHealth: '+str(self.health)+"\n"+inventory.rstrip()
 
 	@desc.setter
 	def desc(self,value):
