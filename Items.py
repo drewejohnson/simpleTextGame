@@ -2,12 +2,9 @@
 # Andrew Johnson
 # Text Based Python Game
 #-----------------------
-
-
-"""module containing items and methods for spawning items"""
-
+"""module containing items and adjectives for spawning items"""
 #---------------
-# Module Import
+# Imports
 #---------------
 import itemMod as IM
 
@@ -21,7 +18,7 @@ def buildItems():
     # Generate starting items
     # createItem(IM.Sword,"trusty")
     # createItem(IM.Shield,'reliable')
-    print(IM.RoomItem.objects)
+    return None
 
 
 def populateItemAdj():
@@ -63,3 +60,7 @@ def createItem(itemClass,itemAdj):
         return newItemName
     else:
         return None
+
+
+startSword = IM.Sword("trusty",10)
+startShield = IM.Shield("reliable",10)

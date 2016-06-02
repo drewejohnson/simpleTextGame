@@ -15,6 +15,7 @@ fight monsters, and obtain gear.
 import verbFuncMod as VFM
 import classMod as CM
 import itemMod as IM
+import roomMod as RM
 import launch
 import Items
 
@@ -23,27 +24,26 @@ import Items
 #--------------
 gameSpace = 60
 launch.launchScreen(gameSpace,__doc__)
+
 Items.buildItems()
 #------------
 # Creatures
 #------------
-gobbly = CM.Goblin("gobbly")
+gobbly = CM.Goblin("gobbly",10)
 #------------
 # Game
 #------------
 
 pName = input("What is your name, brave adventurer: \n")
-player = CM.Player(pName.lower())
 # Generate starting items
-startSword = Items.createItem(IM.Sword,"trusty")
-startShield = Items.createItem(IM.Shield,'reliable')
-VFM.take(startSword.itemName)
-VFM.take(startShield.itemName)
-print(VFM.equip(startSword.itemName))
-print(VFM.equip(startShield.itemName))
-startStr = "Armed with their "+startSword.itemName+' '+\
-	startSword.itemType+' and '+startShield.itemName+' '+\
-	startShield.itemType+', '+pName.capitalize()+\
+player = CM.Player(pName.lower(),10)
+VFM.take(Items.startSword.itemName)
+VFM.take(Items.startShield.itemName)
+print(VFM.equip(Items.startSword.itemName))
+print(VFM.equip(Items.startShield.itemName))
+startStr = "Armed with their "+Items.startSword.itemName+' '+\
+	Items.startSword.itemType+' and '+Items.startShield.itemName+' '+\
+	Items.startShield.itemType+', '+pName.capitalize()+\
 	' departed into the darkness of the dungeon.'
 launch.prettyPrint(gameSpace,startStr)
 while True:
