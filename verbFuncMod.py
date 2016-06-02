@@ -4,14 +4,13 @@
 # Simple Text based Game
 #-------------
 
-"""
-Module for various verb functions
-"""
+"""Module for various verb functions"""
 #----------------------
 #	Modules Import
 #----------------------
 import classMod as CM
 import itemMod as IM
+import roomMod as RM
 #----------------------
 #	Verb Functions
 #----------------------
@@ -23,6 +22,7 @@ def say(noun = None):
 	else:
 		return 'You said nothing.'
 
+
 def examine(noun = None):
 	"""Examine an object, enemy, or player"""
 	if (noun != None):
@@ -32,7 +32,8 @@ def examine(noun = None):
 			return "There is no {} here".format(noun)
 	else:
 		return "Need target to examine."
-# looks for an object wth name noun in GameCharacter
+
+
 def hit(noun = None):
 	"""Hit an enemy"""
 	if (noun != None):
@@ -42,28 +43,35 @@ def hit(noun = None):
 # thing is the class of noun
 			thing.health = thing.health -1
 			if thing.health <= 0:
-				msg = "You killed {}!".format(thing.name)
+				return "You killed {}!".format(thing.name)
 			else:
-				msg = "You hit {}".format(thing.name)
+				return "You hit {}".format(thing.name)
 		else:
-			msg = "There is no {} here.".format(noun)
+			return "There is no {} here.".format(noun)
 	else:
-		msg = 'Need target to hit'
-	return msg
+		return 'Need target to hit'
+
 
 def take(takeItem = None):
 	"""Pick up item and add to inventory"""
 	if(takeItem != None):
 		if takeItem in IM.RoomItem.objects:
-			thing = IM.RoomItem.objects[takeItem]
-			CM.Player.pack[takeItem] = thing
-			takeMsg = "You picked up the {0} {1}".format(takeItem,\
-				thing.itemType)
+			pLoc = CM.getLoc(CM.Player)
+			if takeItem in RM.rooms[pLoc].items:
+				thing = IM.RoomItem.objects[takeItem]
+				if RM.delFromRoom(takeItem,pLoc) == 0:
+					CM.Player.pack[takeItem] = thing
+					return "You picked up the {0} {1}".format(takeItem,\
+					thing.itemType)
+				else:
+					return 'Could not delete item from room'
+			else:
+				return "There is no {} here".format(takeItem)
 		else:
-			takeMsg = "There is no {} here".format(takeItem)
+			return 'No item by that name.'
 	else:
-		takeMsg = "Need target to take"
-	return takeMsg
+		return "Need target to take"
+
 
 def getInput():
 	command = input(": ").split()
@@ -78,6 +86,7 @@ def getInput():
 		print(verb(nounIn))
 	else:
 		print(verb())
+
 
 def help(vHelp = None):
 	"""Return descriptions on various actions"""
@@ -96,6 +105,7 @@ def help(vHelp = None):
 		for key in sortedVerbs:
 			helpMsg += helpStr.format(key,verbDict[key].__doc__)
 	return helpMsg.strip()
+
 
 def equip(equipObj = None):
 	"""Equip an object from your pack"""
@@ -131,6 +141,7 @@ def equip(equipObj = None):
 					return equipFull('head')
 		else:
 			return "No item {} in pack.".format(equipObj)
+
 
 def equipFull(equipSlot):
 	"""Error message for equipping an item to a full slot"""
