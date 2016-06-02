@@ -71,31 +71,31 @@ class Player(GameCharacter):
 		"""Returns a string with the inventory of the player"""
 # Maybe put the parsing through dictionaries into a class method at some point
 		inventory = "Inventory:\n"
-		inventory += "Arms: "
 		if(len(self.arms)==0):
-			inventory +="Nothing\n"
+			inventory += "Arms: Nothing\n"
 		else:
+			inventory += "Arms: \n"
 			for item in self.arms:
-				inventory += "{0} {1}\n".format(self.arms[item].itemName,\
+				inventory += "  {0} {1}\n".format(self.arms[item].itemName,\
 					self.arms[item].itemType)
-		inventory += "Legs: "
 		if(len(self.legs)==0):
-			inventory +="Nothing\n"
+			inventory +="Legs: Nothing\n"
 		else:
+			inventory += 'Legs: \n'
 			for item in self.legs:
-				inventory += "{0} {1}\n".format(self.legs[item].itemName,\
+				inventory += "  {0} {1}\n".format(self.legs[item].itemName,\
 					self.legs[item].itemType)
-		inventory += "Head: "
 		if(len(self.head)==0):
-			inventory +="Nothing\n"
+			inventory +="Head: Nothing\n"
 		else:
+			inventory += "Head: \n"
 			for item in self.head:
 				inventory += "{0} {1}\n".format(self.head[item].itemName,\
 					self.head[item].itemType)
-		inventory += "Pack: "
 		if(len(self.pack)==0):
-			inventory += "Nothing\n"
+			inventory += "Pack: Nothing\n"
 		else:
+			inventory += "Pack: \n"
 			for item in self.pack:
 				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
 					self.pack[item].itemType)
@@ -109,6 +109,6 @@ class Player(GameCharacter):
 # Functions
 #----------
 
-def getLoc(player):
+def getLoc():
 	"""Returns the location of the player"""
 	return list(Player.pos.keys())[0]
