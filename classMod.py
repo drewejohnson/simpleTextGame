@@ -16,10 +16,12 @@ class GameCharacter:
 	className = ""
 	desc = ""
 	objects = {}
+	values = []		# health, attack, defense
 
-	def __init__(self,name,sweep):#,locX,locY):
+	def __init__(self,name,sweep,values):#,locX,locY):
 		self.name = name
 		GameCharacter.objects[self.name] = self
+		self.values = values
 		RM.addToRoom(name,sweep)
 		# self.name stores keys as character names, not classNames
 
@@ -29,15 +31,15 @@ class GameCharacter:
 class Goblin(GameCharacter):
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "goblin"
-		self.health = 3
-		super().__init__(name,sweep)#,locX,locY)
+		gobValues = [5,1,1]			# 5 health, 1 attack and defense
+		super().__init__(name,sweep,gobValues)#,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
 
 	@property
 	def desc(self):
 		# Return goblin name and health
-		return self._desc+"\nHealth: "+str(self.health)
+		return self._desc+"\nHealth: "+str(self.values[0])
 
 	@desc.setter
 	def desc(self,value):
@@ -49,15 +51,11 @@ class Player(GameCharacter):
 	head = {}
 	pack = {}
 	pos = {}
-# Items for hands, legs, head, and backpack
-#	location = [3,1]
-# Assume game space is a 5x5 grid. Start at center edge (5,0)
 
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
-		self.health = 5
-		# self._name = name
-		super().__init__(name,sweep)#,locX,locY)
+		pValues = [5,2,2]
+		super().__init__(name,sweep,pValues)#,locX,locY)
 		self.pos[sweep] = RM.rooms[sweep]
 		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
 
@@ -66,6 +64,8 @@ class Player(GameCharacter):
 	def desc(self):
 		"""Returns a string with the inventory and location of the player"""
 # Maybe put the parsing through dictionaries into a class method at some point
+		stats = "Health: {0:3d} Attack: {1:3d} Defense: {2:3d}\n".\
+			format(self.values[0],self.values[1],self.values[2])
 		location = "Location: ({0},{1})\n".\
 			format(RM.sweepFunc(getLoc())[0],RM.sweepFunc(getLoc())[1])
 		inventory = "Inventory:\n"
@@ -97,7 +97,7 @@ class Player(GameCharacter):
 			for item in self.pack:
 				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
 					self.pack[item].itemType)
-		return self._desc+"\n"+location+inventory.rstrip()
+		return self._desc+"\n"+stats+location+inventory.rstrip()
 
 
 	@desc.setter
