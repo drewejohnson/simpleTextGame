@@ -38,26 +38,29 @@ def examine(noun = None):
 
 def examineRoom():
 	"""Displays the items and enemies in the player's room"""
-	thisRoom = CM.getLoc()
-	roomStr = ""
-	if len(RM.rooms[thisRoom].enemies) > 1:
-		roomStr = 'Enemies: \n'
-		for thing in list(RM.rooms[thisRoom].enemies):
-			if isinstance(RM.rooms[thisRoom].enemies[thing],CM.Player) != True:
-				thingType = CM.GameCharacter.objects[thing].className
-				roomStr += '  '+thing.capitalize()+' the '+thingType+'\n'
+	thisSwp = CM.getLoc()
+	thisRoom = RM.sweepFunc(thisSwp)
+	roomStr = "Current room: ({0},{1})\n".format(thisRoom[0],thisRoom[1])
+	if len(RM.rooms[thisSwp].enemies) > 0:
+		roomStr += 'Enemies: \n'
+		for thing in list(RM.rooms[thisSwp].enemies):
+			thingType = CM.GameCharacter.objects[thing].className
+			if isinstance(RM.rooms[thisSwp].enemies[thing],CM.Player) != True:
+				# thingType = CM.GameCharacter.objects[thing].className
+				roomStr += '  '+thing.capitalize()#+' the '+thingType+'\n'
+			else:
+				roomStr += '  '+pName.capitalize()#+' the '+thingType+'\n'
+			roomStr +=' the '+thingType+'\n'
 	else:
-		roomStr = 'Enemies: None\n'
-	if len(RM.rooms[thisRoom].items) > 0:
+		roomStr += 'Enemies: None\n'
+	if len(RM.rooms[thisSwp].items) > 0:
 		roomStr += 'Items: \n'
-		for item in list(RM.rooms[thisRoom].items):
-			iType = RM.rooms[thisRoom].items[item].itemType
+		for item in list(RM.rooms[thisSwp].items):
+			iType = RM.rooms[thisSwp].items[item].itemType
 			roomStr += '  '+item+' '+iType+'\n'
 	else:
 		roomStr += 'Items: None'
 	return roomStr.strip()
-
-
 
 
 def hit(noun = None):
@@ -206,11 +209,13 @@ def move(direction = None):
 	elif direction.lower() in ['north','south','east','west']:
 		d = direction.lower()
 		if d in nbors:
-			toSwp = RM.sweepFunc(nbors[d])
-			print(toSwp)
-			RM.addToRoom(CM.Player,toSwp)
+			toSwp = nbors[d]
+			toPos = RM.sweepFunc(toSwp)
+			RM.addToRoom('you',toSwp)
 			RM.delFromRoom('you',curSwp)
-			return 'Moved from {0} to {1}'.format(curPos,toSwp)
+			del CM.Player.pos[curSwp]
+			CM.Player.pos[toSwp] = RM.rooms[toSwp]
+			return 'Moved from {0} to {1}'.format(curPos,toPos)
 		else:
 			return 'No door in that direction.'
 	else:

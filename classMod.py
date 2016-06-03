@@ -109,5 +109,9 @@ class Player(GameCharacter):
 #----------
 
 def getLoc():
-	"""Returns the location of the player"""
-	return list(Player.pos.keys())[0]
+	"""Returns the sweep of the player"""
+	pList = list(Player.pos.keys())
+	if len(pList) > 1:
+		raise SystemExit('Player in multiple places at once - getLoc')
+	else:
+		return pList[0]
