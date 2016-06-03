@@ -71,11 +71,19 @@ def hit(noun = None):
 # there is a noun to hit
 			thing = CM.GameCharacter.objects[noun]
 # thing is the class of noun
-			thing.health = thing.health -1
-			if thing.health <= 0:
-				return "You killed {}!".format(thing.name)
+			combatDiff = CM.GameCharacter.objects['you'].values[1] -\
+				thing.values[2]
+			# difference between player attack and enemy defense
+			if combatDiff > 0:
+				thing.values[0] -= combatDiff
+				if thing.values[0] <= 0:
+					return "You killed {}!".format(thing.name.capitalize())
+				else:
+					return "You hit {0}. Current health: {1}".\
+						format(thing.name.capitalize(),thing.values[0])
 			else:
-				return "You hit {}".format(thing.name)
+				return "{} to strong. Attack not effective".\
+					format(thing.name.capitalize())
 		else:
 			return "There is no {} here.".format(noun)
 	else:
