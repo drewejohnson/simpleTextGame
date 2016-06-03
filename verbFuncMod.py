@@ -28,10 +28,36 @@ def examine(noun = None):
 	if (noun != None):
 		if noun in CM.GameCharacter.objects:
 			return CM.GameCharacter.objects[noun].getDesc()
+		elif noun.lower() == 'room':
+			return examineRoom()
 		else:
 			return "There is no {} here".format(noun)
 	else:
 		return "Need target to examine."
+
+
+def examineRoom():
+	"""Displays the items and enemies in the player's room"""
+	thisRoom = CM.getLoc()
+	roomStr = ""
+	if len(RM.rooms[thisRoom].enemies) > 1:
+		roomStr = 'Enemies: \n'
+		for thing in list(RM.rooms[thisRoom].enemies):
+			if isinstance(RM.rooms[thisRoom].enemies[thing],CM.Player) != True:
+				thingType = CM.GameCharacter.objects[thing].className
+				roomStr += '  '+thing.capitalize()+' the '+thingType+'\n'
+	else:
+		roomStr = 'Enemies: None\n'
+	if len(RM.rooms[thisRoom].items) > 0:
+		roomStr += 'Items: \n'
+		for item in list(RM.rooms[thisRoom].items):
+			iType = RM.rooms[thisRoom].items[item].itemType
+			roomStr += '  '+item+' '+iType+'\n'
+	else:
+		roomStr += 'Items: None'
+	return roomStr.strip()
+
+
 
 
 def hit(noun = None):

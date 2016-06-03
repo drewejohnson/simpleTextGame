@@ -29,7 +29,6 @@ launch.launchScreen(gameSpace,__doc__)
 # Creatures
 #------------
 gobbly = CM.Goblin("gobbly",10)
-
 #------------
 # Game
 #------------
