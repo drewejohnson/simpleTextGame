@@ -71,11 +71,19 @@ def hit(noun = None):
 # there is a noun to hit
 			thing = CM.GameCharacter.objects[noun]
 # thing is the class of noun
-			thing.health = thing.health -1
-			if thing.health <= 0:
-				return "You killed {}!".format(thing.name)
+			combatDiff = CM.GameCharacter.objects['you'].values[1] -\
+				thing.values[2]
+			# difference between player attack and enemy defense
+			if combatDiff > 0:
+				thing.values[0] -= combatDiff
+				if thing.values[0] <= 0:
+					return "You killed {}!".format(thing.name.capitalize())
+				else:
+					return "You hit {0}. Current health: {1}".\
+						format(thing.name.capitalize(),thing.values[0])
 			else:
-				return "You hit {}".format(thing.name)
+				return "{} to strong. Attack not effective".\
+					format(thing.name.capitalize())
 		else:
 			return "There is no {} here.".format(noun)
 	else:
@@ -151,10 +159,12 @@ def equip(equipObj = None):
 	else:
 		if equipObj in CM.Player.pack:
 			thing = CM.Player.pack[equipObj]
+			eStr = IM.allAdj[equipObj]		# string to enhance attribute
 			if (thing.equipSlot[0] == 'a'):
 				if (len(CM.Player.arms)<=2):
 					CM.Player.arms[equipObj] = thing
 					del(CM.Player.pack[equipObj])
+					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
 					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
 				else:
@@ -162,6 +172,7 @@ def equip(equipObj = None):
 			elif(thing.equipSlot[0] == 'l'):
 				if(len(CM.Player.legs)<=2):
 					CM.Player.legs[equipObj] = thing
+					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
 					del(CM.Player.pack[equipObj])
 					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
@@ -170,6 +181,7 @@ def equip(equipObj = None):
 			elif(thing.equipSlot[0] == 'h'):
 				if(len(CM.Player.head)<=1):
 					CM.Player.head[equipObj] = thing
+					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
 					del(CM.Player.pack[equipObj])
 					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
@@ -183,6 +195,38 @@ def equipFull(equipSlot):
 	"""Error message for equipping an item to a full slot"""
 	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
 
+
+def unequip(item = None):
+	"""Unequip an item and place it in your pack"""
+	if item != None:
+		if item in CM.Player.arms:
+			itemCls = CM.Player.arms[item]
+			del CM.Player.arms[item]
+			eStr = IM.allAdj[item]
+			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+			CM.Player.pack[item] = itemCls
+			return "You unequipped the {} {}.".\
+				format(item,itemCls.itemType)
+		elif item in CM.Player.legs:
+			itemCls = CM.Player.legs[item]
+			del CM.Player.head[item]
+			eStr = IM.allAdj[item]
+			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+			CM.Player.pack[item] = itemCls
+			return "You unequipped the {} {}.".\
+				format(item,itemCls.itemType)
+		elif item in CM.Player.head:
+			itemCls = CM.Player.head[item]
+			del CM.Player.head[item]
+			eStr = IM.allAdj[item]
+			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+			CM.Player.pack[item] = itemCls
+			return "You unequipped the {} {}.".\
+				format(item,itemCls.itemType)
+		else:
+			return "Item {} not equipped.".format(item)
+	else:
+		return "Need target to unequip/"
 
 def move(direction = None):
 	"""Select a compass direction (NSEW) to move the player"""
@@ -269,6 +313,7 @@ verbDict = {
 	"equip": equip,
 	"move": move,
 	"quit": quitGame,
+	"unequip": unequip,
 }
 sortedVerbs = sorted(verbDict)
 
