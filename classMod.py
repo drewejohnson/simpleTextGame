@@ -8,8 +8,10 @@
 # Imports
 #------------
 import roomMod as RM
-
-
+import verbFuncMod as VFM
+#-------------------
+# Classes for Characters
+#-------------------
 class GameCharacter:
 	className = ""
 	desc = ""
@@ -31,18 +33,11 @@ class Goblin(GameCharacter):
 		super().__init__(name,sweep)#,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
+
 	@property
-	def desc(self):	# function for modifying the health line
-		healthLine = "Health: {}".format(self.health)
-		if self.health >= 3:
-			statusLine = "Full strength."
-		elif self.health == 2:
-			statusLine = "It has a wound on its knee."
-		elif self.health == 1:
-			statusLine = "Its left arm has been cut off!"
-		elif self.health <= 0:
-			statusLine = "It is dead."
-		return self._desc+"\n"+healthLine+"\n"+statusLine
+	def desc(self):
+		# Return goblin name and health
+		return self._desc+"\nHealth: "+str(self.health)
 
 	@desc.setter
 	def desc(self,value):
@@ -61,45 +56,49 @@ class Player(GameCharacter):
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
 		self.health = 5
+		# self._name = name
 		super().__init__(name,sweep)#,locX,locY)
 		self.pos[sweep] = RM.rooms[sweep]
-		self._desc = "A brave adventurer named "+self.name.capitalize()
+		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
 
 
 	@property
 	def desc(self):
-		"""Returns a string with the inventory of the player"""
+		"""Returns a string with the inventory and location of the player"""
 # Maybe put the parsing through dictionaries into a class method at some point
+		location = "Location: ({0},{1})\n".\
+			format(RM.sweepFunc(getLoc())[0],RM.sweepFunc(getLoc())[1])
 		inventory = "Inventory:\n"
-		inventory += "Arms: "
 		if(len(self.arms)==0):
-			inventory +="Nothing\n"
+			inventory += "Arms: Nothing\n"
 		else:
+			inventory += "Arms: \n"
 			for item in self.arms:
-				inventory += "{0} {1}\n".format(self.arms[item].itemName,\
+				inventory += "  {0} {1}\n".format(self.arms[item].itemName,\
 					self.arms[item].itemType)
-		inventory += "Legs: "
 		if(len(self.legs)==0):
-			inventory +="Nothing\n"
+			inventory +="Legs: Nothing\n"
 		else:
+			inventory += 'Legs: \n'
 			for item in self.legs:
-				inventory += "{0} {1}\n".format(self.legs[item].itemName,\
+				inventory += "  {0} {1}\n".format(self.legs[item].itemName,\
 					self.legs[item].itemType)
-		inventory += "Head: "
 		if(len(self.head)==0):
-			inventory +="Nothing\n"
+			inventory +="Head: Nothing\n"
 		else:
+			inventory += "Head: \n"
 			for item in self.head:
 				inventory += "{0} {1}\n".format(self.head[item].itemName,\
 					self.head[item].itemType)
-		inventory += "Pack: "
 		if(len(self.pack)==0):
-			inventory += "Nothing\n"
+			inventory += "Pack: Nothing\n"
 		else:
+			inventory += "Pack: \n"
 			for item in self.pack:
 				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
 					self.pack[item].itemType)
-		return self._desc+"\n"+inventory.rstrip()
+		return self._desc+"\n"+location+inventory.rstrip()
+
 
 	@desc.setter
 	def desc(self,value):
@@ -109,6 +108,10 @@ class Player(GameCharacter):
 # Functions
 #----------
 
-def getLoc(player):
-	"""Returns the location of the player"""
-	return list(Player.pos.keys())[0]
+def getLoc():
+	"""Returns the sweep of the player"""
+	pList = list(Player.pos.keys())
+	if len(pList) > 1:
+		raise SystemExit('Player in multiple places at once - getLoc')
+	else:
+		return pList[0]
