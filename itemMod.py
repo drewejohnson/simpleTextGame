@@ -12,8 +12,8 @@ class RoomItem:
     itemType = ""
     equipSlot = ""
     enhance = ""
-    objects = {}
-    lowRare = {}
+    objects = {}        # actual items created
+    lowRare = {}        # adjectives to be used
     medRare = {}
     highRare = {}
 
@@ -24,24 +24,28 @@ class RoomItem:
 
 
 class Sword(RoomItem):
+    objects = {}
     def __init__(self,name,sweep):
         self.itemType = "sword"
         self.equipSlot = "arms"
         super().__init__(name,sweep)
 
 class Axe(RoomItem):
+    objects = {}
     def __init__(self,name,sweep):
         self.itemType = "axe"
         self.equipSlot = "arms"
         super().__init__(name,sweep)
 
 class Shield(RoomItem):
+    objects = {}
     def __init__(self,name,sweep):
         self.itemType = "shield"
         self.equipSlot = "arms"
         super().__init__(name,sweep)
 
 class Helmet(RoomItem):
+    objects = {}
     def __init__(self,name):
         self.itemType = 'helmet'
         self.equipSlot = 'head'

@@ -7,19 +7,10 @@
 # Imports
 #---------------
 import itemMod as IM
-
+import roomMod as RM
 #----------
 # Functions
 #----------
-
-def buildItems():
-    """Driver method for creating all weapons in the game"""
-    populateItemAdj()
-    # Generate starting items
-    # createItem(IM.Sword,"trusty")
-    # createItem(IM.Shield,'reliable')
-    return None
-
 
 def populateItemAdj():
     """Submethod for populating lists of adjectives based on flags"""
@@ -38,7 +29,7 @@ def populateItemAdj():
     IM.Helmet.highRare = IM.adjPopulate(IM.highRareAdj,'h')
 
 
-def inClass(itemClass,itemAdj):
+def inClass(itemAdj,itemClass):
     """If itemAdj in a rarity dictionary of itemClass, return that dictionary"""
     if itemAdj in itemClass.lowRare:
         return itemClass.lowRare
@@ -47,20 +38,41 @@ def inClass(itemClass,itemAdj):
     elif itemAdj in itemClass.highRare:
         return itemClass.highRare
     else:
-        return None
+        return 1
 
 
-def createItem(itemClass,itemAdj):
-    """Creates and returns an object in class itemClass with the adjective itemAdj"""
-    inRareDict = inClass(itemClass,itemAdj)
-    if inRareDict != None:
-        newItemName = itemClass(itemAdj)
-        # create new item in itemClass
-        del inRareDict[itemAdj]     # remove adjective from dictionary
-        return newItemName
+def createAddItem(itemAdj,itemClass,sweep):
+    """
+    Creates an item of class itemClass and adds item to dictionary
+    of that class, if one does not exist already. Returns an object
+    instantiated with these characteristics.
+    """
+    whichRare = inClass(itemAdj,itemClass)
+    if whichRare != 1:
+        # adjective is a valid adjective
+        if not itemAdj in itemClass.objects:
+            # item with this name not created
+            itemClass.objects[itemAdj] = whichRare[itemAdj]
+            # add the item to the specific class of items (sword, axe,etc)
+            IM.RoomItem.objects[itemAdj] = itemClass(itemAdj,sweep)
+            # add the item to the overall item dictionary
+            RM.addToRoom(itemAdj,sweep)
+            del whichRare[itemAdj]
+            print('Added item {0} to class {1}'.\
+                format(itemAdj,itemClass))
+            return IM.RoomItem.objects[itemAdj]
+            # return an instance of the item
+        else:
+            print('Item already exists in {}'.format(itemClass))
+            return 1
     else:
-        return None
+        print('Item {} not in adjective dictionaries'.format(itemAdj))
+        return 1
 
 
-startSword = IM.Sword("trusty",10)
-startShield = IM.Shield("reliable",10)
+#--------------
+# Build the Items
+#--------------
+populateItemAdj()
+startSword = createAddItem("trusty",IM.Sword,10)
+startShield = createAddItem("reliable",IM.Shield,10)

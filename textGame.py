@@ -24,8 +24,6 @@ import Items
 #--------------
 gameSpace = 60
 launch.launchScreen(gameSpace,__doc__)
-
-Items.buildItems()
 #------------
 # Creatures
 #------------
