@@ -88,14 +88,14 @@ class Player(GameCharacter):
 		else:
 			inventory += "Head: \n"
 			for item in self.head:
-				inventory += "{0} {1}\n".format(self.head[item].itemName,\
+				inventory += "  {0} {1}\n".format(self.head[item].itemName,\
 					self.head[item].itemType)
 		if(len(self.pack)==0):
 			inventory += "Pack: Nothing\n"
 		else:
 			inventory += "Pack: \n"
 			for item in self.pack:
-				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
+				inventory += "  {0} {1}\n".format(self.pack[item].itemName,\
 					self.pack[item].itemType)
 		return self._desc+"\n"+stats+location+inventory.rstrip()
 

@@ -192,6 +192,32 @@ def equipFull(equipSlot):
 	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
 
 
+def unequip(item = None):
+	"""Unequip an item and place it in your pack"""
+	if item != None:
+		if item in CM.Player.arms:
+			itemCls = CM.Player.arms[item]
+			del CM.Player.arms[item]
+			CM.Player.pack[item] = itemCls
+			return "You unequipped the {} {}.".\
+				format(item,itemCls.itemType)
+		elif item in CM.Player.legs:
+			itemCls = CM.Player.legs[item]
+			del CM.Player.head[item]
+			CM.Player.pack[item] = itemCls
+			return "You unequipped the {} {}.".\
+				format(item,itemCls.itemType)
+		elif item in CM.Player.head:
+			itemCls = CM.Player.head[item]
+			del CM.Player.head[item]
+			CM.Player.pack[item] = itemCls
+			return "You unequipped the {} {}.".\
+				format(item,itemCls.itemType)
+		else:
+			return "Item {} not equipped.".format(item)
+	else:
+		return "Need target to unequip/"
+
 def move(direction = None):
 	"""Select a compass direction (NSEW) to move the player"""
 	curSwp = CM.getLoc()
@@ -277,6 +303,7 @@ verbDict = {
 	"equip": equip,
 	"move": move,
 	"quit": quitGame,
+	"unequip": unequip,
 }
 sortedVerbs = sorted(verbDict)
 
