@@ -63,7 +63,7 @@ def addToRoom(item,sweep):
 
 
 def delFromRoom(item,sweep):
-    """Removes and item from the room dictionary"""
+    """Removes an item from the room dictionary"""
     if (item in IM.RoomItem.objects):
         if item in rooms[sweep].items:
             del rooms[sweep].items[item]

@@ -8,8 +8,10 @@
 # Imports
 #------------
 import roomMod as RM
-
-
+import verbFuncMod as VFM
+#-------------------
+# Classes for Characters
+#-------------------
 class GameCharacter:
 	className = ""
 	desc = ""
@@ -31,9 +33,11 @@ class Goblin(GameCharacter):
 		super().__init__(name,sweep)#,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
+
 	@property
-		healthLine = "Health: {}".format(self.health)
-		return self._desc+"\n"+healthLine#+statusLine
+	def desc(self):
+		# Return goblin name and health
+		return self._desc+"\nHealth: "+str(self.health)
 
 	@desc.setter
 	def desc(self,value):
@@ -52,15 +56,18 @@ class Player(GameCharacter):
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
 		self.health = 5
+		# self._name = name
 		super().__init__(name,sweep)#,locX,locY)
 		self.pos[sweep] = RM.rooms[sweep]
-		self._desc = "A brave adventurer named "+self.name.capitalize()
+		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
 
 
 	@property
 	def desc(self):
-		"""Returns a string with the inventory of the player"""
+		"""Returns a string with the inventory and location of the player"""
 # Maybe put the parsing through dictionaries into a class method at some point
+		location = "Location: ({0},{1})\n".\
+			format(RM.sweepFunc(getLoc())[0],RM.sweepFunc(getLoc())[1])
 		inventory = "Inventory:\n"
 		if(len(self.arms)==0):
 			inventory += "Arms: Nothing\n"
@@ -90,7 +97,8 @@ class Player(GameCharacter):
 			for item in self.pack:
 				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
 					self.pack[item].itemType)
-		return self._desc+'\nHealth: '+str(self.health)+"\n"+inventory.rstrip()
+		return self._desc+"\n"+location+inventory.rstrip()
+
 
 	@desc.setter
 	def desc(self,value):
@@ -101,5 +109,9 @@ class Player(GameCharacter):
 #----------
 
 def getLoc():
-	"""Returns the location of the player"""
-	return list(Player.pos.keys())[0]
+	"""Returns the sweep of the player"""
+	pList = list(Player.pos.keys())
+	if len(pList) > 1:
+		raise SystemExit('Player in multiple places at once - getLoc')
+	else:
+		return pList[0]

@@ -38,26 +38,29 @@ def examine(noun = None):
 
 def examineRoom():
 	"""Displays the items and enemies in the player's room"""
-	thisRoom = CM.getLoc()
-	roomStr = ""
-	if len(RM.rooms[thisRoom].enemies) > 1:
-		roomStr = 'Enemies: \n'
-		for thing in list(RM.rooms[thisRoom].enemies):
-			if isinstance(RM.rooms[thisRoom].enemies[thing],CM.Player) != True:
-				thingType = CM.GameCharacter.objects[thing].className
-				roomStr += '  '+thing.capitalize()+' the '+thingType+'\n'
+	thisSwp = CM.getLoc()
+	thisRoom = RM.sweepFunc(thisSwp)
+	roomStr = "Current room: ({0},{1})\n".format(thisRoom[0],thisRoom[1])
+	if len(RM.rooms[thisSwp].enemies) > 0:
+		roomStr += 'Enemies: \n'
+		for thing in list(RM.rooms[thisSwp].enemies):
+			thingType = CM.GameCharacter.objects[thing].className
+			if isinstance(RM.rooms[thisSwp].enemies[thing],CM.Player) != True:
+				# thingType = CM.GameCharacter.objects[thing].className
+				roomStr += '  '+thing.capitalize()#+' the '+thingType+'\n'
+			else:
+				roomStr += '  '+pName.capitalize()#+' the '+thingType+'\n'
+			roomStr +=' the '+thingType+'\n'
 	else:
-		roomStr = 'Enemies: None\n'
-	if len(RM.rooms[thisRoom].items) > 0:
+		roomStr += 'Enemies: None\n'
+	if len(RM.rooms[thisSwp].items) > 0:
 		roomStr += 'Items: \n'
-		for item in list(RM.rooms[thisRoom].items):
-			iType = RM.rooms[thisRoom].items[item].itemType
+		for item in list(RM.rooms[thisSwp].items):
+			iType = RM.rooms[thisSwp].items[item].itemType
 			roomStr += '  '+item+' '+iType+'\n'
 	else:
 		roomStr += 'Items: None'
 	return roomStr.strip()
-
-
 
 
 def hit(noun = None):
@@ -109,6 +112,8 @@ def getInput():
 		return
 	if len(command)>=2:
 		nounIn = command[1].lower()
+		if nounIn == pName or nounIn.lower() == 'self':
+			nounIn = 'you'
 		print(verb(nounIn))
 	else:
 		print(verb())
@@ -173,6 +178,68 @@ def equipFull(equipSlot):
 	"""Error message for equipping an item to a full slot"""
 	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
 
+
+def move(direction = None):
+	"""Select a compass direction (NSEW) to move the player"""
+	curSwp = CM.getLoc()
+	curPos = RM.sweepFunc(curSwp)
+	nbors = {}	# keys: valid directions; values: corresponding room
+	# North
+	if validCoord(curPos[1]+1,1):
+		nbors['north'] = RM.sweepFunc(curPos[0],curPos[1]+1)
+	if validCoord(curPos[1]-1,1):
+		nbors['south'] = RM.sweepFunc(curPos[0],curPos[1]-1)
+	if validCoord(curPos[0]-1,0):
+		nbors['west'] = RM.sweepFunc(curPos[0]-1,curPos[1])
+	if validCoord(curPos[0]+1,0):
+		nbors['east'] = RM.sweepFunc(curPos[0]+1,curPos[1])
+	if direction == None:
+		mvStr = 'Possible directions:\n'
+		if 'north' in nbors:
+			mvStr += 'North\n'
+		if 'east' in nbors:
+			mvStr += 'East\n'
+		if 'south' in nbors:
+			mvStr += 'South\n'
+		if 'west' in nbors:
+			mvStr += 'West'
+			return mvStr
+		else:
+			return mvStr.strip()
+	elif direction.lower() in ['north','south','east','west']:
+		d = direction.lower()
+		if d in nbors:
+			toSwp = nbors[d]
+			toPos = RM.sweepFunc(toSwp)
+			RM.addToRoom('you',toSwp)
+			RM.delFromRoom('you',curSwp)
+			del CM.Player.pos[curSwp]
+			CM.Player.pos[toSwp] = RM.rooms[toSwp]
+			return 'Moved from {0} to {1}'.format(curPos,toPos)
+		else:
+			return 'No door in that direction.'
+	else:
+		return "{} is not a valid direction of movement.".format(direction.capitalize())
+
+def validCoord(curcoord,dim):
+	"""Returns true if curcoord within gamespace dimension dim"""
+	# dim == 0 => x, dim == 1 => y
+	if curcoord > 0:
+		if dim == 0: # moving in x
+			if curcoord < RM.roomsX:
+				return True
+			else:
+				return False
+		elif dim == 1: # moving in y
+			if curcoord < RM.roomsY:
+				return True
+			else:
+				return False
+		else:
+			raise SystemExit('Bad Dimension in validCoord')
+	else:
+		return False
+
 # Verb Dictionary
 verbDict = {
 	"say": say,
@@ -181,5 +248,8 @@ verbDict = {
 	"help": help,
 	"take": take,
 	"equip": equip,
+	"move": move,
 }
 sortedVerbs = sorted(verbDict)
+
+pName = ""
