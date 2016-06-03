@@ -33,9 +33,11 @@ class Goblin(GameCharacter):
 		super().__init__(name,sweep)#,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
+
 	@property
-		healthLine = "Health: {}".format(self.health)
-		return self._desc+"\n"+healthLine#+statusLine
+	def desc(self):
+		# Return goblin name and health
+		return self._desc+"\nHealth: "+str(self.health)
 
 	@desc.setter
 	def desc(self,value):
@@ -58,10 +60,6 @@ class Player(GameCharacter):
 		super().__init__(name,sweep)#,locX,locY)
 		self.pos[sweep] = RM.rooms[sweep]
 		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
-
-	# @property
-	# def name(self):
-	# 	return self._name
 
 
 	@property
@@ -100,7 +98,7 @@ class Player(GameCharacter):
 				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
 					self.pack[item].itemType)
 		return self._desc+"\n"+location+inventory.rstrip()
-		
+
 
 	@desc.setter
 	def desc(self,value):
