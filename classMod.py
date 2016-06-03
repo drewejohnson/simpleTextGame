@@ -28,6 +28,27 @@ class GameCharacter:
 	def getDesc(self):
 		return "Class: "+self.className+"\n"+self.desc
 
+
+	def valEnhance(self,enhanceStr,eMod):
+		"""
+		enhanceStr: string that governs attribute modification.
+		eMod: add (0) or subtract (1) enhancement
+		"""
+		if len(enhanceStr) % 2 != 0:
+			raise SystemExit('String of odd length in valEnhance')
+		for c in range(0,len(enhanceStr),2):
+			if enhanceStr[c] == 'a':
+				self.values[1] += int(enhanceStr[c+1])*(-1)**eMod
+				return 0
+			elif enhanceStr[c] =='d':
+				self.values[2] += int(enhanceStr[c+1])*(-1)**eMod
+				return 0
+			elif enhanceStr[c] == 'h':
+				self.values[0] += int(enhanceStr[c+1])*(-1)**eMod
+				return 0
+			else:
+				raise SystemExit("Bad enhancer in valEnhance")
+
 class Goblin(GameCharacter):
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "goblin"

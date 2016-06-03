@@ -101,3 +101,11 @@ highRareAdj = {
     "robust":"d7a5",
     "deadly":"a6d5"
 }
+
+allAdj = {}
+for adj in lowRareAdj:
+    allAdj[adj] = lowRareAdj[adj]
+for adj in medRareAdj:
+    allAdj[adj] = medRareAdj[adj]
+for adj in highRareAdj:
+    allAdj[adj] = highRareAdj[adj]

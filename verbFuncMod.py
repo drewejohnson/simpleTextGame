@@ -159,10 +159,12 @@ def equip(equipObj = None):
 	else:
 		if equipObj in CM.Player.pack:
 			thing = CM.Player.pack[equipObj]
+			eStr = IM.allAdj[equipObj]		# string to enhance attribute
 			if (thing.equipSlot[0] == 'a'):
 				if (len(CM.Player.arms)<=2):
 					CM.Player.arms[equipObj] = thing
 					del(CM.Player.pack[equipObj])
+					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
 					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
 				else:
@@ -170,6 +172,7 @@ def equip(equipObj = None):
 			elif(thing.equipSlot[0] == 'l'):
 				if(len(CM.Player.legs)<=2):
 					CM.Player.legs[equipObj] = thing
+					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
 					del(CM.Player.pack[equipObj])
 					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
@@ -178,6 +181,7 @@ def equip(equipObj = None):
 			elif(thing.equipSlot[0] == 'h'):
 				if(len(CM.Player.head)<=1):
 					CM.Player.head[equipObj] = thing
+					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
 					del(CM.Player.pack[equipObj])
 					return equipStr+"{0} {1}".\
 						format(thing.itemName,thing.itemType)
@@ -198,18 +202,24 @@ def unequip(item = None):
 		if item in CM.Player.arms:
 			itemCls = CM.Player.arms[item]
 			del CM.Player.arms[item]
+			eStr = IM.allAdj[item]
+			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
 				format(item,itemCls.itemType)
 		elif item in CM.Player.legs:
 			itemCls = CM.Player.legs[item]
 			del CM.Player.head[item]
+			eStr = IM.allAdj[item]
+			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
 				format(item,itemCls.itemType)
 		elif item in CM.Player.head:
 			itemCls = CM.Player.head[item]
 			del CM.Player.head[item]
+			eStr = IM.allAdj[item]
+			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
 				format(item,itemCls.itemType)
