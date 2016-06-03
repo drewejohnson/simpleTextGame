@@ -11,6 +11,7 @@
 import classMod as CM
 import itemMod as IM
 import roomMod as RM
+import launch
 #----------------------
 #	Verb Functions
 #----------------------
@@ -109,14 +110,18 @@ def getInput():
 		verb = verbDict[verbIn]
 	else:
 		print("Unknown verb {}".format(verbIn))
-		return
-	if len(command)>=2:
-		nounIn = command[1].lower()
-		if nounIn == pName or nounIn.lower() == 'self':
-			nounIn = 'you'
-		print(verb(nounIn))
+		return 0
+	if verbIn.lower() == 'quit':
+		return quitGame()
 	else:
-		print(verb())
+		if len(command)>=2:
+			nounIn = command[1].lower()
+			if nounIn == pName or nounIn.lower() == 'self':
+				nounIn = 'you'
+			print(verb(nounIn))
+		else:
+			print(verb())
+		return 0
 
 
 def help(vHelp = None):
@@ -240,6 +245,20 @@ def validCoord(curcoord,dim):
 	else:
 		return False
 
+
+def quitGame(val = None):
+	"""Quit the game"""
+	print('You are about to quit the game. If you do so, you will lose'+\
+		' all progress.\nAre you sure you want to do this?\n')
+	quitVal = str(input('Press y to quit\n: '))
+	if quitVal.lower() == 'y':
+		print('Until next time, brave adventurer.')
+		return 1
+	else:
+		print('Carry on!')
+		return 0
+
+
 # Verb Dictionary
 verbDict = {
 	"say": say,
@@ -249,6 +268,7 @@ verbDict = {
 	"take": take,
 	"equip": equip,
 	"move": move,
+	"quit": quitGame,
 }
 sortedVerbs = sorted(verbDict)
 

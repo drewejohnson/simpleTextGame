@@ -33,7 +33,7 @@ gobbly = CM.Goblin("gobbly",10)
 # Game
 #------------
 
-VFM.pName = input("What is your name, brave adventurer: \n")
+VFM.pName = input("\nWhat is your name, brave adventurer: \n")
 player = CM.Player('you',10)
 VFM.take(Items.startSword.itemName)
 VFM.take(Items.startShield.itemName)
@@ -45,4 +45,6 @@ startStr = "Armed with their "+Items.startSword.itemName+' '+\
 	' departed into the darkness of the dungeon.'
 launch.prettyPrint(gameSpace,startStr)
 while True:
-	VFM.getInput()
+	qFlag = VFM.getInput()
+	if qFlag == 1:
+		break
