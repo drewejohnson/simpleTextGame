@@ -45,6 +45,4 @@ startStr = "Armed with their "+Items.startSword.itemName+' '+\
 	' departed into the darkness of the dungeon.'
 launch.prettyPrint(gameSpace,startStr)
 while True:
-	qFlag = VFM.getInput()
-	if qFlag == 1:
-		break
+	VFM.getInput()

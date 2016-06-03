@@ -252,8 +252,8 @@ def quitGame(val = None):
 		' all progress.\nAre you sure you want to do this?\n')
 	quitVal = str(input('Press y to quit\n: '))
 	if quitVal.lower() == 'y':
-		print('Until next time, brave adventurer.')
-		return 1
+		# print('Until next time, brave adventurer.')
+		raise SystemExit('Until next time, brave adventurer.')
 	else:
 		print('Carry on!')
 		return 0
