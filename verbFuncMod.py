@@ -56,7 +56,7 @@ def take(takeItem = None):
 	"""Pick up item and add to inventory"""
 	if(takeItem != None):
 		if takeItem in IM.RoomItem.objects:
-			pLoc = CM.getLoc(CM.Player)
+			pLoc = CM.getLoc()
 			if takeItem in RM.rooms[pLoc].items:
 				thing = IM.RoomItem.objects[takeItem]
 				if RM.delFromRoom(takeItem,pLoc) == 0:
@@ -83,6 +83,8 @@ def getInput():
 		return
 	if len(command)>=2:
 		nounIn = command[1].lower()
+		if nounIn == pName or nounIn.lower() == 'self':
+			nounIn = 'you'
 		print(verb(nounIn))
 	else:
 		print(verb())
@@ -147,6 +149,66 @@ def equipFull(equipSlot):
 	"""Error message for equipping an item to a full slot"""
 	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
 
+
+def move(direction = None):
+	"""Select a compass direction (NSEW) to move the player"""
+	curSwp = CM.getLoc()
+	curPos = RM.sweepFunc(curSwp)
+	nbors = {}	# keys: valid directions; values: corresponding room
+	# North
+	if validCoord(curPos[1]+1,1):
+		nbors['north'] = RM.sweepFunc(curPos[0],curPos[1]+1)
+	if validCoord(curPos[1]-1,1):
+		nbors['south'] = RM.sweepFunc(curPos[0],curPos[1]-1)
+	if validCoord(curPos[0]-1,0):
+		nbors['west'] = RM.sweepFunc(curPos[0]-1,curPos[1])
+	if validCoord(curPos[0]+1,0):
+		nbors['east'] = RM.sweepFunc(curPos[0]+1,curPos[1])
+	if direction == None:
+		mvStr = 'Possible directions:\n'
+		if 'north' in nbors:
+			mvStr += 'North\n'
+		if 'east' in nbors:
+			mvStr += 'East\n'
+		if 'south' in nbors:
+			mvStr += 'South\n'
+		if 'west' in nbors:
+			mvStr += 'West'
+			return mvStr
+		else:
+			return mvStr.strip()
+	elif direction.lower() in ['north','south','east','west']:
+		d = direction.lower()
+		if d in nbors:
+			toSwp = RM.sweepFunc(nbors[d])
+			print(toSwp)
+			RM.addToRoom(CM.Player,toSwp)
+			RM.delFromRoom('you',curSwp)
+			return 'Moved from {0} to {1}'.format(curPos,toSwp)
+		else:
+			return 'No door in that direction.'
+	else:
+		return "{} is not a valid direction of movement.".format(direction.capitalize())
+
+def validCoord(curcoord,dim):
+	"""Returns true if curcoord within gamespace dimension dim"""
+	# dim == 0 => x, dim == 1 => y
+	if curcoord > 0:
+		if dim == 0: # moving in x
+			if curcoord < RM.roomsX:
+				return True
+			else:
+				return False
+		elif dim == 1: # moving in y
+			if curcoord < RM.roomsY:
+				return True
+			else:
+				return False
+		else:
+			raise SystemExit('Bad Dimension in validCoord')
+	else:
+		return False
+
 # Verb Dictionary
 verbDict = {
 	"say": say,
@@ -155,5 +217,8 @@ verbDict = {
 	"help": help,
 	"take": take,
 	"equip": equip,
+	"move": move,
 }
 sortedVerbs = sorted(verbDict)
+
+pName = ""

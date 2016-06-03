@@ -8,8 +8,10 @@
 # Imports
 #------------
 import roomMod as RM
-
-
+import verbFuncMod as VFM
+#-------------------
+# Classes for Characters
+#-------------------
 class GameCharacter:
 	className = ""
 	desc = ""
@@ -61,15 +63,22 @@ class Player(GameCharacter):
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
 		self.health = 5
+		# self._name = name
 		super().__init__(name,sweep)#,locX,locY)
 		self.pos[sweep] = RM.rooms[sweep]
-		self._desc = "A brave adventurer named "+self.name.capitalize()
+		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
+
+	# @property
+	# def name(self):
+	# 	return self._name
 
 
 	@property
 	def desc(self):
-		"""Returns a string with the inventory of the player"""
+		"""Returns a string with the inventory and location of the player"""
 # Maybe put the parsing through dictionaries into a class method at some point
+		location = "Location: ({0},{1})\n".\
+			format(RM.sweepFunc(getLoc())[0],RM.sweepFunc(getLoc())[1])
 		inventory = "Inventory:\n"
 		inventory += "Arms: "
 		if(len(self.arms)==0):
@@ -99,7 +108,7 @@ class Player(GameCharacter):
 			for item in self.pack:
 				inventory += "{0} {1}\n".format(self.pack[item].itemName,\
 					self.pack[item].itemType)
-		return self._desc+"\n"+inventory.rstrip()
+		return self._desc+"\n"+location+inventory.rstrip()
 
 	@desc.setter
 	def desc(self,value):
@@ -109,6 +118,6 @@ class Player(GameCharacter):
 # Functions
 #----------
 
-def getLoc(player):
+def getLoc():
 	"""Returns the location of the player"""
 	return list(Player.pos.keys())[0]

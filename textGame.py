@@ -34,15 +34,15 @@ gobbly = CM.Goblin("gobbly",10)
 # Game
 #------------
 
-pName = input("What is your name, brave adventurer: \n")
-player = CM.Player(pName.lower(),10)
+VFM.pName = input("What is your name, brave adventurer: \n")
+player = CM.Player('you',10)
 VFM.take(Items.startSword.itemName)
 VFM.take(Items.startShield.itemName)
 print(VFM.equip(Items.startSword.itemName))
 print(VFM.equip(Items.startShield.itemName))
 startStr = "Armed with their "+Items.startSword.itemName+' '+\
 	Items.startSword.itemType+' and '+Items.startShield.itemName+' '+\
-	Items.startShield.itemType+', '+pName.capitalize()+\
+	Items.startShield.itemType+', '+VFM.pName.capitalize()+\
 	' departed into the darkness of the dungeon.'
 launch.prettyPrint(gameSpace,startStr)
 while True:
