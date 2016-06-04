@@ -74,5 +74,5 @@ def createAddItem(itemAdj,itemClass,sweep):
 # Build the Items
 #--------------
 populateItemAdj()
-startSword = createAddItem("trusty",IM.Sword,10)
-startShield = createAddItem("reliable",IM.Shield,10)
+startSword = createAddItem("trusty",IM.Sword,RM.startSwp)
+startShield = createAddItem("reliable",IM.Shield,RM.startSwp)

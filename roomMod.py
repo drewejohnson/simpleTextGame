@@ -86,8 +86,19 @@ def delFromRoom(item,sweep):
 #--------------------------
 # Initialize the game space
 #--------------------------
+#------------------ Game parameters ------------
 roomsX = 5
 roomsY = 5
+startSwp = sweepFunc(1,1)
+bossSwp = sweepFunc(roomsX,roomsY)
+roomDiff =  [[0,1,1,1,1],\
+            [1,1,2,2,2],\
+            [1,2,2,2,3],\
+            [1,1,2,3,3],\
+            [1,2,3,3,4]]
+# 0 -> start room, 1-> low,2-> med,3-> high rare enemies/items,
+# 4 -> boss
+#------------------------------------------------
 rooms = {}
 #sweep = {}
 for y in range(1,roomsY+1):

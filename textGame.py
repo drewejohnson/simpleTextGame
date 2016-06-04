@@ -27,13 +27,13 @@ launch.launchScreen(gameSpace,__doc__)
 #------------
 # Creatures
 #------------
-gobbly = CM.Goblin("gobbly",10)
+gobbly = CM.Goblin("gobbly",RM.startSwp)
 #------------
 # Game
 #------------
 
 VFM.pName = input("\nWhat is your name, brave adventurer: \n")
-player = CM.Player('you',10)
+player = CM.Player('you',RM.startSwp)
 VFM.take(Items.startSword.itemName)
 VFM.take(Items.startShield.itemName)
 print(VFM.equip(Items.startSword.itemName))

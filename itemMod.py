@@ -81,7 +81,8 @@ lowRareAdj = {
     "decent":"a3",
     "adequate":"h1",
     "lucky":"d2a2h2",
-    "smart":"h2"
+    "smart":"h2",
+    "unlucky": "a0"
 }
 
 medRareAdj = {
