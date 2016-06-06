@@ -11,7 +11,6 @@
 import classMod as CM
 import itemMod as IM
 import roomMod as RM
-import launch
 #----------------------
 #	Verb Functions
 #----------------------
@@ -159,7 +158,8 @@ def equip(equipObj = None):
 	else:
 		if equipObj in CM.Player.pack:
 			thing = CM.Player.pack[equipObj]
-			eStr = IM.allAdj[equipObj]		# string to enhance attribute
+			eStr = IM.allAdj[IM.inRare(equipObj)][equipObj]
+			# string to enhance attribute
 			if (thing.equipSlot[0] == 'a'):
 				if (len(CM.Player.arms)<=2):
 					CM.Player.arms[equipObj] = thing

@@ -4,7 +4,6 @@
 # Text Based Python Game
 #-----------------------
 
-import verbFuncMod as VFM
 def prettyIntro(widthScr):
     """Launch screen visuals for text-based python game"""
     print('+'*widthScr+"\n")
@@ -39,11 +38,12 @@ gameObjective = "Traverse through the dangerous dungeon to defeat the boss "+\
     "as you approach the center, but loot becomes more powerful as well. " +\
     "In combat, enemies will only attack you if you attack them first."
 
-def launchScreen(widthScr,gameDesc):
+def launchScreen(widthScr):
     """Driver for the launch screen of the game. Prints rules and objectives"""
     prettyIntro(widthScr)
+    gameDesc = "A simple text-based game where you explore a maze,fight monsters, and obtain gear."
     prettyPrint(widthScr,gameDesc.replace('\n',' '))
     prettyPrint(widthScr,gameObjective.replace('\t',' '))
 #    print(VFM.sortedVerbs)
     print("{s:^{w}}".format(s = "Commands: ",w = widthScr))
-    print(VFM.help())
+#    print(VFM.help())
