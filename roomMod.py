@@ -112,7 +112,9 @@ def buildRoom(swp,diff):
         	' departed into the darkness of the dungeon.'
         launch.prettyPrint(gameSpace,startStr)
         return 0
-    elif diff == 4:
+    elif diff == 4:     # boss room
+        nameInt = R.randint(0,len(CM.dragonNames))
+        boss = CM.Dragon(CM.dragonNames[nameInt],swp)
         return 0
     else:
         for roll in range(roomRolls[diff]):
@@ -178,8 +180,8 @@ bossSwp = sweepFunc(roomsX,roomsY)
 roomDiff =  [[0,1,1,1,1],\
             [1,1,2,2,2],\
             [1,2,2,2,3],\
-            [1,1,2,3,3],\
-            [1,2,3,3,4]]
+            [1,1,2,4,3],\
+            [1,2,3,3,3]]
 # 0 -> start room, 1-> low,2-> med,3-> high rare enemies/items,
 # 4 -> boss
 roomRolls = {1:2,2:3,3:4}
