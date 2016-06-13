@@ -20,9 +20,9 @@ class GameCharacter:
 
 	def __init__(self,name,sweep,values):#,locX,locY):
 		self.name = name
-		GameCharacter.objects[self.name] = self
+		GameCharacter.objects[self.name.lower()] = self
 		self.values = values
-		RM.addToRoom(name,sweep)
+		RM.rooms[sweep].enemies[self.name.lower()] = self
 		# self.name stores keys as character names, not classNames
 
 	def getDesc(self):
@@ -52,7 +52,7 @@ class GameCharacter:
 class Goblin(GameCharacter):
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "goblin"
-		gobValues = [5,1,1]			# 5 health, 1 attack and defense
+		gobValues = [5,2,2]			# 5 health, 1 attack and defense
 		super().__init__(name,sweep,gobValues)#,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 
@@ -65,6 +65,71 @@ class Goblin(GameCharacter):
 	@desc.setter
 	def desc(self,value):
 		self._desc = value
+
+
+class Werewolf(GameCharacter):
+	def __init__(self,name,sweep):
+		self.className = "werewolf"
+		wolfValues = [6,4,5]
+		super().__init__(name,sweep,wolfValues)
+		self._desc = "A ferocious wolf named "+self.name.capitalize()
+
+	@property
+	def desc(self):
+		return self._desc+"\nHealth: {0}".format(self.values[0])
+
+	@desc.setter
+	def desc(self,value):
+		self._desc = value
+
+
+class Elf(GameCharacter):
+	def __init__(self,name,sweep):
+		self.className = "elf"
+		elfValues = [8,3,7]
+		super().__init__(name,sweep,elfValues)
+		self._desc = "An estranged elf named {}".format(self.name.capitalize())
+
+	@property
+	def desc(self):
+		return self._desc+"\nHealth: {0}".format(self.values[0])
+
+	@desc.setter
+	def desc(self,value):
+		self._desc = value
+
+
+class Wizard(GameCharacter):
+	def __init__(self,name,sweep):
+		self.className = "wizard"
+		wizValues = [10,7,8]
+		super().__init__(name,sweep,wizValues)
+		self._desc = "A powerful wizard named {}".format(self.name.capitalize())
+
+	@property
+	def desc(self):
+		return self._desc+"\nHealth: {0}".format(self.values[0])
+
+	@desc.setter
+	def desc(self,value):
+		self._desc = value
+
+
+class Dragon(GameCharacter):
+	def __init__(self,name,sweep):
+		self.className = "dragon"
+		dragonValues = [15,15,15]
+		super().__init__(name,sweep,dragonValues)
+		self._desc = "An enraged, gigantic dragon known as {}".format(self.name.capitalize())
+
+	@property
+	def desc(self):
+		return self._desc+"\nHealth: {0}".format(self.values[0])
+
+	@desc.setter
+	def desc(self,value):
+		self._desc = value
+
 
 class Player(GameCharacter):
 	arms = {}
@@ -136,3 +201,15 @@ def getLoc():
 		raise SystemExit('Player in multiple places at once - getLoc')
 	else:
 		return pList[0]
+#-----------
+# Enemy Names
+#------------
+
+gobNames = ["Gob1","Gob2","Gob3","Gob4","Gob5","Gob6"]
+elfNames = ["Elf1","Elf2","Elf3","Elf4","Elf5","Elf6"]
+wizNames = ["Wiz1","Wiz2","Wiz3","Wiz4","Wiz5","Wiz6"]
+wolfNames = ["Wolf1","Wolf2","Wolf3","Wolf4","Wolf5","Wolf6"]
+dragonNames = ["Smaug","Toothless","Nibbler"]
+# To draw from names: grab an index using random.randint(0,len(LIST))
+# Use the name corresponding to that integer
+# delete the item in the list with that index
