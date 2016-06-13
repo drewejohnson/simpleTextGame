@@ -11,7 +11,6 @@
 import classMod as CM
 import itemMod as IM
 import roomMod as RM
-import launch
 #----------------------
 #	Verb Functions
 #----------------------
@@ -25,9 +24,11 @@ def say(noun = None):
 
 
 def examine(noun = None):
-	"""Examine an object, enemy, or player"""
+	"""Examine items, enemies, yourself, or the room"""
 	if (noun != None):
-		if noun in CM.GameCharacter.objects:
+		swp = CM.getLoc()
+		if (noun in RM.rooms[swp].items or noun in RM.rooms[swp].enemies) and \
+			noun in CM.GameCharacter.objects:
 			return CM.GameCharacter.objects[noun].getDesc()
 		elif noun.lower() == 'room':
 			return examineRoom()
@@ -159,7 +160,8 @@ def equip(equipObj = None):
 	else:
 		if equipObj in CM.Player.pack:
 			thing = CM.Player.pack[equipObj]
-			eStr = IM.allAdj[equipObj]		# string to enhance attribute
+			eStr = IM.allAdj[IM.inRare(equipObj)][equipObj]
+			# string to enhance attribute
 			if (thing.equipSlot[0] == 'a'):
 				if (len(CM.Player.arms)<=2):
 					CM.Player.arms[equipObj] = thing
@@ -199,10 +201,11 @@ def equipFull(equipSlot):
 def unequip(item = None):
 	"""Unequip an item and place it in your pack"""
 	if item != None:
+		eStr = IM.allAdj[IM.inRare(item)][item]
 		if item in CM.Player.arms:
 			itemCls = CM.Player.arms[item]
 			del CM.Player.arms[item]
-			eStr = IM.allAdj[item]
+			# eStr = IM.allAdj[IM.inRare(item)][item]
 			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
@@ -210,7 +213,7 @@ def unequip(item = None):
 		elif item in CM.Player.legs:
 			itemCls = CM.Player.legs[item]
 			del CM.Player.head[item]
-			eStr = IM.allAdj[item]
+			# eStr = IM.allAdj[item]
 			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
@@ -218,7 +221,7 @@ def unequip(item = None):
 		elif item in CM.Player.head:
 			itemCls = CM.Player.head[item]
 			del CM.Player.head[item]
-			eStr = IM.allAdj[item]
+			# eStr = IM.allAdj[item]
 			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
@@ -260,8 +263,10 @@ def move(direction = None):
 		if d in nbors:
 			toSwp = nbors[d]
 			toPos = RM.sweepFunc(toSwp)
-			RM.addToRoom('you',toSwp)
-			RM.delFromRoom('you',curSwp)
+			# RM.addToRoom('you',toSwp)
+			# RM.delFromRoom('you',curSwp)
+			RM.rooms[toSwp].enemies['you'] = CM.GameCharacter.objects['you']
+			del RM.rooms[curSwp].enemies['you']
 			del CM.Player.pos[curSwp]
 			CM.Player.pos[toSwp] = RM.rooms[toSwp]
 			return 'Moved from {0} to {1}'.format(curPos,toPos)
@@ -275,12 +280,12 @@ def validCoord(curcoord,dim):
 	# dim == 0 => x, dim == 1 => y
 	if curcoord > 0:
 		if dim == 0: # moving in x
-			if curcoord < RM.roomsX:
+			if curcoord <= RM.roomsX:
 				return True
 			else:
 				return False
 		elif dim == 1: # moving in y
-			if curcoord < RM.roomsY:
+			if curcoord <= RM.roomsY:
 				return True
 			else:
 				return False

@@ -20,51 +20,105 @@ class GameCharacter:
 
 	def __init__(self,name,sweep,values):#,locX,locY):
 		self.name = name
-		GameCharacter.objects[self.name] = self
+		GameCharacter.objects[self.name.lower()] = self
 		self.values = values
-		RM.addToRoom(name,sweep)
+		RM.rooms[sweep].enemies[self.name.lower()] = self
+		# print("Added a {0} {1} to room {2}".format(name,self,RM.sweepFunc(sweep)))
 		# self.name stores keys as character names, not classNames
 
+
+	def __str__(self):
+		return str(self.className)+str(self.name)
+
+
 	def getDesc(self):
-		return "Class: "+self.className+"\n"+self.desc
-
-
-	def valEnhance(self,enhanceStr,eMod):
-		"""
-		enhanceStr: string that governs attribute modification.
-		eMod: add (0) or subtract (1) enhancement
-		"""
-		if len(enhanceStr) % 2 != 0:
-			raise SystemExit('String of odd length in valEnhance')
-		for c in range(0,len(enhanceStr),2):
-			if enhanceStr[c] == 'a':
-				self.values[1] += int(enhanceStr[c+1])*(-1)**eMod
-				return 0
-			elif enhanceStr[c] =='d':
-				self.values[2] += int(enhanceStr[c+1])*(-1)**eMod
-				return 0
-			elif enhanceStr[c] == 'h':
-				self.values[0] += int(enhanceStr[c+1])*(-1)**eMod
-				return 0
-			else:
-				raise SystemExit("Bad enhancer in valEnhance")
-
-class Goblin(GameCharacter):
-	def __init__(self,name,sweep):#,locX,locY):
-		self.className = "goblin"
-		gobValues = [5,1,1]			# 5 health, 1 attack and defense
-		super().__init__(name,sweep,gobValues)#,locX,locY)
-		self._desc = "A foul goblin called "+self.name.capitalize()
+		return self.desc
 
 
 	@property
 	def desc(self):
-		# Return goblin name and health
-		return self._desc+"\nHealth: "+str(self.values[0])
+		return self._desc+"\nHealth: {0:3d} Attack: {1:3d} Defense: {2:3d}"\
+			.format(self.values[0],self.values[1],self.values[2])
 
 	@desc.setter
 	def desc(self,value):
 		self._desc = value
+
+
+
+	def enhance(self,eStr):
+		"""Way to increase the enemy difficulty using a given adjective"""
+		if len(eStr)%2 != 0:
+			raise SystemExit('Odd string length for enemyEnhance {0} on {1}'.\
+				format(eStr,self))
+		else:
+			for c in range(0,len(eStr),2):
+				if eStr[c] == 'a':
+					self.values[1] += int(eStr[c+1])
+				elif eStr[c] == 'd':
+					self.values[2] += int(eStr[c+1])
+				elif eStr[c] == 'h':
+					self.values[0] += int(eStr[c+1])
+				else:
+					raise SystemExit("Bad enhancer {} in enemyEnhance".format(eStr))
+			# print("Applied enhancement {0} to {1}".format(eStr,self))
+
+
+
+class Goblin(GameCharacter):
+	def __init__(self,name,sweep,adj = None):#,locX,locY):
+		self.className = "goblin"
+		gobValues = [5,2,2]			# 5 health, 1 attack and defense
+		super().__init__(name,sweep,gobValues)#,locX,locY)
+		self._desc = "A foul goblin called "+self.name.capitalize()
+		if adj != None:
+			self._desc += " the {}".format(adj.capitalize())
+			# super().enhance(adj)
+
+
+class Werewolf(GameCharacter):
+	def __init__(self,name,sweep,adj = None):
+		self.className = "werewolf"
+		wolfValues = [6,4,5]
+		super().__init__(name,sweep,wolfValues)
+		self._desc = "A ferocious wolf named "+self.name.capitalize()
+		if adj != None:
+			self._desc += " the {}".format(adj.capitalize())
+			# super().enemyEnhance(adj)
+
+
+class Elf(GameCharacter):
+	def __init__(self,name,sweep,adj=None):
+		self.className = "elf"
+		elfValues = [8,3,7]
+		super().__init__(name,sweep,elfValues)
+		self._desc = "An estranged elf named {}".format(self.name.capitalize())
+		if adj != None:
+			self._desc += " the {}".format(adj.capitalize())
+			# super().enemyEnhance(adj)
+
+
+class Wizard(GameCharacter):
+	def __init__(self,name,sweep,adj=None):
+		self.className = "wizard"
+		wizValues = [10,7,8]
+		super().__init__(name,sweep,wizValues)
+		self._desc = "A powerful wizard named {}".format(self.name.capitalize())
+		if adj != None:
+			self._desc += " the {}".format(adj.capitalize())
+			# super().enemyEnhance(adj)
+
+
+class Dragon(GameCharacter):
+	def __init__(self,name,sweep,adj=None):
+		self.className = "dragon"
+		dragonValues = [15,15,15]
+		super().__init__(name,sweep,dragonValues)
+		self._desc = "An enraged, gigantic dragon known as {}".format(self.name.capitalize())
+		if adj != None:
+			self._desc += " the {}".format(adj.capitalize())
+			# super().enemyEnhance(adj)
+
 
 class Player(GameCharacter):
 	arms = {}
@@ -75,7 +129,7 @@ class Player(GameCharacter):
 
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
-		pValues = [5,2,2]
+		pValues = [5,5,5]
 		super().__init__(name,sweep,pValues)#,locX,locY)
 		self.pos[sweep] = RM.rooms[sweep]
 		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
@@ -125,6 +179,27 @@ class Player(GameCharacter):
 	def desc(self,value):
 		self._desc = value
 
+
+	def valEnhance(self,enhanceStr,eMod):
+		"""
+		enhanceStr: string that governs attribute modification.
+		eMod: add (0) or subtract (1) enhancement
+		"""
+		if len(enhanceStr) % 2 != 0:
+			raise SystemExit('String of odd length in valEnhance')
+		for c in range(0,len(enhanceStr),2):
+			if enhanceStr[c] == 'a':
+				self.values[1] += int(enhanceStr[c+1])*(-1)**eMod
+				return 0
+			elif enhanceStr[c] =='d':
+				self.values[2] += int(enhanceStr[c+1])*(-1)**eMod
+				return 0
+			elif enhanceStr[c] == 'h':
+				self.values[0] += int(enhanceStr[c+1])*(-1)**eMod
+				return 0
+			else:
+				raise SystemExit("Bad enhancer in valEnhance")
+
 #----------
 # Functions
 #----------
@@ -136,3 +211,15 @@ def getLoc():
 		raise SystemExit('Player in multiple places at once - getLoc')
 	else:
 		return pList[0]
+#-----------
+# Enemy Names
+#------------
+
+gobNames = ["Gob1","Gob2","Gob3","Gob4","Gob5","Gob6"]
+elfNames = ["Elf1","Elf2","Elf3","Elf4","Elf5","Elf6"]
+wizNames = ["Wiz1","Wiz2","Wiz3","Wiz4","Wiz5","Wiz6"]
+wolfNames = ["Wolf1","Wolf2","Wolf3","Wolf4","Wolf5","Wolf6"]
+dragonNames = ["Smaug","Toothless","Nibbler"]
+# To draw from names: grab an index using random.randint(0,len(LIST))
+# Use the name corresponding to that integer
+# delete the item in the list with that index

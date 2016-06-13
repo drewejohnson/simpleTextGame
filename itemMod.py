@@ -13,14 +13,15 @@ class RoomItem:
     equipSlot = ""
     enhance = ""
     objects = {}        # actual items created
-    lowRare = {}        # adjectives to be used
-    medRare = {}
-    highRare = {}
+    # lowRare = {}        # adjectives to be used
+    # medRare = {}
+    # highRare = {}
 
     def __init__(self,name,sweep):
         self.itemName = name
         RoomItem.objects[self.itemName] = self
-        RM.addToRoom(name,sweep)
+        RM.rooms[sweep].items[name] = self
+        # print("Added a {0} {1} to room {2}".format(name,self,sweep))
 
 
 class Sword(RoomItem):
@@ -46,7 +47,7 @@ class Shield(RoomItem):
 
 class Helmet(RoomItem):
     objects = {}
-    def __init__(self,name):
+    def __init__(self,name,sweep):
         self.itemType = 'helmet'
         self.equipSlot = 'head'
         super().__init__(name,sweep)
@@ -55,6 +56,54 @@ class Helmet(RoomItem):
 #----------
 # Functions
 #----------
+def inRare(adj):
+    """Return the key associated with the rarity/difficulty of the adjective"""
+    if adj in allAdj[1]:
+        return 1
+    elif adj in allAdj[2]:
+        return 2
+    elif adj in allAdj[3]:
+        return 3
+
+
+def createAddItem(itemAdj,itemClass,sweep):
+    """
+    Creates an item of class itemClass and adds item to dictionary
+    of that class, if one does not exist already. Returns an object
+    instantiated with these characteristics.
+    """
+# -------------Can probably be deleted --------------------
+    if itemAdj in lowRareAdj:
+        whichRare = lowRareAdj[itemAdj]
+    elif itemAdj in medRareAdj:
+        whichRare = medRareAdj[itemAdj]
+    elif itemAdj in highRareAdj:
+        whichRare = highRareAdj[itemAdj]
+    else:
+        whichRare = 1
+    if whichRare != 1:
+        # adjective is a valid adjective
+        if not itemAdj in itemClass.objects:
+            # item with this name not created
+            itemClass.objects[itemAdj] = whichRare#[itemAdj]
+            # add the item to the specific class of items (sword, axe,etc)
+            RoomItem.objects[itemAdj] = itemClass(itemAdj,sweep)
+            # add the item to the overall item dictionary
+            RM.addToRoom(itemAdj,sweep)
+#            del whichRare[itemAdj]
+#-----------ROUTINE TO DELETE AN ADJECTIVE FROM A GIVEN ITEM RARITY DICTIONARY--------
+            print('Added item {0} to class {1}'.\
+                format(itemAdj,itemClass))
+            return RoomItem.objects[itemAdj]
+            # return an instance of the item
+        else:
+            print('Item already exists in {}'.format(itemClass))
+            return 1
+    else:
+        print('Item {} not in adjective dictionaries'.format(itemAdj))
+        return 1
+
+
 def adjPopulate(adjDict,adjFlag):
     """Method for populating the dictionary of adjectives for a specific item"""
 # adjectives with enhancements starting with 'a' will go into dictionaries for weapons
@@ -63,7 +112,7 @@ def adjPopulate(adjDict,adjFlag):
     passDict = {}
 
     for key in adjDict:
-        if adjDict[key][0 ] == adjFlag:
+        if adjDict[key][0] == adjFlag:
             passDict[key] = adjDict[key]
 
     return passDict
@@ -81,7 +130,8 @@ lowRareAdj = {
     "decent":"a3",
     "adequate":"h1",
     "lucky":"d2a2h2",
-    "smart":"h2"
+    "smart":"h2",
+    "unlucky": "a0"
 }
 
 medRareAdj = {
@@ -102,10 +152,21 @@ highRareAdj = {
     "deadly":"a6d5"
 }
 
-allAdj = {}
+allAdj = {1:{},2:{},3:{}}
 for adj in lowRareAdj:
-    allAdj[adj] = lowRareAdj[adj]
+    allAdj[1][adj] = lowRareAdj[adj]
 for adj in medRareAdj:
-    allAdj[adj] = medRareAdj[adj]
+    allAdj[2][adj] = medRareAdj[adj]
 for adj in highRareAdj:
-    allAdj[adj] = highRareAdj[adj]
+    allAdj[3][adj] = highRareAdj[adj]
+
+swordAdj = {1:{},2:{},3:{}}
+axeAdj = {1:{},2:{},3:{}}
+shieldAdj = {1:{},2:{},3:{}}
+helmetAdj = {1:{},2:{},3:{}}
+
+for r in range(1,4):
+    swordAdj[r] = adjPopulate(allAdj[r],'a')
+    axeAdj[r] = adjPopulate(allAdj[r],'a')
+    shieldAdj[r] = adjPopulate(allAdj[r],'d')
+    helmetAdj[r] = adjPopulate(allAdj[r],'h')
