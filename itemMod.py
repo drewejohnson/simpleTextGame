@@ -8,10 +8,10 @@
 import roomMod as RM
 
 class RoomItem:
-    itemName = ""
-    itemType = ""
-    equipSlot = ""
-    enhance = ""
+    # itemName = ""
+    # itemType = ""
+    # equipSlot = ""
+    # enhance = ""
     objects = {}        # actual items created
     # lowRare = {}        # adjectives to be used
     # medRare = {}
@@ -51,6 +51,24 @@ class Helmet(RoomItem):
         self.itemType = 'helmet'
         self.equipSlot = 'head'
         super().__init__(name,sweep)
+
+class Potion:
+    #value = 1,2,3 for different amounts of healing
+    amounts = [10,20,30]
+    types = ["Potion","Serum","Elixir"]
+    def __init__(self,var,swp):
+        """var: type of potion. higher var => higher healing amount"""
+        self.var = var
+        if var == 0:
+            # self.amount = 10
+            self.itemType = "Potion"
+        elif var == 1:
+            # self.amount = 20
+            self.itemType = "Serum"
+        elif var == 2:
+            # self.amount = 30
+            self.itemType = "Elixir"
+        RM.rooms[swp].items[self.itemType.lower()]=self
 
 
 #----------

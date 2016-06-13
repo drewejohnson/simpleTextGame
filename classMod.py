@@ -9,6 +9,7 @@
 #------------
 import roomMod as RM
 import verbFuncMod as VFM
+import itemMod as IM
 #-------------------
 # Classes for Characters
 #-------------------
@@ -126,10 +127,12 @@ class Player(GameCharacter):
 	head = {}
 	pack = {}
 	pos = {}
+	potions = [0,0,0]
 
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
 		pValues = [5,5,5]
+		self.maxHealth = pValues[0]
 		super().__init__(name,sweep,pValues)#,locX,locY)
 		self.pos[sweep] = RM.rooms[sweep]
 		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
@@ -139,8 +142,8 @@ class Player(GameCharacter):
 	def desc(self):
 		"""Returns a string with the inventory and location of the player"""
 # Maybe put the parsing through dictionaries into a class method at some point
-		stats = "Health: {0:3d} Attack: {1:3d} Defense: {2:3d}\n".\
-			format(self.values[0],self.values[1],self.values[2])
+		stats = "Health: {0:3d}/{1:<3d} Attack: {2:3d} Defense: {3:3d}\n".\
+			format(self.values[0],self.maxHealth,self.values[1],self.values[2])
 		location = "Location: ({0},{1})\n".\
 			format(RM.sweepFunc(getLoc())[0],RM.sweepFunc(getLoc())[1])
 		inventory = "Inventory:\n"
@@ -169,9 +172,17 @@ class Player(GameCharacter):
 			inventory += "Pack: Nothing\n"
 		else:
 			inventory += "Pack: \n"
+			# pString = [0,0,0]
 			for item in self.pack:
-				inventory += "  {0} {1}\n".format(self.pack[item].itemName,\
-					self.pack[item].itemType)
+				if not isinstance(self.pack[item],IM.Potion):
+					inventory += "  {0} {1}\n".format(self.pack[item].itemName,\
+						self.pack[item].itemType)
+		if self.potions[0] > 0:
+			inventory += "Potions: {}\n".format(self.potions[0])
+		if self.potions[1] > 0:
+			inventory += "Serums: {}\n".format(self.potions[1])
+		if self.potions[2] > 0:
+			inventory += "Elixirs: {}\n".format(self.potions[2])
 		return self._desc+"\n"+stats+location+inventory.rstrip()
 
 
@@ -196,9 +207,26 @@ class Player(GameCharacter):
 				return 0
 			elif enhanceStr[c] == 'h':
 				self.values[0] += int(enhanceStr[c+1])*(-1)**eMod
+				self.maxHealth += int(enhanceStr[c+1])*(-1)**eMod
 				return 0
 			else:
 				raise SystemExit("Bad enhancer in valEnhance")
+
+
+	def drink(self,typ):
+		if self.values[0] == self.maxHealth:
+			return "Already at full health. No need to heal"
+		if self.potion[typ] > 0:
+			self.potion[typ] -= 1
+			if self.values[0] + IM.Potions.amounts[typ] > self.maxHealth:
+				self.values[0] = self.maxHealth
+			else:
+				self.values[0] += IM.potions.amounts[typ]
+			return "You drank the {0}. Current health: {1}/{2:<}".\
+				format(noun,CM.Player.values[0],CM.Player.maxHealth)
+		else:
+			return 0
+
 
 #----------
 # Functions

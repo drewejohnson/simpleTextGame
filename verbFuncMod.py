@@ -58,12 +58,52 @@ def examineRoom():
 	if len(RM.rooms[thisSwp].items) > 0:
 		roomStr += 'Items: \n'
 		for item in list(RM.rooms[thisSwp].items):
-			iType = RM.rooms[thisSwp].items[item].itemType
-			roomStr += '  '+item+' '+iType+'\n'
+			iType = RM.rooms[thisSwp].items[item]
+			if isinstance(iType,IM.Potion):
+				roomStr += "  "+iType.itemType+"\n"
+			else:
+				roomStr += '  '+item+' '+iType.itemType+'\n'
 	else:
 		roomStr += 'Items: None'
 	return roomStr.strip()
 
+
+def drink(noun = None):
+	"""Drink a healing potion from your inventory"""
+	if noun == None:
+		#-------CALL A FUNCTION TO SHOW ALL POTIONS
+		return "Need a target to drink"
+	# else:
+	# 	if CM.Player.values[0] == CM.Player.maxHealth:
+	# 		return "Already at full health. No need to heal"
+	# if noun == "potion":
+	# 	typ = 0
+	# elif noun == "serum":
+	# 	typ  = 1
+	# elif noun == "elixir":
+	# 	typ = 2
+	# 	else:
+	# 		return "you have no {} to drink".format(noun)
+	# 	if CM.Player.potion[typ] > 0:
+	# 		CM.Player.potion[typ] -= 1
+	# 		if CM.Player.values[0] + IM.Potions.amounts[typ] >= CM.Player.maxHealth:
+	# 			CM.Player.values[0] = CM.Player.maxHealth
+	# 		else:
+	# 			CM.Player.values[0] += IM.Potions.amounts[typ]
+	# 		return "You drank the {0}. Current health: {1}/{2:<}".\
+	# 			format(IM.Potion.types[typ],CM.Player.values[0],CM.Player.maxHealth)
+	else:
+		if noun == "potion":
+			typ = 0
+		elif noun == "serum":
+			typ  = 1
+		elif noun == "elixir":
+			typ = 2
+		rString =  CM.Player.drink(typ)
+		if rString == 0:
+			return "You have no {} to drink".format(noun)
+		else:
+			return rString
 
 def hit(noun = None):
 	"""Hit an enemy"""
@@ -94,20 +134,20 @@ def hit(noun = None):
 def take(takeItem = None):
 	"""Pick up item and add to inventory"""
 	if(takeItem != None):
-		if takeItem in IM.RoomItem.objects:
-			pLoc = CM.getLoc()
-			if takeItem in RM.rooms[pLoc].items:
-				thing = IM.RoomItem.objects[takeItem]
-				if RM.delFromRoom(takeItem,pLoc) == 0:
-					CM.Player.pack[takeItem] = thing
-					return "You picked up the {0} {1}".format(takeItem,\
-					thing.itemType)
-				else:
-					return 'Could not delete item from room'
+		pLoc = CM.getLoc()
+		if takeItem in RM.rooms[pLoc].items:
+			thing = RM.rooms[pLoc].items[takeItem]
+			del RM.rooms[pLoc].items[takeItem]
+			if isinstance(thing,IM.Potion):
+				CM.Player.potions[thing.var] += 1
+				print(CM.Player.potions)
+				return "You picked up the {}".format(thing.itemType)
 			else:
-				return "There is no {} here".format(takeItem)
+				CM.Player.pack[takeItem]=thing
+				return "You picked up the {0} {1}".format(takeItem,\
+					thing.itemType)
 		else:
-			return 'No item by that name.'
+			return "There is no {} here".format(takeItem)
 	else:
 		return "Need target to take"
 
@@ -319,6 +359,7 @@ verbDict = {
 	"move": move,
 	"quit": quitGame,
 	"unequip": unequip,
+	"drink":drink,
 }
 sortedVerbs = sorted(verbDict)
 
