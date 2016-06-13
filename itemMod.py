@@ -20,7 +20,8 @@ class RoomItem:
     def __init__(self,name,sweep):
         self.itemName = name
         RoomItem.objects[self.itemName] = self
-        RM.addToRoom(name,sweep)
+        RM.rooms[sweep].items[name] = self
+        # print("Added a {0} {1} to room {2}".format(name,self,sweep))
 
 
 class Sword(RoomItem):
@@ -46,7 +47,7 @@ class Shield(RoomItem):
 
 class Helmet(RoomItem):
     objects = {}
-    def __init__(self,name):
+    def __init__(self,name,sweep):
         self.itemType = 'helmet'
         self.equipSlot = 'head'
         super().__init__(name,sweep)

@@ -134,36 +134,22 @@ def buildRoom(swp,diff):
     #----------------ENEMY SPAWN GOES HERE-------------------
                     return 0
                 else:       # add an item to the room
-                    adjRem = len(IM.swordAdj[diff])+len(IM.axeAdj[diff])+len(IM.shieldAdj[diff])+\
-                        len(IM.helmetAdj[diff])
-                    itemSplit = [len(IM.swordAdj[diff])/adjRem,\
-                        len(IM.swordAdj[diff])+len(IM.axeAdj[diff])/adjRem,\
-                        len(IM.swordAdj[diff])+len(IM.axeAdj[diff])+len(IM.shieldAdj[diff])/adjRem]
-                    if rn3 < itemSplit[0]:
-                        # GENERATE A SWORD of rarity difRare
-                        thisAdj = R.choice(list(IM.swordAdj[diffRare].keys()))
-                        del IM.swordAdj[diffRare][thisAdj]
-                        thisItem = IM.Sword(thisAdj,swp)
-                        return 0
-                    elif rn3 < itemSplit[1]:
-                        # GENERATE AN AXE of rarity difRare
-                        thisAdj = R.choice(list(IM.axeAdj[diffRare].keys()))
-                        del IM.axeAdj[diffRare][thisAdj]
-                        thisItem = IM.Axe(thisAdj,swp)
-                        return 0
-                    elif rn3 < itemSplit[2]:
-                        # GENERATE A SHIELD of rarity difRare
-                        thisAdj = R.choice(list(IM.shieldAdj[diffRare].keys()))
-                        del IM.shieldAdj[diffRare][thisAdj]
-                        thisItem = IM.Shield(thisAdj,swp)
-                        return 0
-                    else:
-                        # GENERATE A HELMET of rarity difRare
-                        thisAdj = R.choice(list(IM.helmetAdj[diffRare].keys()))
-                        del IM.helmetAdj[diffRare][thisAdj]
-                        thisItem = IM.Helmet(thisAdj,swp)
-                        return 0
+                    itemChoice = {}
+                    if len(IM.swordAdj[diff])>0:
+                        itemChoice[IM.Sword] = IM.swordAdj[diff]
+                    if len(IM.axeAdj[diff]) > 0:
+                        itemChoice[IM.Axe]= IM.axeAdj[diff]
+                    if len(IM.shieldAdj[diff]) > 0:
+                        itemChoice[IM.Shield] = IM.shieldAdj[diff]
+                    if len(IM.helmetAdj[diff]) > 0:
+                        itemChoice[IM.Helmet] = IM.helmetAdj[diff]
+                    thisType = R.choice(list(itemChoice.keys()))
+                    thisAdj = R.choice(list(itemChoice[thisType].keys()))
+                    thisItem = thisType(thisAdj,swp)
+                    del itemChoice[thisType][thisAdj]
+                    return 0
             else:
+                print("Nothing added to room {}".format(sweepFunc(swp)))
                 return 0 # nothing added to this room
 
 
