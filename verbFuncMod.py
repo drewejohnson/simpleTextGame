@@ -199,10 +199,11 @@ def equipFull(equipSlot):
 def unequip(item = None):
 	"""Unequip an item and place it in your pack"""
 	if item != None:
+		eStr = IM.allAdj[IM.inRare(item)][item]
 		if item in CM.Player.arms:
 			itemCls = CM.Player.arms[item]
 			del CM.Player.arms[item]
-			eStr = IM.allAdj[item]
+			# eStr = IM.allAdj[IM.inRare(item)][item]
 			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
@@ -210,7 +211,7 @@ def unequip(item = None):
 		elif item in CM.Player.legs:
 			itemCls = CM.Player.legs[item]
 			del CM.Player.head[item]
-			eStr = IM.allAdj[item]
+			# eStr = IM.allAdj[item]
 			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
@@ -218,7 +219,7 @@ def unequip(item = None):
 		elif item in CM.Player.head:
 			itemCls = CM.Player.head[item]
 			del CM.Player.head[item]
-			eStr = IM.allAdj[item]
+			# eStr = IM.allAdj[item]
 			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
 			CM.Player.pack[item] = itemCls
 			return "You unequipped the {} {}.".\
