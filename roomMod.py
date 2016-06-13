@@ -113,14 +113,12 @@ def buildRoom(swp,diff):
         launch.prettyPrint(gameSpace,startStr)
         return 0
     elif diff == 4:     # boss room
-        nameInt = R.randint(0,len(CM.dragonNames))
-        boss = CM.Dragon(CM.dragonNames[nameInt],swp)
+        boss = CM.Dragon(R.choice(CM.dragonNames),swp)
         return 0
     else:
-        for roll in range(roomRolls[diff]):
+        for roll in range(0,roomRolls[diff]):
             rn1 = R.random()     # rarity
             rn2 = R.random()     # enemy or item
-            rn3 = R.random()     # adjective for item/enemy
             if rn1 < rareThresh[diff][0]:
                 diffRare = 1
             elif rn1 < rareThresh[diff][1]:
@@ -128,29 +126,47 @@ def buildRoom(swp,diff):
             elif rn1 < rareThresh[diff][2]:
                 diffRare = 3
             else:
-                diffRare = 0        # no item/enemy spawned
+                diffRare = diff-1
+            # print("Room: {0}, Roll: {1},DiffRare: {2}".\
+            #     format(sweepFunc(swp),roll,diffRare))
             if diffRare > 0:
-                if rn2 > splitIE[diff]:  # add an enemy to the room
-    #----------------ENEMY SPAWN GOES HERE-------------------
-                    return 0
+                if rn2 > splitIE[diffRare]:  # add an enemy to the room
+                    enemyChoice = {}
+                    if len(CM.gobNames) > 0:
+                        enemyChoice[CM.Goblin] = CM.gobNames
+                    if len(CM.elfNames) > 0:
+                        enemyChoice[CM.Elf] = CM.elfNames
+                    if len(CM.wizNames) > 0:
+                        enemyChoice[CM.Wizard] = CM.wizNames
+                    if len(CM.wolfNames) > 0:
+                        enemyChoice[CM.Werewolf] = CM.wolfNames
+                    if len(enemyChoice) == 0:
+                        print("No enemy names left {}".format(sweepFunc(swp)))
+                        return 1
+                    else:
+                        thisType = R.choice(list(enemyChoice.keys()))
+                        thisName = R.choice(list(enemyChoice[thisType]))
+                        thisEnemy = thisType(thisName,swp)
                 else:       # add an item to the room
                     itemChoice = {}
-                    if len(IM.swordAdj[diff])>0:
-                        itemChoice[IM.Sword] = IM.swordAdj[diff]
-                    if len(IM.axeAdj[diff]) > 0:
-                        itemChoice[IM.Axe]= IM.axeAdj[diff]
-                    if len(IM.shieldAdj[diff]) > 0:
-                        itemChoice[IM.Shield] = IM.shieldAdj[diff]
-                    if len(IM.helmetAdj[diff]) > 0:
-                        itemChoice[IM.Helmet] = IM.helmetAdj[diff]
-                    thisType = R.choice(list(itemChoice.keys()))
-                    thisAdj = R.choice(list(itemChoice[thisType].keys()))
-                    thisItem = thisType(thisAdj,swp)
-                    del itemChoice[thisType][thisAdj]
-                    return 0
-            else:
-                print("Nothing added to room {}".format(sweepFunc(swp)))
-                return 0 # nothing added to this room
+                    if len(IM.swordAdj[diffRare])>0:
+                        itemChoice[IM.Sword] = IM.swordAdj[diffRare]
+                    if len(IM.axeAdj[diffRare]) > 0:
+                        itemChoice[IM.Axe]= IM.axeAdj[diffRare]
+                    if len(IM.shieldAdj[diffRare]) > 0:
+                        itemChoice[IM.Shield] = IM.shieldAdj[diffRare]
+                    if len(IM.helmetAdj[diffRare]) > 0:
+                        itemChoice[IM.Helmet] = IM.helmetAdj[diffRare]
+                    if (len(itemChoice) == 0):
+                        print("No item adjectives left {0} in difficulty {1}".\
+                            format(sweepFunc(swp),diffRare))
+                        # return 1
+                    else:
+                        thisType = R.choice(list(itemChoice.keys()))
+                        thisAdj = R.choice(list(itemChoice[thisType].keys()))
+                        thisItem = thisType(thisAdj,swp)
+                        del itemChoice[thisType][thisAdj]
+        return 0
 
 
 
@@ -177,14 +193,13 @@ splitIE = {1:0.6,2:0.5,3:0.35} # threshold for item/enemy generation
 
 #------------------------------------------------
 rooms = {}
-#sweep = {}
-# for y in range(1,roomsY+1):
-#     for x in range(1,roomsX+1):
-#         rooms[sweepFunc(x,y)] = RoomClass(sweepFunc(x,y))
-        # print(x,y,roomDiff[y][x])
 for s in range(1,roomsX*roomsY+1):
     rooms[s] = RoomClass(s)
     bflag = buildRoom(s,thisDiff(s))
     if bflag != 0:
-        print('Error in building room {}.'.format(s))
+        print('Error in building room {}.'.format(sweepFunc(s)))
         dummy = input('**')
+    # else:
+    #     print("Room: {}".format(sweepFunc(s)))
+    #     print(rooms[s].items)
+    #     print(rooms[s].enemies)

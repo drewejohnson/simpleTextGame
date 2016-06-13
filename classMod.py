@@ -23,6 +23,7 @@ class GameCharacter:
 		GameCharacter.objects[self.name.lower()] = self
 		self.values = values
 		RM.rooms[sweep].enemies[self.name.lower()] = self
+		# print("Added a {0} {1} to room {2}".format(name,self,RM.sweepFunc(sweep)))
 		# self.name stores keys as character names, not classNames
 
 	def getDesc(self):
