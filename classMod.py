@@ -20,9 +20,9 @@ class GameCharacter:
 
 	def __init__(self,name,sweep,values):#,locX,locY):
 		self.name = name
-		GameCharacter.objects[self.name] = self
+		GameCharacter.objects[self.name.lower()] = self
 		self.values = values
-		RM.addToRoom(name,sweep)
+		RM.rooms[sweep].enemies[self.name.lower()] = self
 		# self.name stores keys as character names, not classNames
 
 	def getDesc(self):
@@ -209,7 +209,7 @@ gobNames = ["Gob1","Gob2","Gob3","Gob4","Gob5","Gob6"]
 elfNames = ["Elf1","Elf2","Elf3","Elf4","Elf5","Elf6"]
 wizNames = ["Wiz1","Wiz2","Wiz3","Wiz4","Wiz5","Wiz6"]
 wolfNames = ["Wolf1","Wolf2","Wolf3","Wolf4","Wolf5","Wolf6"]
-dragonNames = ["Smaug","The error of the Winds","Nibbler"]
+dragonNames = ["Smaug","Toothless","Nibbler"]
 # To draw from names: grab an index using random.randint(0,len(LIST))
 # Use the name corresponding to that integer
 # delete the item in the list with that index
