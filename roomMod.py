@@ -97,7 +97,8 @@ def buildRoom(swp,diff):
         print(VFM.help())
         VFM.pName = input("\nWhat is your name, brave adventurer: \n")
         player = CM.Player('you',swp)
-        gobbly = CM.Goblin("gobbly",swp)
+        gobbly = CM.Goblin("gobbly",swp,"unlucky")
+        gobbly.values[1] = 0
         startSword = IM.Sword("trusty",swp)
         startShield = IM.Shield("reliable",swp)
         VFM.take(startSword.itemName)
@@ -141,7 +142,7 @@ def buildRoom(swp,diff):
                     if len(CM.wolfNames) > 0:
                         enemyChoice[CM.Werewolf] = CM.wolfNames
                     if len(enemyChoice) == 0:
-                        print("No enemy names left {}".format(sweepFunc(swp)))
+                        # print("No enemy names left {}".format(sweepFunc(swp)))
                         return 1
                     else:
                         thisType = R.choice(list(enemyChoice.keys()))
@@ -160,11 +161,7 @@ def buildRoom(swp,diff):
                         itemChoice[IM.Shield] = IM.shieldAdj[diffRare]
                     if len(IM.helmetAdj[diffRare]) > 0:
                         itemChoice[IM.Helmet] = IM.helmetAdj[diffRare]
-                    if (len(itemChoice) == 0):
-                        print("No item adjectives left {0} in difficulty {1}".\
-                            format(sweepFunc(swp),diffRare))
-                        # return 1
-                    else:
+                    if (len(itemChoice) > 0):
                         thisType = R.choice(list(itemChoice.keys()))
                         thisAdj = R.choice(list(itemChoice[thisType].keys()))
                         thisItem = thisType(thisAdj,swp)

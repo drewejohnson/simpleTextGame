@@ -24,9 +24,11 @@ def say(noun = None):
 
 
 def examine(noun = None):
-	"""Examine an object, enemy, or player"""
+	"""Examine items, enemies, yourself, or the room"""
 	if (noun != None):
-		if noun in CM.GameCharacter.objects:
+		swp = CM.getLoc()
+		if (noun in RM.rooms[swp].items or noun in RM.rooms[swp].enemies) and \
+			noun in CM.GameCharacter.objects:
 			return CM.GameCharacter.objects[noun].getDesc()
 		elif noun.lower() == 'room':
 			return examineRoom()

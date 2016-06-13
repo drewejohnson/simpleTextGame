@@ -61,7 +61,7 @@ class GameCharacter:
 					self.values[0] += int(eStr[c+1])
 				else:
 					raise SystemExit("Bad enhancer {} in enemyEnhance".format(eStr))
-			print("Applied enhancement {0} to {1}".format(eStr,self))
+			# print("Applied enhancement {0} to {1}".format(eStr,self))
 
 
 
