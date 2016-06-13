@@ -260,8 +260,10 @@ def move(direction = None):
 		if d in nbors:
 			toSwp = nbors[d]
 			toPos = RM.sweepFunc(toSwp)
-			RM.addToRoom('you',toSwp)
-			RM.delFromRoom('you',curSwp)
+			# RM.addToRoom('you',toSwp)
+			# RM.delFromRoom('you',curSwp)
+			RM.rooms[toSwp].enemies['you'] = CM.GameCharacter.objects['you']
+			del RM.rooms[curSwp].enemies['you']
 			del CM.Player.pos[curSwp]
 			CM.Player.pos[toSwp] = RM.rooms[toSwp]
 			return 'Moved from {0} to {1}'.format(curPos,toPos)
@@ -275,12 +277,12 @@ def validCoord(curcoord,dim):
 	# dim == 0 => x, dim == 1 => y
 	if curcoord > 0:
 		if dim == 0: # moving in x
-			if curcoord < RM.roomsX:
+			if curcoord <= RM.roomsX:
 				return True
 			else:
 				return False
 		elif dim == 1: # moving in y
-			if curcoord < RM.roomsY:
+			if curcoord <= RM.roomsY:
 				return True
 			else:
 				return False

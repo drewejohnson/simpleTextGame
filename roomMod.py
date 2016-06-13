@@ -99,7 +99,7 @@ def buildRoom(swp,diff):
         player = CM.Player('you',swp)
         gobbly = CM.Goblin("gobbly",swp)
         startSword = IM.Sword("trusty",swp)
-        startShield = IM.Shield("trusty",swp)
+        startShield = IM.Shield("reliable",swp)
         VFM.take(startSword.itemName)
         VFM.take(startShield.itemName)
         print(VFM.equip(startSword.itemName))
