@@ -68,6 +68,9 @@ class Potion:
         elif var == 2:
             # self.amount = 30
             self.itemType = "Elixir"
+        else:
+            print(swp,var)
+            raise SystemExit('Bad Potion Creation')
         RM.rooms[swp].items[self.itemType.lower()]=self
 
 

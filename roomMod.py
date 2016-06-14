@@ -167,6 +167,12 @@ def buildRoom(swp,diff):
                         thisAdj = R.choice(list(itemChoice[thisType].keys()))
                         thisItem = thisType(thisAdj,swp)
                         del itemChoice[thisType][thisAdj]
+        if len(rooms[swp].enemies)>len(rooms[swp].items):
+            print(sweepFunc(swp),diffRare)
+            print(len(rooms[swp].enemies),len(rooms[swp].items))
+            for p in range(0,R.randint(1,diff)):
+                thisPotion = IM.Potion(diff-1,swp)
+                print(p)
         return 0
 
 
@@ -197,9 +203,9 @@ rooms = {}
 for s in range(1,roomsX*roomsY+1):
     rooms[s] = RoomClass(s)
     bflag = buildRoom(s,thisDiff(s))
-    if bflag != 0:
-        print('Error in building room {}.'.format(sweepFunc(s)))
-        dummy = input('**')
+    # if bflag != 0:
+    #     print('Error in building room {}.'.format(sweepFunc(s)))
+    #     dummy = input('**')
     # else:
     #     print("Room: {}".format(sweepFunc(s)))
     #     print(rooms[s].items)
