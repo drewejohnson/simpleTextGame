@@ -8,14 +8,7 @@
 import roomMod as RM
 
 class RoomItem:
-    # itemName = ""
-    # itemType = ""
-    # equipSlot = ""
-    # enhance = ""
     objects = {}        # actual items created
-    # lowRare = {}        # adjectives to be used
-    # medRare = {}
-    # highRare = {}
 
     def __init__(self,name,sweep):
         self.itemName = name
@@ -24,12 +17,17 @@ class RoomItem:
         # print("Added a {0} {1} to room {2}".format(name,self,sweep))
 
 
+    def getDesc(self):
+        
+        return self.desc
+
 class Sword(RoomItem):
     objects = {}
     def __init__(self,name,sweep):
         self.itemType = "sword"
         self.equipSlot = "arms"
         super().__init__(name,sweep)
+        self.desc = "{0} {1}".format(self.itemName,self.itemType)
 
 class Axe(RoomItem):
     objects = {}
@@ -37,6 +35,7 @@ class Axe(RoomItem):
         self.itemType = "axe"
         self.equipSlot = "arms"
         super().__init__(name,sweep)
+        self.desc = "{0} {1}".format(self.itemName,self.itemType)
 
 class Shield(RoomItem):
     objects = {}
@@ -44,6 +43,7 @@ class Shield(RoomItem):
         self.itemType = "shield"
         self.equipSlot = "arms"
         super().__init__(name,sweep)
+        self.desc = "{0} {1}".format(self.itemName,self.itemType)
 
 class Helmet(RoomItem):
     objects = {}
@@ -51,28 +51,33 @@ class Helmet(RoomItem):
         self.itemType = 'helmet'
         self.equipSlot = 'head'
         super().__init__(name,sweep)
+        self.desc = "{0} {1}".format(self.itemName,self.itemType)
 
 class Potion:
     #value = 1,2,3 for different amounts of healing
-    amounts = [10,20,30]
+    values = [10,20,30]
     types = ["Potion","Serum","Elixir"]
     def __init__(self,var,swp):
         """var: type of potion. higher var => higher healing amount"""
         self.var = var
         if var == 0:
-            # self.amount = 10
+            self.amount = self.values[0]
             self.itemType = "Potion"
         elif var == 1:
-            # self.amount = 20
+            self.amount = self.values[1]
             self.itemType = "Serum"
         elif var == 2:
-            # self.amount = 30
+            self.amount = self.values[2]
             self.itemType = "Elixir"
         else:
             print(swp,var)
             raise SystemExit('Bad Potion Creation')
         RM.rooms[swp].items[self.itemType.lower()]=self
+        self.desc = "Healing {0}\n  Health + {1}".\
+            format(self.itemType,self.amount)
 
+    def getDesc(self):
+        return self.desc
 
 #----------
 # Functions

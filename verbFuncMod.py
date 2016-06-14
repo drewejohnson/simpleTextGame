@@ -27,11 +27,13 @@ def examine(noun = None):
 	"""Examine items, enemies, yourself, or the room"""
 	if (noun != None):
 		swp = CM.getLoc()
-		if (noun in RM.rooms[swp].items or noun in RM.rooms[swp].enemies) and \
-			noun in CM.GameCharacter.objects:
+		if noun in RM.rooms[swp].enemies and  noun in CM.GameCharacter.objects:
 			return CM.GameCharacter.objects[noun].getDesc()
 		elif noun.lower() == 'room':
 			return examineRoom()
+		elif noun in RM.rooms[swp].items:
+			thing = RM.rooms[swp].items[noun]
+			return thing.getDesc()
 		else:
 			return "There is no {} here".format(noun)
 	else:
