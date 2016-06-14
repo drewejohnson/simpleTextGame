@@ -131,9 +131,10 @@ class Player(GameCharacter):
 
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
-		pValues = [5,5,5]
-		self.maxHealth = pValues[0]
-		super().__init__(name,sweep,pValues)#,locX,locY)
+		self.values = [5,5,5]
+		self.maxHealth = self.values[0]*2
+		# self.potions = [0,0,0]
+		super().__init__(name,sweep,self.values)#,locX,locY)
 		self.pos[sweep] = RM.rooms[sweep]
 		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
 
@@ -178,11 +179,14 @@ class Player(GameCharacter):
 					inventory += "  {0} {1}\n".format(self.pack[item].itemName,\
 						self.pack[item].itemType)
 		if self.potions[0] > 0:
-			inventory += "Potions: {}\n".format(self.potions[0])
+			inventory += "Potions: {0}  +{1} health\n".\
+				format(self.potions[0],IM.Potion.amounts[0])
 		if self.potions[1] > 0:
-			inventory += "Serums: {}\n".format(self.potions[1])
+			inventory += "Serums: {0}  +{1} health\n".\
+				format(self.potions[1],IM.Potion.amounts[1])
 		if self.potions[2] > 0:
-			inventory += "Elixirs: {}\n".format(self.potions[2])
+			inventory += "Elixirs: {0}  +{1} health\n".\
+				format(self.potions[2],IM.Potion.amounts[2])
 		return self._desc+"\n"+stats+location+inventory.rstrip()
 
 
@@ -213,17 +217,17 @@ class Player(GameCharacter):
 				raise SystemExit("Bad enhancer in valEnhance")
 
 
-	def drink(self,typ):
+	def drink(self,ver):
 		if self.values[0] == self.maxHealth:
 			return "Already at full health. No need to heal"
-		if self.potion[typ] > 0:
-			self.potion[typ] -= 1
-			if self.values[0] + IM.Potions.amounts[typ] > self.maxHealth:
+		if self.potions[ver] > 0:
+			self.potions[ver] -= 1
+			if self.values[0] + IM.Potion.amounts[ver] > self.maxHealth:
 				self.values[0] = self.maxHealth
 			else:
-				self.values[0] += IM.potions.amounts[typ]
+				self.values[0] += IM.Potion.amounts[ver]
 			return "You drank the {0}. Current health: {1}/{2:<}".\
-				format(noun,CM.Player.values[0],CM.Player.maxHealth)
+				format(IM.Potion.types[ver],self.values[0],self.maxHealth)
 		else:
 			return 0
 

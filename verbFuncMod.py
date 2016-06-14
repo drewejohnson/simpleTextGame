@@ -73,33 +73,14 @@ def drink(noun = None):
 	if noun == None:
 		#-------CALL A FUNCTION TO SHOW ALL POTIONS
 		return "Need a target to drink"
-	# else:
-	# 	if CM.Player.values[0] == CM.Player.maxHealth:
-	# 		return "Already at full health. No need to heal"
-	# if noun == "potion":
-	# 	typ = 0
-	# elif noun == "serum":
-	# 	typ  = 1
-	# elif noun == "elixir":
-	# 	typ = 2
-	# 	else:
-	# 		return "you have no {} to drink".format(noun)
-	# 	if CM.Player.potion[typ] > 0:
-	# 		CM.Player.potion[typ] -= 1
-	# 		if CM.Player.values[0] + IM.Potions.amounts[typ] >= CM.Player.maxHealth:
-	# 			CM.Player.values[0] = CM.Player.maxHealth
-	# 		else:
-	# 			CM.Player.values[0] += IM.Potions.amounts[typ]
-	# 		return "You drank the {0}. Current health: {1}/{2:<}".\
-	# 			format(IM.Potion.types[typ],CM.Player.values[0],CM.Player.maxHealth)
 	else:
 		if noun == "potion":
-			typ = 0
+			ver = 0
 		elif noun == "serum":
-			typ  = 1
+			ver  = 1
 		elif noun == "elixir":
-			typ = 2
-		rString =  CM.Player.drink(typ)
+			ver = 2
+		rString =  CM.GameCharacter.objects['you'].drink(ver)
 		if rString == 0:
 			return "You have no {} to drink".format(noun)
 		else:
@@ -140,7 +121,6 @@ def take(takeItem = None):
 			del RM.rooms[pLoc].items[takeItem]
 			if isinstance(thing,IM.Potion):
 				CM.Player.potions[thing.var] += 1
-				print(CM.Player.potions)
 				return "You picked up the {}".format(thing.itemType)
 			else:
 				CM.Player.pack[takeItem]=thing
