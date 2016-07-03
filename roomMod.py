@@ -106,6 +106,7 @@ def buildRoom(swp,diff):
         startPotion = IM.Potion(0,swp)
         print(VFM.equip(startSword.itemName))
         print(VFM.equip(startShield.itemName))
+        print(VFM.take("potion"))
         del IM.swordAdj[1]["trusty"]
         del IM.shieldAdj[1]['reliable']
         startStr = "Armed with their "+startSword.itemName+' '+\

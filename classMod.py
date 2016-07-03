@@ -7,6 +7,7 @@
 #------------
 # Imports
 #------------
+import random as R
 import roomMod as RM
 import verbFuncMod as VFM
 import itemMod as IM
@@ -28,16 +29,12 @@ class GameCharacter:
 		# self.name stores keys as character names, not classNames
 
 
-	def __str__(self):
-		return str(self.className)+str(self.name)
-
 
 	def getDesc(self):
 		return self.desc
 
 
 	@property
-# <<<<<<< HEAD
 	def desc(self):
 		return self._desc+"\nHealth: {0:3d} Attack: {1:3d} Defense: {2:3d}"\
 			.format(self.values[0],self.values[1],self.values[2])
@@ -46,7 +43,6 @@ class GameCharacter:
 	@desc.setter
 	def desc(self,value):
 		self._desc = value
-
 
 
 	def enhance(self,eStr):
@@ -67,6 +63,28 @@ class GameCharacter:
 			# print("Applied enhancement {0} to {1}".format(eStr,self))
 
 
+	def attack(self,other):
+		"""Character self attacks other"""
+		if self.values[1] == 0:
+			return 0
+		combatDiff = self.values[1] - other.values[2]
+		if combatDiff > 0:
+			if combatDiff >= other.values[0]:
+				other.values[0] = 0
+				return 2		# other is dead
+			else:
+				other.values[0] -= combatDiff
+			return 1		# successful attack
+		else:
+			if R.random() > 0.5:		# random chance to attack anyways
+				if combatDiff >= other.values[0]:
+					other.values[0] = 0
+					return 2
+				else:
+					other.values[0] -= combatDiff
+				return 1
+			else:
+				return 0		# failed attack
 
 class Goblin(GameCharacter):
 	def __init__(self,name,sweep,adj = None):#,locX,locY):
@@ -237,10 +255,10 @@ class Player(GameCharacter):
 			return "Already at full health. No need to heal"
 		if self.potions[ver] > 0:
 			self.potions[ver] -= 1
-			if self.values[0] + IM.Potion.amounts[ver] > self.maxHealth:
+			if self.values[0] + IM.Potion.values[ver] > self.maxHealth:
 				self.values[0] = self.maxHealth
 			else:
-				self.values[0] += IM.Potion.amounts[ver]
+				self.values[0] += IM.Potion.values[ver]
 			return "You drank the {0}. Current health: {1}/{2:<}".\
 				format(IM.Potion.types[ver],self.values[0],self.maxHealth)
 		else:
