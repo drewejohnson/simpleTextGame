@@ -190,6 +190,19 @@ class Player(GameCharacter):
 		return self._desc+"\n"+stats+location+inventory.rstrip()
 
 
+	def onPerson(self,noun):
+	    """Return the location of an equipped item with name noun"""
+	    if noun in self.arms:
+	        return (True,self.arms)
+	    elif noun in self.legs:
+	        return (True,self.legs)
+	    elif noun in self.head:
+	        return (True,self.head)
+	    elif noun in self.pack:
+	        return (True,self.pack)
+	    else:
+	        return (False,0)
+
 	@desc.setter
 	def desc(self,value):
 		self._desc = value

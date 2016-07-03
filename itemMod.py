@@ -9,7 +9,6 @@ import roomMod as RM
 
 class RoomItem:
     objects = {}        # actual items created
-
     def __init__(self,name,sweep):
         self.itemName = name
         RoomItem.objects[self.itemName] = self
@@ -18,7 +17,6 @@ class RoomItem:
 
 
     def getDesc(self):
-        
         return self.desc
 
 class Sword(RoomItem):
@@ -90,6 +88,23 @@ def inRare(adj):
         return 2
     elif adj in allAdj[3]:
         return 3
+    else:
+        return 0
+
+
+def isItem(obType,iType):
+    """Return true if the object obType is of the class designated by iType"""
+    if iType == 'sword':
+        return isinstance(obType,Sword)
+    elif iType == 'axe':
+        return isinstance(obType,Axe)
+    elif iType == 'shield':
+        return isinstance(obType,Shield)
+    elif iType == 'helmet':
+        return isinstance(obType,Helmet)
+    else:
+        pass
+        # raise SystemError('Bad item type {} in isItem'.format(iType))
 
 
 def createAddItem(itemAdj,itemClass,sweep):

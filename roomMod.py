@@ -168,11 +168,11 @@ def buildRoom(swp,diff):
                         thisItem = thisType(thisAdj,swp)
                         del itemChoice[thisType][thisAdj]
         if len(rooms[swp].enemies)>len(rooms[swp].items):
-            print(sweepFunc(swp),diffRare)
-            print(len(rooms[swp].enemies),len(rooms[swp].items))
+            # print(sweepFunc(swp),diffRare)
+            # print(len(rooms[swp].enemies),len(rooms[swp].items))
             for p in range(0,R.randint(1,diff)):
                 thisPotion = IM.Potion(diff-1,swp)
-                print(p)
+                # print(p)
         return 0
 
 
