@@ -46,43 +46,6 @@ def sweepFunc(inX,inY = None):
         return (outX,outY)
 
 
-def addToRoom(item,sweep):
-    """Adds an item or an enemy to the appropriate dictionary for room sweep"""
-#----------can probably be deleted since items/enemies are added in buildRoom funciton
-    if (item in IM.RoomItem.objects):
-#        print('Adding '+str(item)+' to items')
-        rooms[sweep].items[item] = IM.RoomItem.objects[item]
-        return 0
-    elif (item in CM.GameCharacter.objects):
-#        print('Adding '+str(item)+' to characters')
-        rooms[sweep].enemies[item] = CM.GameCharacter.objects[item]
-        return 0
-    else:
-        return 1
-
-
-def delFromRoom(item,sweep):
-    """Removes an item from the room dictionary"""
-#---------don't delete. Could still be useful for combat in removing enemies
-    if (item in IM.RoomItem.objects):
-        if item in rooms[sweep].items:
-            del rooms[sweep].items[item]
-            return 0
-        else:
-            print('No item in room {0} to remove'.format(sweep))
-            return 2
-    elif item in CM.GameCharacter.objects:
-        if item in rooms[sweep].enemies:
-            del rooms[sweep].enemies[item]
-            return 0
-        else:
-            print('No item in room {0} to remove'.format(sweep))
-            return 2
-    else:
-        print('Bad item {}'.format(item))
-        return 1
-
-
 def thisDiff(s):
     """Returns the difficulty of a room given it's sweep value"""
     thisXY = sweepFunc(s)
