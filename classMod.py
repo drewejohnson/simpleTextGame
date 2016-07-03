@@ -237,7 +237,7 @@ class Player(GameCharacter):
 			return "Already at full health. No need to heal"
 		if self.potions[ver] > 0:
 			self.potions[ver] -= 1
-			if self.values[0] + IM.Potion.amounts[ver] > self.maxHealth:
+			if self.values[0] + IM.Potion.values[ver] > self.maxHealth:
 				self.values[0] = self.maxHealth
 			else:
 				self.values[0] += IM.Potion.amounts[ver]

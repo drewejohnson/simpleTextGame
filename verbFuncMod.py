@@ -70,9 +70,25 @@ def examineItem(adj,iType):
 		else:
 			return "No item {0} {1} equipped nor in pack".\
 				format(adj.capitalize(),iType.capitalize())
-	else:
-		return "Item {0} {1} not found on person".\
-			format(adj.capitalize(),iType.capitalize())
+	else:		# item not on person. Check the room
+		swp = CM.getLoc()
+		if adj in RM.rooms[swp].items:
+			if IM.isItem(RM.rooms[swp].items[adj],iType):
+				rStr = "{0} {1}\n".format(adj.capitalize(),iType.capitalize())
+				rarity = IM.inRare(adj)
+				if rarity > 0:
+					enhanceStr = IM.allAdj[rarity][adj]
+					for c in range(0,len(enhanceStr)):
+						if enhanceStr[c] == 'a':
+							rStr += "  Attack: +{}\n".format(enhanceStr[c+1])
+						elif enhanceStr[c] == 'h':
+							rStr += "  Health: +{}\n".format(enhanceStr[c+1])
+						elif enhanceStr[c] == 'd':
+							rStr += "  Defense: +{}\n".format(enhanceStr[c+1])
+				return rStr.rstrip()
+	return "Item {0} {1} not found on person nor in the room".\
+		format(adj.capitalize(),iType.capitalize())
+
 
 
 def examineRoom():
