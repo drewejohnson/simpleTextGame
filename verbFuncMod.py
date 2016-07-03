@@ -23,19 +23,56 @@ def say(noun = None):
 		return 'You said nothing.'
 
 
-def examine(noun = None):
+def examine(noun = None,iType = None):
 	"""Examine items, enemies, yourself, or the room"""
+	# print(noun,iType)
 	if (noun != None):
 		swp = CM.getLoc()
-		if (noun in RM.rooms[swp].items or noun in RM.rooms[swp].enemies) and \
-			noun in CM.GameCharacter.objects:
-			return CM.GameCharacter.objects[noun].getDesc()
-		elif noun.lower() == 'room':
-			return examineRoom()
+		if iType == None:
+			if noun in RM.rooms[swp].enemies and  noun in CM.GameCharacter.objects:
+				return CM.GameCharacter.objects[noun].getDesc()
+			elif noun.lower() == 'room':
+				return examineRoom()
+			elif noun in RM.rooms[swp].items:
+				thing = RM.rooms[swp].items[noun]
+				# print(thing)
+				return thing.getDesc()
+			else:
+				return "There is no {} here".format(noun)
 		else:
-			return "There is no {} here".format(noun)
+			return examineItem(noun,iType)
 	else:
 		return "Need target to examine."
+
+
+def examineItem(adj,iType):
+	"""Reveal the name and type of item, as well as attributes"""
+	onPlayerTpl = CM.GameCharacter.objects['you'].onPerson(adj)
+	# if item with same adjective is on person,
+	# 	onPlayerTpl is (True, item_location)
+	#	where item_location displays all items equipped in that spot (arms, pack, etc)
+	# else, onPlayerTpl is (False,0)
+	if onPlayerTpl[0]:
+		if IM.isItem(onPlayerTpl[1][adj],iType):
+			# check if the item with the noun is of the requested type
+			rStr = "{0} {1}\n".format(adj.capitalize(),iType.capitalize())
+			rarity = IM.inRare(adj)
+			if rarity > 0:
+				enhanceStr = IM.allAdj[rarity][adj]
+				for c in range(0,len(enhanceStr)):
+					if enhanceStr[c] == 'a':
+						rStr += "  Attack: +{}\n".format(enhanceStr[c+1])
+					elif enhanceStr[c] == 'h':
+						rStr += "  Health: +{}\n".format(enhanceStr[c+1])
+					elif enhanceStr[c] == 'd':
+						rStr += "  Defense: +{}\n".format(enhanceStr[c+1])
+			return rStr.rstrip()
+		else:
+			return "No item {0} {1} equipped nor in pack".\
+				format(adj.capitalize(),iType.capitalize())
+	else:
+		return "Item {0} {1} not found on person".\
+			format(adj.capitalize(),iType.capitalize())
 
 
 def examineRoom():
@@ -147,10 +184,20 @@ def getInput():
 			nounIn = command[1].lower()
 			if nounIn == pName or nounIn.lower() == 'self':
 				nounIn = 'you'
-			print(verb(nounIn))
+			if verbIn.lower() == 'examine':
+				if len(command) > 2:
+					iType = command[2].lower()
+					print(examine(nounIn,iType))
+					return 0
+				else:
+					print(examine(nounIn))
+					return 0
+			else:
+				print(verb(nounIn))
+				return 0
 		else:
 			print(verb())
-		return 0
+			return 0
 
 
 def help(vHelp = None):

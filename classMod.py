@@ -37,9 +37,11 @@ class GameCharacter:
 
 
 	@property
+# <<<<<<< HEAD
 	def desc(self):
 		return self._desc+"\nHealth: {0:3d} Attack: {1:3d} Defense: {2:3d}"\
 			.format(self.values[0],self.values[1],self.values[2])
+
 
 	@desc.setter
 	def desc(self,value):
@@ -180,15 +182,28 @@ class Player(GameCharacter):
 						self.pack[item].itemType)
 		if self.potions[0] > 0:
 			inventory += "Potions: {0}  +{1} health\n".\
-				format(self.potions[0],IM.Potion.amounts[0])
+				format(self.potions[0],IM.Potion.values[0])
 		if self.potions[1] > 0:
 			inventory += "Serums: {0}  +{1} health\n".\
-				format(self.potions[1],IM.Potion.amounts[1])
+				format(self.potions[1],IM.Potion.values[1])
 		if self.potions[2] > 0:
 			inventory += "Elixirs: {0}  +{1} health\n".\
-				format(self.potions[2],IM.Potion.amounts[2])
+				format(self.potions[2],IM.Potion.values[2])
 		return self._desc+"\n"+stats+location+inventory.rstrip()
 
+
+	def onPerson(self,noun):
+	    """Return the location of an equipped item with name noun"""
+	    if noun in self.arms:
+	        return (True,self.arms)
+	    elif noun in self.legs:
+	        return (True,self.legs)
+	    elif noun in self.head:
+	        return (True,self.head)
+	    elif noun in self.pack:
+	        return (True,self.pack)
+	    else:
+	        return (False,0)
 
 	@desc.setter
 	def desc(self,value):
