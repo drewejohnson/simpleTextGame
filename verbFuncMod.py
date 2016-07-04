@@ -139,30 +139,67 @@ def drink(noun = None):
 		else:
 			return rString
 
-def hit(noun = None):
+
+def hit(enemy = None):
 	"""Hit an enemy"""
-	if (noun != None):
-		if noun in CM.GameCharacter.objects:
-# there is a noun to hit
-			thing = CM.GameCharacter.objects[noun]
-# thing is the class of noun
-			combatDiff = CM.GameCharacter.objects['you'].values[1] -\
-				thing.values[2]
-			# difference between player attack and enemy defense
-			if combatDiff > 0:
-				thing.values[0] -= combatDiff
-				if thing.values[0] <= 0:
-					return "You killed {}!".format(thing.name.capitalize())
-				else:
-					return "You hit {0}. Current health: {1}".\
-						format(thing.name.capitalize(),thing.values[0])
-			else:
-				return "{} to strong. Attack not effective".\
-					format(thing.name.capitalize())
+	if enemy != None:
+		swp = CM.getLoc()
+		if enemy in RM.rooms[swp].enemies:
+			thingObj = RM.rooms[swp].enemies[enemy]
+			player = CM.GameCharacter.objects['you']
+			status = player.attack(thingObj)
+			if status == 1:		# successful attack. enemy strikes back
+				print("You struck {0}. {1}'s health: {2}".\
+					format(enemy,enemy.capitalize(),thingObj.values[0]))
+				status2 = thingObj.attack(player)
+				if status2 == 1:
+					return "{0} struck back!\nHealth: {1}".\
+						format(enemy.capitalize(),player.values[0])
+				elif status2 == 2:
+					return "You dead bro."
+				elif status2 == 0:
+					return "{0} tried to hit you back and failed.".format(enemy.capitalize())
+			elif status == 2:		# killed enemy
+				del RM.rooms[swp].enemies[enemy]
+				return "You killed {0}!".format(enemy.capitalize())
+			elif status == 0:
+				return "Attack strength too low. Failed to hit {}".format(enemy)
 		else:
-			return "There is no {} here.".format(noun)
+			return "There is no {0} in this room".format(enemy)
+
 	else:
-		return 'Need target to hit'
+		return "Need target to hit"
+
+
+# def strike(enemy = None):
+# 	"""Better combat mechanics using class methods"""
+	# if enemy != None:
+	# 	swp = CM.getLoc()
+	# 	if enemy in RM.rooms[swp].enemies:
+	# 		thingObj = RM.rooms[swp].enemies[enemy]
+	# 		player = CM.GameCharacter.objects['you']
+	# 		status = player.attack(thingObj)
+	# 		if status == 1:		# successful attack. enemy strikes back
+	# 			print("You struck {0}. {1}'s health: {2}".\
+	# 				format(enemy,enemy.capitalize(),thingObj.values[0]))
+	# 			status2 = thingObj.attack(player)
+	# 			if status2 == 1:
+	# 				return "{0} struck back!\nHealth: {1}".\
+	# 					format(enemy.capitalize(),player.values[0])
+	# 			elif status2 == 2:
+	# 				return "You dead bro."
+	# 			elif status2 == 0:
+	# 				return "{0} tried to hit you back and failed.".format(enemy.capitalize())
+	# 		elif status == 2:		# killed enemy
+	# 			del RM.rooms[swp].enemies[enemy]
+	# 			return "You killed {0}!".format(enemy.capitalize())
+	# 		elif status == 0:
+	# 			return "Attack strength too low. Failed to hit {}".format(enemy)
+	# 	else:
+	# 		return "There is no {0} in this room".format(enemy)
+	#
+	# else:
+	# 	return "Need target to hit"
 
 
 def take(takeItem = None):
@@ -403,6 +440,7 @@ verbDict = {
 	"quit": quitGame,
 	"unequip": unequip,
 	"drink":drink,
+	# "strike":strike,
 }
 sortedVerbs = sorted(verbDict)
 
