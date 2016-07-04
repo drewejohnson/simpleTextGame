@@ -12,7 +12,7 @@ class RoomItem:
     def __init__(self,name,sweep):
         self.itemName = name
         RoomItem.objects[self.itemName] = self
-        RM.rooms[sweep].items[name] = self
+        RM.rooms[sweep].items[name+" "+self.itemType] = self
         # print("Added a {0} {1} to room {2}".format(name,self,sweep))
 
 

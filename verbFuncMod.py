@@ -115,7 +115,7 @@ def examineRoom():
 			if isinstance(iType,IM.Potion):
 				roomStr += "  "+iType.itemType+"\n"
 			else:
-				roomStr += '  '+item+' '+iType.itemType+'\n'
+				roomStr += '  '+item+"\n"
 	else:
 		roomStr += 'Items: None'
 	return roomStr.strip()
@@ -176,26 +176,28 @@ def take(adj = None,iType = None):
 	"""Pick up item and add to inventory"""
 	if(adj != None):
 		pLoc = CM.getLoc()
-		print(adj,iType)
-		if adj in RM.rooms[pLoc].items:
+		if adj in RM.rooms[pLoc].items: # check if item is a potion
 			thing = RM.rooms[pLoc].items[adj]
 			if isinstance(thing,IM.Potion):
 				CM.Player.potions[thing.var] += 1
 				del RM.rooms[pLoc].items[adj]
 				return "You picked up the {}".format(thing.itemType)
-			else:
+		if iType != None:
+			item = adj+" "+iType
+			if item in RM.rooms[pLoc].items:
+				thing = RM.rooms[pLoc].items[item]
 				if IM.isItem(thing,iType):
 # True if there is an item of the type iType with the
 # specified adjective in the room
-					del RM.rooms[pLoc].items[adj]
-					CM.GameCharacter.objects['you'].pack[adj+iType]=thing
-					return "You picked up the {0} {1}".format(adj,\
-						thing.itemType)
+					del RM.rooms[pLoc].items[item]
+					CM.GameCharacter.objects['you'].pack[item]=thing
+					return "You picked up the {}".format(item)
 				else:
-					return "There is no {0} {1} here.".\
-						format(adj,iType)
-		else:
-			return "There is no {0} {1} here.".format(adj,iType)
+					return "There is no {} here.".format(item)
+			else:
+				return "There is no {0} {1} here.".format(adj,iType)
+		else:		# no value of iType given
+			return "Will place something here to show all values with that adjective"
 	else:
 		return "Need target to take"
 
