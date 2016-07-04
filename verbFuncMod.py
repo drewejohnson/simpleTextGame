@@ -172,22 +172,30 @@ def hit(enemy = None,arg2 = None):
 
 
 
-def take(takeItem = None,arg2 = None):
+def take(adj = None,iType = None):
 	"""Pick up item and add to inventory"""
-	if(takeItem != None):
+	if(adj != None):
 		pLoc = CM.getLoc()
-		if takeItem in RM.rooms[pLoc].items:
-			thing = RM.rooms[pLoc].items[takeItem]
-			del RM.rooms[pLoc].items[takeItem]
+		print(adj,iType)
+		if adj in RM.rooms[pLoc].items:
+			thing = RM.rooms[pLoc].items[adj]
 			if isinstance(thing,IM.Potion):
 				CM.Player.potions[thing.var] += 1
+				del RM.rooms[pLoc].items[adj]
 				return "You picked up the {}".format(thing.itemType)
 			else:
-				CM.Player.pack[takeItem]=thing
-				return "You picked up the {0} {1}".format(takeItem,\
-					thing.itemType)
+				if IM.isItem(thing,iType):
+# True if there is an item of the type iType with the
+# specified adjective in the room
+					del RM.rooms[pLoc].items[adj]
+					CM.GameCharacter.objects['you'].pack[adj+iType]=thing
+					return "You picked up the {0} {1}".format(adj,\
+						thing.itemType)
+				else:
+					return "There is no {0} {1} here.".\
+						format(adj,iType)
 		else:
-			return "There is no {} here".format(takeItem)
+			return "There is no {0} {1} here.".format(adj,iType)
 	else:
 		return "Need target to take"
 
@@ -205,6 +213,8 @@ def getInput():
 	else:
 		try:
 			arg1 = command[1].lower()
+			if arg1 == 'self' or arg1 == pName:
+				arg1 = 'you'
 		except IndexError:
 			arg1 = None
 		try:
@@ -214,9 +224,6 @@ def getInput():
 
 		print(verb(arg1,arg2))
 		return None
-		# else:
-		# 	print(verb())
-		# 	return 0
 
 
 def help(vHelp = None,arg2 = None):

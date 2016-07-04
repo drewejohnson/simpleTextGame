@@ -107,42 +107,42 @@ def isItem(obType,iType):
         # raise SystemError('Bad item type {} in isItem'.format(iType))
 
 
-def createAddItem(itemAdj,itemClass,sweep):
-    """
-    Creates an item of class itemClass and adds item to dictionary
-    of that class, if one does not exist already. Returns an object
-    instantiated with these characteristics.
-    """
-# -------------Can probably be deleted --------------------
-    if itemAdj in lowRareAdj:
-        whichRare = lowRareAdj[itemAdj]
-    elif itemAdj in medRareAdj:
-        whichRare = medRareAdj[itemAdj]
-    elif itemAdj in highRareAdj:
-        whichRare = highRareAdj[itemAdj]
-    else:
-        whichRare = 1
-    if whichRare != 1:
-        # adjective is a valid adjective
-        if not itemAdj in itemClass.objects:
-            # item with this name not created
-            itemClass.objects[itemAdj] = whichRare#[itemAdj]
-            # add the item to the specific class of items (sword, axe,etc)
-            RoomItem.objects[itemAdj] = itemClass(itemAdj,sweep)
-            # add the item to the overall item dictionary
-            RM.addToRoom(itemAdj,sweep)
-#            del whichRare[itemAdj]
-#-----------ROUTINE TO DELETE AN ADJECTIVE FROM A GIVEN ITEM RARITY DICTIONARY--------
-            print('Added item {0} to class {1}'.\
-                format(itemAdj,itemClass))
-            return RoomItem.objects[itemAdj]
-            # return an instance of the item
-        else:
-            print('Item already exists in {}'.format(itemClass))
-            return 1
-    else:
-        print('Item {} not in adjective dictionaries'.format(itemAdj))
-        return 1
+# def createAddItem(itemAdj,itemClass,sweep):
+#     """
+#     Creates an item of class itemClass and adds item to dictionary
+#     of that class, if one does not exist already. Returns an object
+#     instantiated with these characteristics.
+#     """
+# # -------------Can probably be deleted --------------------
+#     if itemAdj in lowRareAdj:
+#         whichRare = lowRareAdj[itemAdj]
+#     elif itemAdj in medRareAdj:
+#         whichRare = medRareAdj[itemAdj]
+#     elif itemAdj in highRareAdj:
+#         whichRare = highRareAdj[itemAdj]
+#     else:
+#         whichRare = 1
+#     if whichRare != 1:
+#         # adjective is a valid adjective
+#         if not itemAdj in itemClass.objects:
+#             # item with this name not created
+#             itemClass.objects[itemAdj] = whichRare#[itemAdj]
+#             # add the item to the specific class of items (sword, axe,etc)
+#             RoomItem.objects[itemAdj] = itemClass(itemAdj,sweep)
+#             # add the item to the overall item dictionary
+#             RM.addToRoom(itemAdj,sweep)
+# #            del whichRare[itemAdj]
+# #-----------ROUTINE TO DELETE AN ADJECTIVE FROM A GIVEN ITEM RARITY DICTIONARY--------
+#             print('Added item {0} to class {1}'.\
+#                 format(itemAdj,itemClass))
+#             return RoomItem.objects[itemAdj]
+#             # return an instance of the item
+#         else:
+#             print('Item already exists in {}'.format(itemClass))
+#             return 1
+#     else:
+#         print('Item {} not in adjective dictionaries'.format(itemAdj))
+#         return 1
 
 
 def adjPopulate(adjDict,adjFlag):
