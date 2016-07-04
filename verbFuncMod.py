@@ -47,13 +47,14 @@ def examine(noun = None,iType = None):
 
 def examineItem(adj,iType):
 	"""Reveal the name and type of item, as well as attributes"""
-	onPlayerTpl = CM.GameCharacter.objects['you'].onPerson(adj)
+	item = adj+" "+iType
+	onPlayerTpl = CM.GameCharacter.objects['you'].onPerson(item)
 	# if item with same adjective is on person,
 	# 	onPlayerTpl is (True, item_location)
 	#	where item_location displays all items equipped in that spot (arms, pack, etc)
 	# else, onPlayerTpl is (False,0)
 	if onPlayerTpl[0]:
-		if IM.isItem(onPlayerTpl[1][adj],iType):
+		if IM.isItem(onPlayerTpl[1][item],iType):
 			# check if the item with the noun is of the requested type
 			rStr = "{0} {1}\n".format(adj.capitalize(),iType.capitalize())
 			rarity = IM.inRare(adj)
@@ -72,8 +73,8 @@ def examineItem(adj,iType):
 				format(adj.capitalize(),iType.capitalize())
 	else:		# item not on person. Check the room
 		swp = CM.getLoc()
-		if adj in RM.rooms[swp].items:
-			if IM.isItem(RM.rooms[swp].items[adj],iType):
+		if item in RM.rooms[swp].items:
+			if IM.isItem(RM.rooms[swp].items[item],iType):
 				rStr = "{0} {1}\n".format(adj.capitalize(),iType.capitalize())
 				rarity = IM.inRare(adj)
 				if rarity > 0:
@@ -247,45 +248,49 @@ def help(vHelp = None,arg2 = None):
 	return helpMsg.strip()
 
 
-def equip(equipObj = None,arg2 = None):
+def equip(adj = None,iType = None):
 	"""Equip an object from your pack"""
 	equipStr = "You equiped the "
-	if(equipObj == None):
+	if(adj == None):
 		return 'Need target to equip'
 	else:
-		if equipObj in CM.Player.pack:
-			thing = CM.Player.pack[equipObj]
-			eStr = IM.allAdj[IM.inRare(equipObj)][equipObj]
-			# string to enhance attribute
-			if (thing.equipSlot[0] == 'a'):
-				if (len(CM.Player.arms)<=2):
-					CM.Player.arms[equipObj] = thing
-					del(CM.Player.pack[equipObj])
-					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
-					return equipStr+"{0} {1}".\
-						format(thing.itemName,thing.itemType)
-				else:
-					return equipFull('arms')
-			elif(thing.equipSlot[0] == 'l'):
-				if(len(CM.Player.legs)<=2):
-					CM.Player.legs[equipObj] = thing
-					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
-					del(CM.Player.pack[equipObj])
-					return equipStr+"{0} {1}".\
-						format(thing.itemName,thing.itemType)
-				else:
-					return equipFull('legs')
-			elif(thing.equipSlot[0] == 'h'):
-				if(len(CM.Player.head)<=1):
-					CM.Player.head[equipObj] = thing
-					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
-					del(CM.Player.pack[equipObj])
-					return equipStr+"{0} {1}".\
-						format(thing.itemName,thing.itemType)
-				else:
-					return equipFull('head')
+		if iType != None:
+			equipObj = adj+" "+iType
+			if equipObj in CM.Player.pack:
+				thing = CM.Player.pack[equipObj]
+				eStr = IM.allAdj[IM.inRare(adj)][adj]
+				# string to enhance attribute
+				if (thing.equipSlot[0] == 'a'):
+					if (len(CM.Player.arms)<=2):
+						CM.Player.arms[equipObj] = thing
+						del(CM.Player.pack[equipObj])
+						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
+						return equipStr+"{0} {1}".\
+							format(thing.itemName,thing.itemType)
+					else:
+						return equipFull('arms')
+				elif(thing.equipSlot[0] == 'l'):
+					if(len(CM.Player.legs)<=2):
+						CM.Player.legs[equipObj] = thing
+						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
+						del(CM.Player.pack[equipObj])
+						return equipStr+"{0} {1}".\
+							format(thing.itemName,thing.itemType)
+					else:
+						return equipFull('legs')
+				elif(thing.equipSlot[0] == 'h'):
+					if(len(CM.Player.head)<=1):
+						CM.Player.head[equipObj] = thing
+						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
+						del(CM.Player.pack[equipObj])
+						return equipStr+"{0} {1}".\
+							format(thing.itemName,thing.itemType)
+					else:
+						return equipFull('head')
+			else:
+				return "No item {} in pack.".format(equipObj)
 		else:
-			return "No item {} in pack.".format(equipObj)
+			return "EQUIP - Will add a routine to show all items in pack with a given adjective"
 
 
 def equipFull(equipSlot):

@@ -66,8 +66,8 @@ def buildRoom(swp,diff):
         startShield = IM.Shield("reliable",swp)
         print(VFM.take(startSword.itemName,startSword.itemType))
         print(VFM.take(startShield.itemName,startShield.itemType))
-        print(VFM.equip(startSword.itemName))
-        print(VFM.equip(startShield.itemName))
+        print(VFM.equip(startSword.itemName,startSword.itemType))
+        print(VFM.equip(startShield.itemName,startShield.itemType))
         startPotion = IM.Potion(0,swp)
         print(VFM.take("potion"))
         del IM.swordAdj[1]["trusty"]
