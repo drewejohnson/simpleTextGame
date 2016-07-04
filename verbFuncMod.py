@@ -15,7 +15,7 @@ import roomMod as RM
 #	Verb Functions
 #----------------------
 
-def say(noun = None):
+def say(noun = None,arg2 = None):
 	"""Say something"""
 	if (noun != None):
 		return 'You said "{}"'.format(noun)
@@ -121,7 +121,7 @@ def examineRoom():
 	return roomStr.strip()
 
 
-def drink(noun = None):
+def drink(noun = None,arg2 = None):
 	"""Drink a healing potion from your inventory"""
 	if noun == None:
 		#-------CALL A FUNCTION TO SHOW ALL POTIONS
@@ -140,7 +140,7 @@ def drink(noun = None):
 			return rString
 
 
-def hit(enemy = None):
+def hit(enemy = None,arg2 = None):
 	"""Hit an enemy"""
 	if enemy != None:
 		swp = CM.getLoc()
@@ -171,38 +171,8 @@ def hit(enemy = None):
 		return "Need target to hit"
 
 
-# def strike(enemy = None):
-# 	"""Better combat mechanics using class methods"""
-	# if enemy != None:
-	# 	swp = CM.getLoc()
-	# 	if enemy in RM.rooms[swp].enemies:
-	# 		thingObj = RM.rooms[swp].enemies[enemy]
-	# 		player = CM.GameCharacter.objects['you']
-	# 		status = player.attack(thingObj)
-	# 		if status == 1:		# successful attack. enemy strikes back
-	# 			print("You struck {0}. {1}'s health: {2}".\
-	# 				format(enemy,enemy.capitalize(),thingObj.values[0]))
-	# 			status2 = thingObj.attack(player)
-	# 			if status2 == 1:
-	# 				return "{0} struck back!\nHealth: {1}".\
-	# 					format(enemy.capitalize(),player.values[0])
-	# 			elif status2 == 2:
-	# 				return "You dead bro."
-	# 			elif status2 == 0:
-	# 				return "{0} tried to hit you back and failed.".format(enemy.capitalize())
-	# 		elif status == 2:		# killed enemy
-	# 			del RM.rooms[swp].enemies[enemy]
-	# 			return "You killed {0}!".format(enemy.capitalize())
-	# 		elif status == 0:
-	# 			return "Attack strength too low. Failed to hit {}".format(enemy)
-	# 	else:
-	# 		return "There is no {0} in this room".format(enemy)
-	#
-	# else:
-	# 	return "Need target to hit"
 
-
-def take(takeItem = None):
+def take(takeItem = None,arg2 = None):
 	"""Pick up item and add to inventory"""
 	if(takeItem != None):
 		pLoc = CM.getLoc()
@@ -233,27 +203,23 @@ def getInput():
 	if verbIn.lower() == 'quit':
 		return quitGame()
 	else:
-		if len(command)>=2:
-			nounIn = command[1].lower()
-			if nounIn == pName or nounIn.lower() == 'self':
-				nounIn = 'you'
-			if verbIn.lower() == 'examine':
-				if len(command) > 2:
-					iType = command[2].lower()
-					print(examine(nounIn,iType))
-					return 0
-				else:
-					print(examine(nounIn))
-					return 0
-			else:
-				print(verb(nounIn))
-				return 0
-		else:
-			print(verb())
-			return 0
+		try:
+			arg1 = command[1].lower()
+		except IndexError:
+			arg1 = None
+		try:
+			arg2 = command[2].lower()
+		except IndexError:
+			arg2 = None
+
+		print(verb(arg1,arg2))
+		return None
+		# else:
+		# 	print(verb())
+		# 	return 0
 
 
-def help(vHelp = None):
+def help(vHelp = None,arg2 = None):
 	"""Return descriptions on various actions"""
 	helpMsg = " "
 	helpStr = "{0:10s} -{1:20s}\n"
@@ -272,7 +238,7 @@ def help(vHelp = None):
 	return helpMsg.strip()
 
 
-def equip(equipObj = None):
+def equip(equipObj = None,arg2 = None):
 	"""Equip an object from your pack"""
 	equipStr = "You equiped the "
 	if(equipObj == None):
@@ -318,7 +284,7 @@ def equipFull(equipSlot):
 	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
 
 
-def unequip(item = None):
+def unequip(item = None,arg2 = None):
 	"""Unequip an item and place it in your pack"""
 	if item != None:
 		eStr = IM.allAdj[IM.inRare(item)][item]
@@ -351,7 +317,7 @@ def unequip(item = None):
 	else:
 		return "Need target to unequip/"
 
-def move(direction = None):
+def move(direction = None,arg2 = None):
 	"""Select a compass direction (NSEW) to move the player"""
 	curSwp = CM.getLoc()
 	curPos = RM.sweepFunc(curSwp)
@@ -415,7 +381,7 @@ def validCoord(curcoord,dim):
 		return False
 
 
-def quitGame(val = None):
+def quitGame(val = None,arg2 = None):
 	"""Quit the game"""
 	print('You are about to quit the game. If you do so, you will lose'+\
 		' all progress.\nAre you sure you want to do this?\n')
