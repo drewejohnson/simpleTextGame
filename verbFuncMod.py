@@ -298,38 +298,37 @@ def equipFull(equipSlot):
 	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
 
 
-def unequip(item = None,arg2 = None):
+def unequip(adj = None,iType = None):
 	"""Unequip an item and place it in your pack"""
-	if item != None:
-		eStr = IM.allAdj[IM.inRare(item)][item]
-		if item in CM.Player.arms:
-			itemCls = CM.Player.arms[item]
-			del CM.Player.arms[item]
-			# eStr = IM.allAdj[IM.inRare(item)][item]
-			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-			CM.Player.pack[item] = itemCls
-			return "You unequipped the {} {}.".\
-				format(item,itemCls.itemType)
-		elif item in CM.Player.legs:
-			itemCls = CM.Player.legs[item]
-			del CM.Player.head[item]
-			# eStr = IM.allAdj[item]
-			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-			CM.Player.pack[item] = itemCls
-			return "You unequipped the {} {}.".\
-				format(item,itemCls.itemType)
-		elif item in CM.Player.head:
-			itemCls = CM.Player.head[item]
-			del CM.Player.head[item]
-			# eStr = IM.allAdj[item]
-			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-			CM.Player.pack[item] = itemCls
-			return "You unequipped the {} {}.".\
-				format(item,itemCls.itemType)
+	if adj != None:
+		eStr = IM.allAdj[IM.inRare(adj)][adj]
+		if iType != None:
+			item = adj+" "+iType
+			if item in CM.Player.arms:
+				itemCls = CM.Player.arms[item]
+				del CM.Player.arms[item]
+				# eStr = IM.allAdj[IM.inRare(item)][item]
+				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+				CM.Player.pack[item] = itemCls
+				return "You unequipped the {}.".format(item)
+			elif item in CM.Player.legs:
+				itemCls = CM.Player.legs[item]
+				del CM.Player.legs[item]
+				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+				CM.Player.pack[item] = itemCls
+				return "You unequipped the {}".format(item)
+			elif item in CM.Player.head:
+				itemCls = CM.Player.head[item]
+				del CM.Player.head[item]
+				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+				CM.Player.pack[item] = itemCls
+				return "You unequipped the {}".format(item)
+			else:
+				return "Item {} not equipped.".format(item)
 		else:
-			return "Item {} not equipped.".format(item)
+			print("UNEQUIP - Will add a routine to show all items in pack with a given adjective")
 	else:
-		return "Need target to unequip/"
+		return "Need target to unequip."
 
 def move(direction = None,arg2 = None):
 	"""Select a compass direction (NSEW) to move the player"""

@@ -64,8 +64,8 @@ def buildRoom(swp,diff):
         gobbly.values[1] = 0
         startSword = IM.Sword("trusty",swp)
         startShield = IM.Shield("reliable",swp)
-        print(VFM.take(startSword.itemName,startSword.itemType))
-        print(VFM.take(startShield.itemName,startShield.itemType))
+        VFM.take(startSword.itemName,startSword.itemType)
+        VFM.take(startShield.itemName,startShield.itemType)
         print(VFM.equip(startSword.itemName,startSword.itemType))
         print(VFM.equip(startShield.itemName,startShield.itemType))
         startPotion = IM.Potion(0,swp)
