@@ -15,7 +15,7 @@ import roomMod as RM
 #	Verb Functions
 #----------------------
 
-def say(noun = None):
+def say(noun = None,arg2 = None):
 	"""Say something"""
 	if (noun != None):
 		return 'You said "{}"'.format(noun)
@@ -47,13 +47,14 @@ def examine(noun = None,iType = None):
 
 def examineItem(adj,iType):
 	"""Reveal the name and type of item, as well as attributes"""
-	onPlayerTpl = CM.GameCharacter.objects['you'].onPerson(adj)
+	item = adj+" "+iType
+	onPlayerTpl = CM.GameCharacter.objects['you'].onPerson(item)
 	# if item with same adjective is on person,
 	# 	onPlayerTpl is (True, item_location)
 	#	where item_location displays all items equipped in that spot (arms, pack, etc)
 	# else, onPlayerTpl is (False,0)
 	if onPlayerTpl[0]:
-		if IM.isItem(onPlayerTpl[1][adj],iType):
+		if IM.isItem(onPlayerTpl[1][item],iType):
 			# check if the item with the noun is of the requested type
 			rStr = "{0} {1}\n".format(adj.capitalize(),iType.capitalize())
 			rarity = IM.inRare(adj)
@@ -72,8 +73,8 @@ def examineItem(adj,iType):
 				format(adj.capitalize(),iType.capitalize())
 	else:		# item not on person. Check the room
 		swp = CM.getLoc()
-		if adj in RM.rooms[swp].items:
-			if IM.isItem(RM.rooms[swp].items[adj],iType):
+		if item in RM.rooms[swp].items:
+			if IM.isItem(RM.rooms[swp].items[item],iType):
 				rStr = "{0} {1}\n".format(adj.capitalize(),iType.capitalize())
 				rarity = IM.inRare(adj)
 				if rarity > 0:
@@ -115,13 +116,13 @@ def examineRoom():
 			if isinstance(iType,IM.Potion):
 				roomStr += "  "+iType.itemType+"\n"
 			else:
-				roomStr += '  '+item+' '+iType.itemType+'\n'
+				roomStr += '  '+item+"\n"
 	else:
 		roomStr += 'Items: None'
 	return roomStr.strip()
 
 
-def drink(noun = None):
+def drink(noun = None,arg2 = None):
 	"""Drink a healing potion from your inventory"""
 	if noun == None:
 		#-------CALL A FUNCTION TO SHOW ALL POTIONS
@@ -140,7 +141,7 @@ def drink(noun = None):
 			return rString
 
 
-def hit(enemy = None):
+def hit(enemy = None,arg2 = None):
 	"""Hit an enemy"""
 	if enemy != None:
 		swp = CM.getLoc()
@@ -171,53 +172,33 @@ def hit(enemy = None):
 		return "Need target to hit"
 
 
-# def strike(enemy = None):
-# 	"""Better combat mechanics using class methods"""
-	# if enemy != None:
-	# 	swp = CM.getLoc()
-	# 	if enemy in RM.rooms[swp].enemies:
-	# 		thingObj = RM.rooms[swp].enemies[enemy]
-	# 		player = CM.GameCharacter.objects['you']
-	# 		status = player.attack(thingObj)
-	# 		if status == 1:		# successful attack. enemy strikes back
-	# 			print("You struck {0}. {1}'s health: {2}".\
-	# 				format(enemy,enemy.capitalize(),thingObj.values[0]))
-	# 			status2 = thingObj.attack(player)
-	# 			if status2 == 1:
-	# 				return "{0} struck back!\nHealth: {1}".\
-	# 					format(enemy.capitalize(),player.values[0])
-	# 			elif status2 == 2:
-	# 				return "You dead bro."
-	# 			elif status2 == 0:
-	# 				return "{0} tried to hit you back and failed.".format(enemy.capitalize())
-	# 		elif status == 2:		# killed enemy
-	# 			del RM.rooms[swp].enemies[enemy]
-	# 			return "You killed {0}!".format(enemy.capitalize())
-	# 		elif status == 0:
-	# 			return "Attack strength too low. Failed to hit {}".format(enemy)
-	# 	else:
-	# 		return "There is no {0} in this room".format(enemy)
-	#
-	# else:
-	# 	return "Need target to hit"
 
-
-def take(takeItem = None):
+def take(adj = None,iType = None):
 	"""Pick up item and add to inventory"""
-	if(takeItem != None):
+	if(adj != None):
 		pLoc = CM.getLoc()
-		if takeItem in RM.rooms[pLoc].items:
-			thing = RM.rooms[pLoc].items[takeItem]
-			del RM.rooms[pLoc].items[takeItem]
+		if adj in RM.rooms[pLoc].items: # check if item is a potion
+			thing = RM.rooms[pLoc].items[adj]
 			if isinstance(thing,IM.Potion):
 				CM.Player.potions[thing.var] += 1
+				del RM.rooms[pLoc].items[adj]
 				return "You picked up the {}".format(thing.itemType)
+		if iType != None:
+			item = adj+" "+iType
+			if item in RM.rooms[pLoc].items:
+				thing = RM.rooms[pLoc].items[item]
+				if IM.isItem(thing,iType):
+# True if there is an item of the type iType with the
+# specified adjective in the room
+					del RM.rooms[pLoc].items[item]
+					CM.GameCharacter.objects['you'].pack[item]=thing
+					return "You picked up the {}".format(item)
+				else:
+					return "There is no {} here.".format(item)
 			else:
-				CM.Player.pack[takeItem]=thing
-				return "You picked up the {0} {1}".format(takeItem,\
-					thing.itemType)
-		else:
-			return "There is no {} here".format(takeItem)
+				return "There is no {0} {1} here.".format(adj,iType)
+		else:		# no value of iType given
+			return "Will place something here to show all values with that adjective"
 	else:
 		return "Need target to take"
 
@@ -233,27 +214,22 @@ def getInput():
 	if verbIn.lower() == 'quit':
 		return quitGame()
 	else:
-		if len(command)>=2:
-			nounIn = command[1].lower()
-			if nounIn == pName or nounIn.lower() == 'self':
-				nounIn = 'you'
-			if verbIn.lower() == 'examine':
-				if len(command) > 2:
-					iType = command[2].lower()
-					print(examine(nounIn,iType))
-					return 0
-				else:
-					print(examine(nounIn))
-					return 0
-			else:
-				print(verb(nounIn))
-				return 0
-		else:
-			print(verb())
-			return 0
+		try:
+			arg1 = command[1].lower()
+			if arg1 == 'self' or arg1 == pName:
+				arg1 = 'you'
+		except IndexError:
+			arg1 = None
+		try:
+			arg2 = command[2].lower()
+		except IndexError:
+			arg2 = None
+
+		print(verb(arg1,arg2))
+		return None
 
 
-def help(vHelp = None):
+def help(vHelp = None,arg2 = None):
 	"""Return descriptions on various actions"""
 	helpMsg = " "
 	helpStr = "{0:10s} -{1:20s}\n"
@@ -272,45 +248,49 @@ def help(vHelp = None):
 	return helpMsg.strip()
 
 
-def equip(equipObj = None):
+def equip(adj = None,iType = None):
 	"""Equip an object from your pack"""
 	equipStr = "You equiped the "
-	if(equipObj == None):
+	if(adj == None):
 		return 'Need target to equip'
 	else:
-		if equipObj in CM.Player.pack:
-			thing = CM.Player.pack[equipObj]
-			eStr = IM.allAdj[IM.inRare(equipObj)][equipObj]
-			# string to enhance attribute
-			if (thing.equipSlot[0] == 'a'):
-				if (len(CM.Player.arms)<=2):
-					CM.Player.arms[equipObj] = thing
-					del(CM.Player.pack[equipObj])
-					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
-					return equipStr+"{0} {1}".\
-						format(thing.itemName,thing.itemType)
-				else:
-					return equipFull('arms')
-			elif(thing.equipSlot[0] == 'l'):
-				if(len(CM.Player.legs)<=2):
-					CM.Player.legs[equipObj] = thing
-					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
-					del(CM.Player.pack[equipObj])
-					return equipStr+"{0} {1}".\
-						format(thing.itemName,thing.itemType)
-				else:
-					return equipFull('legs')
-			elif(thing.equipSlot[0] == 'h'):
-				if(len(CM.Player.head)<=1):
-					CM.Player.head[equipObj] = thing
-					CM.GameCharacter.objects['you'].valEnhance(eStr,0)
-					del(CM.Player.pack[equipObj])
-					return equipStr+"{0} {1}".\
-						format(thing.itemName,thing.itemType)
-				else:
-					return equipFull('head')
+		if iType != None:
+			equipObj = adj+" "+iType
+			if equipObj in CM.Player.pack:
+				thing = CM.Player.pack[equipObj]
+				eStr = IM.allAdj[IM.inRare(adj)][adj]
+				# string to enhance attribute
+				if (thing.equipSlot[0] == 'a'):
+					if (len(CM.Player.arms)<=2):
+						CM.Player.arms[equipObj] = thing
+						del(CM.Player.pack[equipObj])
+						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
+						return equipStr+"{0} {1}".\
+							format(thing.itemName,thing.itemType)
+					else:
+						return equipFull('arms')
+				elif(thing.equipSlot[0] == 'l'):
+					if(len(CM.Player.legs)<=2):
+						CM.Player.legs[equipObj] = thing
+						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
+						del(CM.Player.pack[equipObj])
+						return equipStr+"{0} {1}".\
+							format(thing.itemName,thing.itemType)
+					else:
+						return equipFull('legs')
+				elif(thing.equipSlot[0] == 'h'):
+					if(len(CM.Player.head)<=1):
+						CM.Player.head[equipObj] = thing
+						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
+						del(CM.Player.pack[equipObj])
+						return equipStr+"{0} {1}".\
+							format(thing.itemName,thing.itemType)
+					else:
+						return equipFull('head')
+			else:
+				return "No item {} in pack.".format(equipObj)
 		else:
-			return "No item {} in pack.".format(equipObj)
+			return "EQUIP - Will add a routine to show all items in pack with a given adjective"
 
 
 def equipFull(equipSlot):
@@ -318,40 +298,39 @@ def equipFull(equipSlot):
 	return "{} full. Need to drop an item.".format(equipSlot.capitalize())
 
 
-def unequip(item = None):
+def unequip(adj = None,iType = None):
 	"""Unequip an item and place it in your pack"""
-	if item != None:
-		eStr = IM.allAdj[IM.inRare(item)][item]
-		if item in CM.Player.arms:
-			itemCls = CM.Player.arms[item]
-			del CM.Player.arms[item]
-			# eStr = IM.allAdj[IM.inRare(item)][item]
-			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-			CM.Player.pack[item] = itemCls
-			return "You unequipped the {} {}.".\
-				format(item,itemCls.itemType)
-		elif item in CM.Player.legs:
-			itemCls = CM.Player.legs[item]
-			del CM.Player.head[item]
-			# eStr = IM.allAdj[item]
-			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-			CM.Player.pack[item] = itemCls
-			return "You unequipped the {} {}.".\
-				format(item,itemCls.itemType)
-		elif item in CM.Player.head:
-			itemCls = CM.Player.head[item]
-			del CM.Player.head[item]
-			# eStr = IM.allAdj[item]
-			CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-			CM.Player.pack[item] = itemCls
-			return "You unequipped the {} {}.".\
-				format(item,itemCls.itemType)
+	if adj != None:
+		eStr = IM.allAdj[IM.inRare(adj)][adj]
+		if iType != None:
+			item = adj+" "+iType
+			if item in CM.Player.arms:
+				itemCls = CM.Player.arms[item]
+				del CM.Player.arms[item]
+				# eStr = IM.allAdj[IM.inRare(item)][item]
+				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+				CM.Player.pack[item] = itemCls
+				return "You unequipped the {}.".format(item)
+			elif item in CM.Player.legs:
+				itemCls = CM.Player.legs[item]
+				del CM.Player.legs[item]
+				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+				CM.Player.pack[item] = itemCls
+				return "You unequipped the {}".format(item)
+			elif item in CM.Player.head:
+				itemCls = CM.Player.head[item]
+				del CM.Player.head[item]
+				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
+				CM.Player.pack[item] = itemCls
+				return "You unequipped the {}".format(item)
+			else:
+				return "Item {} not equipped.".format(item)
 		else:
-			return "Item {} not equipped.".format(item)
+			print("UNEQUIP - Will add a routine to show all items in pack with a given adjective")
 	else:
-		return "Need target to unequip/"
+		return "Need target to unequip."
 
-def move(direction = None):
+def move(direction = None,arg2 = None):
 	"""Select a compass direction (NSEW) to move the player"""
 	curSwp = CM.getLoc()
 	curPos = RM.sweepFunc(curSwp)
@@ -415,7 +394,7 @@ def validCoord(curcoord,dim):
 		return False
 
 
-def quitGame(val = None):
+def quitGame(val = None,arg2 = None):
 	"""Quit the game"""
 	print('You are about to quit the game. If you do so, you will lose'+\
 		' all progress.\nAre you sure you want to do this?\n')
