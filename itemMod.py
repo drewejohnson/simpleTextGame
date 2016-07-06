@@ -161,53 +161,58 @@ def adjPopulate(adjDict,adjFlag):
 #-----------
 # Adjectives
 #-----------
-lowRareAdj = {
-    "trusty":"a1",
-    "reliable":"d1",
-    "pointy":"a2",
-    "durable":"d2",
-    "shiny":"d2",
-    "crooked":"a1",
-    "decent":"a3",
-    "adequate":"h1",
-    "lucky":"d2a2h2",
-    "smart":"h2",
-    "unlucky": "a0"
-}
-
-medRareAdj = {
-    "sharp":"a4",
-    "sturdy":'d3',
-    "protective":"d4a3h2",
-    "viscious":"a4d4",
-    "perceptive":"h4d2",
-    "strong":"d5",
-    "dangerous":"a5",
-    "intimidating":"h5"
-}
-
-highRareAdj = {
-    "legendary":"a7d5h5",
-    "wise":"h7d5",
-    "robust":"d7a5",
-    "deadly":"a6d5"
-}
-
+lowRareAdj = {}
+medRareAdj = {}
+highRareAdj = {}
 allAdj = {1:{},2:{},3:{}}
-for adj in lowRareAdj:
-    allAdj[1][adj] = lowRareAdj[adj]
-for adj in medRareAdj:
-    allAdj[2][adj] = medRareAdj[adj]
-for adj in highRareAdj:
-    allAdj[3][adj] = highRareAdj[adj]
-
 swordAdj = {1:{},2:{},3:{}}
 axeAdj = {1:{},2:{},3:{}}
 shieldAdj = {1:{},2:{},3:{}}
 helmetAdj = {1:{},2:{},3:{}}
 
-for r in range(1,4):
-    swordAdj[r] = adjPopulate(allAdj[r],'a')
-    axeAdj[r] = adjPopulate(allAdj[r],'a')
-    shieldAdj[r] = adjPopulate(allAdj[r],'d')
-    helmetAdj[r] = adjPopulate(allAdj[r],'h')
+def buildAdj():
+
+    lowRareAdj = {
+        "trusty":"a1",
+        "reliable":"d1",
+        "pointy":"a2",
+        "durable":"d2",
+        "shiny":"d2",
+        "crooked":"a1",
+        "decent":"a3",
+        "adequate":"h1",
+        "lucky":"d2a2h2",
+        "smart":"h2",
+        "unlucky": "a0"
+    }
+
+    medRareAdj = {
+        "sharp":"a4",
+        "sturdy":'d3',
+        "protective":"d4a3h2",
+        "viscious":"a4d4",
+        "perceptive":"h4d2",
+        "strong":"d5",
+        "dangerous":"a5",
+        "intimidating":"h5"
+    }
+
+    highRareAdj = {
+        "legendary":"a7d5h5",
+        "wise":"h7d5",
+        "robust":"d7a5",
+        "deadly":"a6d5"
+    }
+
+    for adj in lowRareAdj:
+        allAdj[1][adj] = lowRareAdj[adj]
+    for adj in medRareAdj:
+        allAdj[2][adj] = medRareAdj[adj]
+    for adj in highRareAdj:
+        allAdj[3][adj] = highRareAdj[adj]
+
+    for r in range(1,4):
+        swordAdj[r] = adjPopulate(allAdj[r],'a')
+        axeAdj[r] = adjPopulate(allAdj[r],'a')
+        shieldAdj[r] = adjPopulate(allAdj[r],'d')
+        helmetAdj[r] = adjPopulate(allAdj[r],'h')
