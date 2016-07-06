@@ -151,13 +151,15 @@ def hit(enemy = None,arg2 = None):
 			status = player.attack(thingObj)
 			if status == 1:		# successful attack. enemy strikes back
 				print("You struck {0}. {1}'s health: {2}".\
-					format(enemy,enemy.capitalize(),thingObj.values[0]))
+					format(enemy.capitalize(),enemy.capitalize(),thingObj.values[0]))
 				status2 = thingObj.attack(player)
 				if status2 == 1:
 					return "{0} struck back!\nHealth: {1}".\
 						format(enemy.capitalize(),player.values[0])
 				elif status2 == 2:
-					return "You dead bro."
+					from launch import gameOver
+					gameOver(thingObj)
+					return ""
 				elif status2 == 0:
 					return "{0} tried to hit you back and failed.".format(enemy.capitalize())
 			elif status == 2:		# killed enemy
@@ -224,7 +226,6 @@ def getInput():
 			arg2 = command[2].lower()
 		except IndexError:
 			arg2 = None
-
 		print(verb(arg1,arg2))
 		return None
 
@@ -330,6 +331,7 @@ def unequip(adj = None,iType = None):
 	else:
 		return "Need target to unequip."
 
+
 def move(direction = None,arg2 = None):
 	"""Select a compass direction (NSEW) to move the player"""
 	curSwp = CM.getLoc()
@@ -374,6 +376,7 @@ def move(direction = None,arg2 = None):
 	else:
 		return "{} is not a valid direction of movement.".format(direction.capitalize())
 
+
 def validCoord(curcoord,dim):
 	"""Returns true if curcoord within gamespace dimension dim"""
 	# dim == 0 => x, dim == 1 => y
@@ -398,8 +401,8 @@ def quitGame(val = None,arg2 = None):
 	"""Quit the game"""
 	print('You are about to quit the game. If you do so, you will lose'+\
 		' all progress.\nAre you sure you want to do this?\n')
-	quitVal = str(input('Press y to quit\n: '))
-	if quitVal.lower() == 'y':
+	quitVal = str(input('Press y to quit\n: ')).lower()
+	if quitVal == 'y':
 		# print('Until next time, brave adventurer.')
 		raise SystemExit('Until next time, brave adventurer.')
 	else:

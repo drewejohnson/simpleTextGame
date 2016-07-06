@@ -17,5 +17,9 @@ import roomMod as RM
 import itemMod as IM
 import verbFuncMod as VFM
 
+launch.launchScreen()
+print(VFM.help())
+RM.buildGame()
+
 while True:
 	VFM.getInput()
