@@ -177,30 +177,35 @@ def hit(enemy = None,arg2 = None):
 
 def take(adj = None,iType = None):
 	"""Pick up item and add to inventory"""
+	take1 = "You picked up the {}."
+	take0 = "There is no {} here."
 	if(adj != None):
 		pLoc = CM.getLoc()
-		if adj in RM.rooms[pLoc].items: # check if item is a potion
-			thing = RM.rooms[pLoc].items[adj]
-			if isinstance(thing,IM.Potion):
-				CM.Player.potions[thing.var] += 1
-				del RM.rooms[pLoc].items[adj]
-				return "You picked up the {}".format(thing.itemType)
+		if len(RM.rooms[pLoc].enemies) >1: # player is not alone in the room
+			return "Enemies block your way! Defeat them to grab the loot!"
 		if iType != None:
 			item = adj+" "+iType
 			if item in RM.rooms[pLoc].items:
-				thing = RM.rooms[pLoc].items[item]
+				thing = RM.rooms[pLoc].items[item] # object instance of item
 				if IM.isItem(thing,iType):
-# True if there is an item of the type iType with the
-# specified adjective in the room
+		# True if there is an item of the type iType with the
+		# specified adjective in the room
 					del RM.rooms[pLoc].items[item]
 					CM.GameCharacter.objects['you'].pack[item]=thing
-					return "You picked up the {}".format(item)
+					return take1.format(item)
 				else:
-					return "There is no {} here.".format(item)
+					return take0.format(item)
 			else:
-				return "There is no {0} {1} here.".format(adj,iType)
+				return take0.format(item)
 		else:		# no value of iType given
-			return "Will place something here to show all values with that adjective"
+			if adj in RM.rooms[pLoc].items: # check if item is a potion
+				thing = RM.rooms[pLoc].items[adj]
+				if isinstance(thing,IM.Potion):
+					CM.Player.potions[thing.var] += 1
+					del RM.rooms[pLoc].items[adj]
+					return take1.format(thing.itemType)
+			else:
+				return take0.format(adj)
 	else:
 		return "Need target to take"
 

@@ -70,10 +70,6 @@ def buildRoom(swp,diff):
         # print(VFM.help())
         VFM.pName = input("\nWhat is your name, brave adventurer: \n")
         player = CM.Player('you',swp)
-        player.values[0] = 1
-        player.values[2] = 0
-        gobbly = CM.Goblin("gobbly",swp,"unlucky")
-        # gobbly.values[1] = 0
         startSword = IM.Sword("trusty",swp)
         startShield = IM.Shield("reliable",swp)
         VFM.take(startSword.itemName,startSword.itemType)
@@ -82,6 +78,8 @@ def buildRoom(swp,diff):
         print(VFM.equip(startShield.itemName,startShield.itemType))
         startPotion = IM.Potion(0,swp)
         print(VFM.take("potion"))
+        gobbly = CM.Goblin("gobbly",swp,"unlucky")
+        gobbly.values[1] = 0
         del IM.swordAdj[1]["trusty"]
         del IM.shieldAdj[1]['reliable']
         startStr = "Armed with their "+startSword.itemName+' '+\
