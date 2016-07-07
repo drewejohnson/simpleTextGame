@@ -25,9 +25,9 @@ def say(noun = None,arg2 = None):
 
 def examine(noun = None,iType = None):
 	"""Examine items, enemies, yourself, or the room"""
-	# print(noun,iType)
 	if (noun != None):
-		swp = CM.getLoc()
+		# swp = CM.getLoc()
+		swp = player.sweep
 		if iType == None:
 			if noun in RM.rooms[swp].enemies and  noun in CM.GameCharacter.objects:
 				return CM.GameCharacter.objects[noun].getDesc()
@@ -35,7 +35,6 @@ def examine(noun = None,iType = None):
 				return examineRoom()
 			elif noun in RM.rooms[swp].items:
 				thing = RM.rooms[swp].items[noun]
-				# print(thing)
 				return thing.getDesc()
 			else:
 				return "There is no {} here".format(noun)
@@ -48,7 +47,7 @@ def examine(noun = None,iType = None):
 def examineItem(adj,iType):
 	"""Reveal the name and type of item, as well as attributes"""
 	item = adj+" "+iType
-	onPlayerTpl = CM.GameCharacter.objects['you'].onPerson(item)
+	onPlayerTpl = player.onPerson(item)
 	# if item with same adjective is on person,
 	# 	onPlayerTpl is (True, item_location)
 	#	where item_location displays all items equipped in that spot (arms, pack, etc)
@@ -72,7 +71,7 @@ def examineItem(adj,iType):
 			return "No item {0} {1} equipped nor in pack".\
 				format(adj.capitalize(),iType.capitalize())
 	else:		# item not on person. Check the room
-		swp = CM.getLoc()
+		swp = player.sweep
 		if item in RM.rooms[swp].items:
 			if IM.isItem(RM.rooms[swp].items[item],iType):
 				rStr = "{0} {1}\n".format(adj.capitalize(),iType.capitalize())
@@ -94,7 +93,7 @@ def examineItem(adj,iType):
 
 def examineRoom():
 	"""Displays the items and enemies in the player's room"""
-	thisSwp = CM.getLoc()
+	thisSwp = player.sweep
 	thisRoom = RM.sweepFunc(thisSwp)
 	roomStr = "Current room: ({0},{1})\n".format(thisRoom[0],thisRoom[1])
 	if len(RM.rooms[thisSwp].enemies) > 0:
@@ -102,10 +101,9 @@ def examineRoom():
 		for thing in list(RM.rooms[thisSwp].enemies):
 			thingType = CM.GameCharacter.objects[thing].className
 			if isinstance(RM.rooms[thisSwp].enemies[thing],CM.Player) != True:
-				# thingType = CM.GameCharacter.objects[thing].className
-				roomStr += '  '+thing.capitalize()#+' the '+thingType+'\n'
+				roomStr += '  '+thing.capitalize()
 			else:
-				roomStr += '  '+pName.capitalize()#+' the '+thingType+'\n'
+				roomStr += '  '+pName.capitalize()
 			roomStr +=' the '+thingType+'\n'
 	else:
 		roomStr += 'Enemies: None\n'
@@ -134,7 +132,7 @@ def drink(noun = None,arg2 = None):
 			ver  = 1
 		elif noun == "elixir":
 			ver = 2
-		rString =  CM.GameCharacter.objects['you'].drink(ver)
+		rString = player.drink(ver)
 		if rString == 0:
 			return "You have no {} to drink".format(noun)
 		else:
@@ -144,10 +142,9 @@ def drink(noun = None,arg2 = None):
 def hit(enemy = None,arg2 = None):
 	"""Hit an enemy"""
 	if enemy != None:
-		swp = CM.getLoc()
+		swp = player.sweep
 		if enemy in RM.rooms[swp].enemies:
 			thingObj = RM.rooms[swp].enemies[enemy]
-			player = CM.GameCharacter.objects['you']
 			status = player.attack(thingObj)
 			if status == 1:		# successful attack. enemy strikes back
 				print("You struck {0}. {1}'s health: {2}".\
@@ -169,7 +166,6 @@ def hit(enemy = None,arg2 = None):
 				return "Attack strength too low. Failed to hit {}".format(enemy)
 		else:
 			return "There is no {0} in this room".format(enemy)
-
 	else:
 		return "Need target to hit"
 
@@ -180,7 +176,7 @@ def take(adj = None,iType = None):
 	take1 = "You picked up the {}."
 	take0 = "There is no {} here."
 	if(adj != None):
-		pLoc = CM.getLoc()
+		pLoc = player.sweep
 		if len(RM.rooms[pLoc].enemies) >1: # player is not alone in the room
 			return "Enemies block your way! Defeat them to grab the loot!"
 		if iType != None:
@@ -191,7 +187,7 @@ def take(adj = None,iType = None):
 		# True if there is an item of the type iType with the
 		# specified adjective in the room
 					del RM.rooms[pLoc].items[item]
-					CM.GameCharacter.objects['you'].pack[item]=thing
+					player.pack[item] = thing
 					return take1.format(item)
 				else:
 					return take0.format(item)
@@ -201,7 +197,7 @@ def take(adj = None,iType = None):
 			if adj in RM.rooms[pLoc].items: # check if item is a potion
 				thing = RM.rooms[pLoc].items[adj]
 				if isinstance(thing,IM.Potion):
-					CM.Player.potions[thing.var] += 1
+					player.potions[thing.var] += 1
 					del RM.rooms[pLoc].items[adj]
 					return take1.format(thing.itemType)
 			else:
@@ -223,8 +219,8 @@ def getInput():
 	else:
 		try:
 			arg1 = command[1].lower()
-			if arg1 == 'self' or arg1 == pName:
-				arg1 = 'you'
+			if arg1 == 'self':
+				arg1 = player.name
 		except IndexError:
 			arg1 = None
 		try:
@@ -262,33 +258,33 @@ def equip(adj = None,iType = None):
 	else:
 		if iType != None:
 			equipObj = adj+" "+iType
-			if equipObj in CM.Player.pack:
-				thing = CM.Player.pack[equipObj]
+			if equipObj in player.pack:
+				thing = player.pack[equipObj]
 				eStr = IM.allAdj[IM.inRare(adj)][adj]
 				# string to enhance attribute
 				if (thing.equipSlot[0] == 'a'):
-					if (len(CM.Player.arms)<=2):
-						CM.Player.arms[equipObj] = thing
-						del(CM.Player.pack[equipObj])
-						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
+					if len(player.arms) < 3:
+						player.arms[equipObj] = thing
+						del player.pack[equipObj]
+						player.valEnhance(eStr,0)
 						return equipStr+"{0} {1}".\
 							format(thing.itemName,thing.itemType)
 					else:
 						return equipFull('arms')
 				elif(thing.equipSlot[0] == 'l'):
-					if(len(CM.Player.legs)<=2):
-						CM.Player.legs[equipObj] = thing
-						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
-						del(CM.Player.pack[equipObj])
+					if len(player.legs) < 3:
+						player.legs[equipObj] = thing
+						player.valEnhance(eStr,0)
+						del player.pack[equipObj]
 						return equipStr+"{0} {1}".\
 							format(thing.itemName,thing.itemType)
 					else:
 						return equipFull('legs')
 				elif(thing.equipSlot[0] == 'h'):
-					if(len(CM.Player.head)<=1):
-						CM.Player.head[equipObj] = thing
-						CM.GameCharacter.objects['you'].valEnhance(eStr,0)
-						del(CM.Player.pack[equipObj])
+					if len(player.head) < 2:
+						player.head[equipObj] = thing
+						player.valEnhance(eStr,0)
+						del player.pack[equipObj]
 						return equipStr+"{0} {1}".\
 							format(thing.itemName,thing.itemType)
 					else:
@@ -310,24 +306,23 @@ def unequip(adj = None,iType = None):
 		eStr = IM.allAdj[IM.inRare(adj)][adj]
 		if iType != None:
 			item = adj+" "+iType
-			if item in CM.Player.arms:
-				itemCls = CM.Player.arms[item]
-				del CM.Player.arms[item]
-				# eStr = IM.allAdj[IM.inRare(item)][item]
-				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-				CM.Player.pack[item] = itemCls
+			if item in player.arms:
+				itemCls = player.arms[item]
+				del player.arms[item]
+				player.valEnhance(eStr,1)
+				player.pack[item] = itemCls
 				return "You unequipped the {}.".format(item)
-			elif item in CM.Player.legs:
-				itemCls = CM.Player.legs[item]
-				del CM.Player.legs[item]
-				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-				CM.Player.pack[item] = itemCls
+			elif item in player.legs:
+				itemCls = player.legs[item]
+				del player.legs[item]
+				player.valEnhance(eStr,1)
+				player.pack[item] = itemCls
 				return "You unequipped the {}".format(item)
-			elif item in CM.Player.head:
-				itemCls = CM.Player.head[item]
-				del CM.Player.head[item]
-				CM.GameCharacter.objects['you'].valEnhance(eStr,1)
-				CM.Player.pack[item] = itemCls
+			elif item in player.head:
+				itemCls = player.head[item]
+				del player.head[item]
+				player.valEnhance(eStr,1)
+				player.pack[item] = itemCls
 				return "You unequipped the {}".format(item)
 			else:
 				return "Item {} not equipped.".format(item)
@@ -339,7 +334,8 @@ def unequip(adj = None,iType = None):
 
 def move(direction = None,arg2 = None):
 	"""Select a compass direction (NSEW) to move the player"""
-	curSwp = CM.getLoc()
+	# curSwp = CM.getLoc()
+	curSwp = player.sweep
 	curPos = RM.sweepFunc(curSwp)
 	nbors = {}	# keys: valid directions; values: corresponding room
 	# North
@@ -371,10 +367,14 @@ def move(direction = None,arg2 = None):
 			toPos = RM.sweepFunc(toSwp)
 			# RM.addToRoom('you',toSwp)
 			# RM.delFromRoom('you',curSwp)
-			RM.rooms[toSwp].enemies['you'] = CM.GameCharacter.objects['you']
-			del RM.rooms[curSwp].enemies['you']
-			del CM.Player.pos[curSwp]
-			CM.Player.pos[toSwp] = RM.rooms[toSwp]
+			# RM.rooms[toSwp].enemies['you'] = CM.GameCharacter.objects['you']
+			# del RM.rooms[curSwp].enemies['you']
+			# del CM.Player.pos[curSwp]
+			# CM.Player.pos[toSwp] = RM.rooms[toSwp]
+			RM.rooms[toSwp].enemies[player.name] = player
+			del RM.rooms[curSwp].enemies[player.name]
+			player.sweep = toSwp
+			player.prevSwp = curSwp
 			return 'Moved from {0} to {1}'.format(curPos,toPos)
 		else:
 			return 'No door in that direction.'
@@ -430,5 +430,3 @@ verbDict = {
 	# "strike":strike,
 }
 sortedVerbs = sorted(verbDict)
-
-pName = ""
