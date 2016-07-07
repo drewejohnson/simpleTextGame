@@ -26,7 +26,6 @@ def say(noun = None,arg2 = None):
 def examine(noun = None,iType = None):
 	"""Examine items, enemies, yourself, or the room"""
 	if (noun != None):
-		# swp = CM.getLoc()
 		swp = player.sweep
 		if iType == None:
 			if noun in RM.rooms[swp].enemies and  noun in CM.GameCharacter.objects:
@@ -334,7 +333,6 @@ def unequip(adj = None,iType = None):
 
 def move(direction = None,arg2 = None):
 	"""Select a compass direction (NSEW) to move the player"""
-	# curSwp = CM.getLoc()
 	curSwp = player.sweep
 	curPos = RM.sweepFunc(curSwp)
 	nbors = {}	# keys: valid directions; values: corresponding room
@@ -364,18 +362,24 @@ def move(direction = None,arg2 = None):
 		d = direction.lower()
 		if d in nbors:
 			toSwp = nbors[d]
-			toPos = RM.sweepFunc(toSwp)
-			# RM.addToRoom('you',toSwp)
-			# RM.delFromRoom('you',curSwp)
-			# RM.rooms[toSwp].enemies['you'] = CM.GameCharacter.objects['you']
-			# del RM.rooms[curSwp].enemies['you']
-			# del CM.Player.pos[curSwp]
-			# CM.Player.pos[toSwp] = RM.rooms[toSwp]
-			RM.rooms[toSwp].enemies[player.name] = player
-			del RM.rooms[curSwp].enemies[player.name]
-			player.sweep = toSwp
-			player.prevSwp = curSwp
-			return 'Moved from {0} to {1}'.format(curPos,toPos)
+			if len(RM.rooms[curSwp].enemies) > 1: # cannot move forward if enemies present
+				if toSwp != player.prevSwp:
+					return "A monster blocks your way! You cannot progress, only retreat."
+				else:
+					toPos = RM.sweepFunc(toSwp)
+					RM.rooms[toSwp].enemies[player.name] = player
+					del RM.rooms[curSwp].enemies[player.name]
+					player.sweep = toSwp
+					player.prevSwp = curSwp
+					return 'Moved from {0} to {1}'.format(curPos,toPos)
+			else:
+				toSwp = nbors[d]
+				toPos = RM.sweepFunc(toSwp)
+				RM.rooms[toSwp].enemies[player.name] = player
+				del RM.rooms[curSwp].enemies[player.name]
+				player.sweep = toSwp
+				player.prevSwp = curSwp
+				return 'Moved from {0} to {1}'.format(curPos,toPos)
 		else:
 			return 'No door in that direction.'
 	else:

@@ -157,6 +157,7 @@ class Player(GameCharacter):
 		super().__init__(name,sweep,self.values)#,locX,locY)
 		# self.pos[sweep] = RM.rooms[sweep]
 		self.sweep = sweep		# player location
+		self.prevSwp = sweep
 		self.arms = {}
 		self.legs = {}
 		self.head = {}
