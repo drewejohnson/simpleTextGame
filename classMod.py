@@ -142,10 +142,10 @@ class Dragon(GameCharacter):
 
 
 class Player(GameCharacter):
-	arms = {}
-	legs = {}
-	head = {}
-	pack = {}
+	# arms = {}
+	# legs = {}
+	# head = {}
+	# pack = {}
 	pos = {}
 	potions = [0,0,0]
 
@@ -155,7 +155,12 @@ class Player(GameCharacter):
 		self.maxHealth = self.values[0]*2
 		# self.potions = [0,0,0]
 		super().__init__(name,sweep,self.values)#,locX,locY)
-		self.pos[sweep] = RM.rooms[sweep]
+		# self.pos[sweep] = RM.rooms[sweep]
+		self.sweep = sweep		# player location
+		self.arms = {}
+		self.legs = {}
+		self.head = {}
+		self.pack = {}
 		self._desc = "A brave adventurer named "+VFM.pName.capitalize()
 
 
@@ -166,7 +171,8 @@ class Player(GameCharacter):
 		stats = "Health: {0:3d}/{1:<3d} Attack: {2:3d} Defense: {3:3d}\n".\
 			format(self.values[0],self.maxHealth,self.values[1],self.values[2])
 		location = "Location: ({0},{1})\n".\
-			format(RM.sweepFunc(getLoc())[0],RM.sweepFunc(getLoc())[1])
+			format(RM.sweepFunc(self.sweep)[0],RM.sweepFunc(self.sweep)[1])
+			# format(RM.sweepFunc(getLoc())[0],RM.sweepFunc(getLoc())[1])
 		inventory = "Inventory:\n"
 		if(len(self.arms)==0):
 			inventory += "Arms: Nothing\n"
@@ -269,13 +275,13 @@ class Player(GameCharacter):
 # Functions
 #----------
 
-def getLoc():
-	"""Returns the sweep of the player"""
-	pList = list(Player.pos.keys())
-	if len(pList) > 1:
-		raise SystemExit('Player in multiple places at once - getLoc')
-	else:
-		return pList[0]
+# def getLoc():
+# 	"""Returns the sweep of the player"""
+	# pList = list(Player.pos.keys())
+	# if len(pList) > 1:
+	# 	raise SystemExit('Player in multiple places at once - getLoc')
+	# else:
+	# 	return pList[0]
 #-----------
 # Enemy Names
 #------------

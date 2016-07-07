@@ -69,7 +69,7 @@ def buildRoom(swp,diff):
         # launch.launchScreen()
         # print(VFM.help())
         VFM.pName = input("\nWhat is your name, brave adventurer: \n")
-        player = CM.Player('you',swp)
+        VFM.player = CM.Player(VFM.pName,swp)
         startSword = IM.Sword("trusty",swp)
         startShield = IM.Shield("reliable",swp)
         VFM.take(startSword.itemName,startSword.itemType)
@@ -84,7 +84,7 @@ def buildRoom(swp,diff):
         del IM.shieldAdj[1]['reliable']
         startStr = "Armed with their "+startSword.itemName+' '+\
         	startSword.itemType+' and '+startShield.itemName+' '+\
-        	startShield.itemType+', '+VFM.pName.capitalize()+\
+        	startShield.itemType+', '+VFM.player.name.capitalize()+\
         	' departed into the darkness of the dungeon.'
         return launch.prettyPrint(startStr)
     elif diff == 4:     # boss room
