@@ -93,7 +93,7 @@ def examineItem(adj,iType):
 
 def examineRoom():
 	"""Displays the items and enemies in the player's room"""
-	thisSwp = player.swp
+	thisSwp = player.sweep
 	thisRoom = RM.sweepFunc(thisSwp)
 	roomStr = "Current room: ({0},{1})\n".format(thisRoom[0],thisRoom[1])
 	if len(RM.rooms[thisSwp].enemies) > 0:
@@ -334,7 +334,8 @@ def unequip(adj = None,iType = None):
 
 def move(direction = None,arg2 = None):
 	"""Select a compass direction (NSEW) to move the player"""
-	curSwp = CM.getLoc()
+	# curSwp = CM.getLoc()
+	curSwp = player.sweep
 	curPos = RM.sweepFunc(curSwp)
 	nbors = {}	# keys: valid directions; values: corresponding room
 	# North
@@ -366,10 +367,14 @@ def move(direction = None,arg2 = None):
 			toPos = RM.sweepFunc(toSwp)
 			# RM.addToRoom('you',toSwp)
 			# RM.delFromRoom('you',curSwp)
-			RM.rooms[toSwp].enemies['you'] = CM.GameCharacter.objects['you']
-			del RM.rooms[curSwp].enemies['you']
-			del CM.Player.pos[curSwp]
-			CM.Player.pos[toSwp] = RM.rooms[toSwp]
+			# RM.rooms[toSwp].enemies['you'] = CM.GameCharacter.objects['you']
+			# del RM.rooms[curSwp].enemies['you']
+			# del CM.Player.pos[curSwp]
+			# CM.Player.pos[toSwp] = RM.rooms[toSwp]
+			RM.rooms[toSwp].enemies[player.name] = player
+			del RM.rooms[curSwp].enemies[player.name]
+			player.sweep = toSwp
+			player.prevSwp = curSwp
 			return 'Moved from {0} to {1}'.format(curPos,toPos)
 		else:
 			return 'No door in that direction.'

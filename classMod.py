@@ -146,7 +146,7 @@ class Player(GameCharacter):
 	# legs = {}
 	# head = {}
 	# pack = {}
-	pos = {}
+	# pos = {}
 	potions = [0,0,0]
 
 	def __init__(self,name,sweep):#,locX,locY):
