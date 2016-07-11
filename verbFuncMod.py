@@ -11,6 +11,7 @@
 import classMod as CM
 import itemMod as IM
 import roomMod as RM
+from launch import prettyPrint
 #----------------------
 #	Verb Functions
 #----------------------
@@ -291,7 +292,7 @@ def equip(adj = None,iType = None):
 			else:
 				return "No item {} in pack.".format(equipObj)
 		else:
-			return "EQUIP - Will add a routine to show all items in pack with a given adjective"
+			return "Need to specify type of item to equip"
 
 
 def equipFull(equipSlot):
@@ -302,31 +303,38 @@ def equipFull(equipSlot):
 def unequip(adj = None,iType = None):
 	"""Unequip an item and place it in your pack"""
 	if adj != None:
-		eStr = IM.allAdj[IM.inRare(adj)][adj]
-		if iType != None:
-			item = adj+" "+iType
-			if item in player.arms:
-				itemCls = player.arms[item]
-				del player.arms[item]
-				player.valEnhance(eStr,1)
-				player.pack[item] = itemCls
-				return "You unequipped the {}.".format(item)
-			elif item in player.legs:
-				itemCls = player.legs[item]
-				del player.legs[item]
-				player.valEnhance(eStr,1)
-				player.pack[item] = itemCls
-				return "You unequipped the {}".format(item)
-			elif item in player.head:
-				itemCls = player.head[item]
-				del player.head[item]
-				player.valEnhance(eStr,1)
-				player.pack[item] = itemCls
-				return "You unequipped the {}".format(item)
+		rare = IM.inRare(adj)
+		if rare != 0:
+			eStr = IM.allAdj[IM.inRare(adj)][adj]
+			if iType != None:
+				item = adj+" "+iType
+				if item in player.arms:
+					itemCls = player.arms[item]
+					del player.arms[item]
+					player.valEnhance(eStr,1)
+					player.pack[item] = itemCls
+					return "You unequipped the {}.".format(item)
+				elif item in player.legs:
+					itemCls = player.legs[item]
+					del player.legs[item]
+					player.valEnhance(eStr,1)
+					player.pack[item] = itemCls
+					return "You unequipped the {}".format(item)
+				elif item in player.head:
+					itemCls = player.head[item]
+					del player.head[item]
+					player.valEnhance(eStr,1)
+					player.pack[item] = itemCls
+					return "You unequipped the {}".format(item)
+				else:
+					return "Item {} not equipped.".format(item)
 			else:
-				return "Item {} not equipped.".format(item)
+				return("Need to specify type of item to unequip")
 		else:
-			print("UNEQUIP - Will add a routine to show all items in pack with a given adjective")
+			if iType != None:
+				return("No item equipped by name {}".format(adj+" "+iType))
+			else:
+				return("Need to specify type of item to unequip")
 	else:
 		return "Need target to unequip."
 
@@ -408,7 +416,7 @@ def validCoord(curcoord,dim):
 
 def quitGame(val = None,arg2 = None):
 	"""Quit the game"""
-	print('You are about to quit the game. If you do so, you will lose'+\
+	prettyPrint('You are about to quit the game. If you do so, you will lose'+\
 		' all progress.\nAre you sure you want to do this?\n')
 	quitVal = str(input('Press y to quit\n: ')).lower()
 	if quitVal == 'y':

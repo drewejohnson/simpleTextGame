@@ -3,7 +3,7 @@
 
 # Text Based Python Game
 #-----------------------
-gameSpace = 60
+gameSpace = 70
 def prettyIntro():
     """Launch screen visuals for text-based python game"""
     print('+'*gameSpace+"\n")
@@ -19,18 +19,23 @@ def prettyIntro():
         print("{str:^{spc}}".format(str = line,spc = gameSpace))
     print("\n"+'+'*gameSpace)
 
-def prettyPrint(str):
+
+def prettyPrint(inStr):
     """Print a string, centered, with some padding on each side"""
     w = gameSpace
     pad = 2     # leave pad/2 spaces on each side of the string
-#    cleanStr = str.replace('\n',' ')
-    lenStr = len(str)
-    fullLine = lenStr//(w-pad)
-    lineLen = w-pad         # length of printable line
-    for n in range(0,fullLine):
-        print("{thisStr:^{width}}"\
-            .format(thisStr = str[lineLen*n:lineLen*(n+1)],width = w))
-    print("{thisStr:^{width}}".format(thisStr =str[lineLen*(n+1):],width = w ))
+    strLst = inStr.split()
+    outStr = strLst[0]
+    char = len(outStr)
+    for i in range(1,len(strLst)):
+        word = strLst[i]
+        if char + len(word) > w-pad:
+            outStr += "\n"+word
+            char = len(word)
+        else:
+            outStr += " "+word
+            char += len(word)+1
+    print(outStr)
 
 
 def launchScreen():

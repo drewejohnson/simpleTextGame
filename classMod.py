@@ -154,7 +154,7 @@ class Player(GameCharacter):
 		self.values = [5,5,5]
 		self.maxHealth = self.values[0]*2
 		# self.potions = [0,0,0]
-		super().__init__(name,sweep,self.values)#,locX,locY)
+		super().__init__(name.lower(),sweep,self.values)#,locX,locY)
 		# self.pos[sweep] = RM.rooms[sweep]
 		self.sweep = sweep		# player location
 		self.prevSwp = sweep
