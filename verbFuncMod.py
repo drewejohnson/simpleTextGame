@@ -11,6 +11,7 @@
 import classMod as CM
 import itemMod as IM
 import roomMod as RM
+from launch import prettyPrint
 #----------------------
 #	Verb Functions
 #----------------------
@@ -408,7 +409,7 @@ def validCoord(curcoord,dim):
 
 def quitGame(val = None,arg2 = None):
 	"""Quit the game"""
-	print('You are about to quit the game. If you do so, you will lose'+\
+	prettyPrint('You are about to quit the game. If you do so, you will lose'+\
 		' all progress.\nAre you sure you want to do this?\n')
 	quitVal = str(input('Press y to quit\n: ')).lower()
 	if quitVal == 'y':
