@@ -79,7 +79,7 @@ def buildRoom(swp,diff):
         startPotion = IM.Potion(0,swp)
         print(VFM.take("potion"))
         gobbly = CM.Goblin("gobbly",swp,"unlucky")
-        gobbly.values[1] = 0
+        gobbly.values = [5,1,2]
         del IM.swordAdj[1]["trusty"]
         del IM.shieldAdj[1]['reliable']
         startStr = "Armed with their "+startSword.itemName+' '+\

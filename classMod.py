@@ -81,7 +81,7 @@ class GameCharacter:
 					other.values[0] = 0
 					return 2
 				else:
-					other.values[0] -= combatDiff
+					other.values[0] -= abs(combatDiff)
 				return 1
 			else:
 				return 0		# failed attack
@@ -89,7 +89,7 @@ class GameCharacter:
 class Goblin(GameCharacter):
 	def __init__(self,name,sweep,adj = None):#,locX,locY):
 		self.className = "goblin"
-		gobValues = [5,2,2]			# 5 health, 1 attack and defense
+		gobValues = [5,5,5]			# 5 health, 1 attack and defense
 		super().__init__(name,sweep,gobValues)#,locX,locY)
 		self._desc = "A foul goblin called "+self.name.capitalize()
 		if adj != None:
@@ -100,7 +100,7 @@ class Goblin(GameCharacter):
 class Werewolf(GameCharacter):
 	def __init__(self,name,sweep,adj = None):
 		self.className = "werewolf"
-		wolfValues = [6,4,5]
+		wolfValues = [6,7,6]
 		super().__init__(name,sweep,wolfValues)
 		self._desc = "A ferocious wolf named "+self.name.capitalize()
 		if adj != None:
@@ -111,7 +111,7 @@ class Werewolf(GameCharacter):
 class Elf(GameCharacter):
 	def __init__(self,name,sweep,adj=None):
 		self.className = "elf"
-		elfValues = [8,3,7]
+		elfValues = [6,8,7]
 		super().__init__(name,sweep,elfValues)
 		self._desc = "An estranged elf named {}".format(self.name.capitalize())
 		if adj != None:
@@ -122,7 +122,7 @@ class Elf(GameCharacter):
 class Wizard(GameCharacter):
 	def __init__(self,name,sweep,adj=None):
 		self.className = "wizard"
-		wizValues = [10,7,8]
+		wizValues = [9,7,8]
 		super().__init__(name,sweep,wizValues)
 		self._desc = "A powerful wizard named {}".format(self.name.capitalize())
 		if adj != None:
@@ -151,8 +151,8 @@ class Player(GameCharacter):
 
 	def __init__(self,name,sweep):#,locX,locY):
 		self.className = "Adventurer"
-		self.values = [5,5,5]
-		self.maxHealth = self.values[0]*2
+		self.values = [7,5,5]
+		self.maxHealth = self.values[0]
 		# self.potions = [0,0,0]
 		super().__init__(name.lower(),sweep,self.values)#,locX,locY)
 		# self.pos[sweep] = RM.rooms[sweep]
@@ -271,26 +271,14 @@ class Player(GameCharacter):
 		else:
 			return 0
 
-
-#----------
-# Functions
-#----------
-
-# def getLoc():
-# 	"""Returns the sweep of the player"""
-	# pList = list(Player.pos.keys())
-	# if len(pList) > 1:
-	# 	raise SystemExit('Player in multiple places at once - getLoc')
-	# else:
-	# 	return pList[0]
 #-----------
 # Enemy Names
 #------------
 
-gobNames = ["Gob1","Gob2","Gob3","Gob4","Gob5","Gob6"]
-elfNames = ["Elf1","Elf2","Elf3","Elf4","Elf5","Elf6"]
-wizNames = ["Wiz1","Wiz2","Wiz3","Wiz4","Wiz5","Wiz6"]
-wolfNames = ["Wolf1","Wolf2","Wolf3","Wolf4","Wolf5","Wolf6"]
+gobNames = ["Gnarly","Dopy","Greasy","Jabber","Grimy"]
+elfNames = ["Legalad","Legolike","Legalass","Legless"]
+wizNames = ["Merlin","Grandalf","Dumbledude","Snep","Moldewart","Whiny"]
+wolfNames = ["CrookedTeeth","ThickFur","Str8killah","Howler","-undecipherable-"]
 dragonNames = ["Smaug","Toothless","Nibbler"]
 # To draw from names: grab an index using random.randint(0,len(LIST))
 # Use the name corresponding to that integer
