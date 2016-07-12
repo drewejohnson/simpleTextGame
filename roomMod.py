@@ -79,7 +79,7 @@ def buildRoom(swp,diff):
         startPotion = IM.Potion(0,swp)
         print(VFM.take("potion"))
         gobbly = CM.Goblin("gobbly",swp,"unlucky")
-        gobbly.values[1] = 0
+        gobbly.values = [5,1,2]
         del IM.swordAdj[1]["trusty"]
         del IM.shieldAdj[1]['reliable']
         startStr = "Armed with their "+startSword.itemName+' '+\
@@ -121,8 +121,12 @@ def buildRoom(swp,diff):
                     else:
                         thisType = R.choice(list(enemyChoice.keys()))
                         thisName = R.choice(list(enemyChoice[thisType]))
-                        thisAdj = R.choice(list(IM.allAdj[diffRare]))
-                        eStr = IM.allAdj[diffRare][thisAdj]
+                        if diff > 1:
+                            thisAdj = R.choice(list(IM.allAdj[diffRare]))
+                            eStr = IM.allAdj[diffRare][thisAdj]
+                        else:
+                            thisAdj = None
+                            eStr = None
                         thisEnemy = thisType(thisName,swp,thisAdj)
                         thisEnemy.enhance(eStr)
                 else:       # add an item to the room
