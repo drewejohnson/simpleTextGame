@@ -25,9 +25,7 @@ class GameCharacter:
 		GameCharacter.objects[self.name.lower()] = self
 		self.values = values
 		RM.rooms[sweep].enemies[self.name.lower()] = self
-		# print("Added a {0} {1} to room {2}".format(name,self,RM.sweepFunc(sweep)))
 		# self.name stores keys as character names, not classNames
-
 
 
 	def getDesc(self):
@@ -72,7 +70,10 @@ class GameCharacter:
 		if combatDiff > 0:
 			if combatDiff >= other.values[0]:
 				other.values[0] = 0
-				return 2		# other is dead
+				if isinstance(other,Dragon):
+					return 99
+				else:
+					return 2		# other is dead
 			else:
 				other.values[0] -= combatDiff
 			return 1		# successful attack
