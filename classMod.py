@@ -47,19 +47,20 @@ class GameCharacter:
 
 	def enhance(self,eStr):
 		"""Way to increase the enemy difficulty using a given adjective"""
-		if len(eStr)%2 != 0:
-			raise SystemExit('Odd string length for enemyEnhance {0} on {1}'.\
-				format(eStr,self))
-		else:
-			for c in range(0,len(eStr),2):
-				if eStr[c] == 'a':
-					self.values[1] += int(eStr[c+1])
-				elif eStr[c] == 'd':
-					self.values[2] += int(eStr[c+1])
-				elif eStr[c] == 'h':
-					self.values[0] += int(eStr[c+1])
-				else:
-					raise SystemExit("Bad enhancer {} in enemyEnhance".format(eStr))
+		if eStr != None:
+			if len(eStr)%2 != 0:
+				raise SystemExit('Odd string length for enemyEnhance {0} on {1}'.\
+					format(eStr,self))
+			else:
+				for c in range(0,len(eStr),2):
+					if eStr[c] == 'a':
+						self.values[1] += int(eStr[c+1])
+					elif eStr[c] == 'd':
+						self.values[2] += int(eStr[c+1])
+					elif eStr[c] == 'h':
+						self.values[0] += int(eStr[c+1])
+					else:
+						raise SystemExit("Bad enhancer {} in enemyEnhance".format(eStr))
 			# print("Applied enhancement {0} to {1}".format(eStr,self))
 
 
@@ -81,8 +82,8 @@ class GameCharacter:
 					other.values[0] = 0
 					return 2
 				else:
-					other.values[0] -= abs(combatDiff)
-				return 1
+					other.values[0] -= abs(combatDiff)*int(R.random())
+					return 1
 			else:
 				return 0		# failed attack
 
@@ -111,7 +112,7 @@ class Werewolf(GameCharacter):
 class Elf(GameCharacter):
 	def __init__(self,name,sweep,adj=None):
 		self.className = "elf"
-		elfValues = [6,8,7]
+		elfValues = [7,7,7]
 		super().__init__(name,sweep,elfValues)
 		self._desc = "An estranged elf named {}".format(self.name.capitalize())
 		if adj != None:
@@ -122,7 +123,7 @@ class Elf(GameCharacter):
 class Wizard(GameCharacter):
 	def __init__(self,name,sweep,adj=None):
 		self.className = "wizard"
-		wizValues = [9,7,8]
+		wizValues = [9,6,7]
 		super().__init__(name,sweep,wizValues)
 		self._desc = "A powerful wizard named {}".format(self.name.capitalize())
 		if adj != None:

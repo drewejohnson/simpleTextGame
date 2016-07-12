@@ -121,8 +121,12 @@ def buildRoom(swp,diff):
                     else:
                         thisType = R.choice(list(enemyChoice.keys()))
                         thisName = R.choice(list(enemyChoice[thisType]))
-                        thisAdj = R.choice(list(IM.allAdj[diffRare]))
-                        eStr = IM.allAdj[diffRare][thisAdj]
+                        if diff > 1:
+                            thisAdj = R.choice(list(IM.allAdj[diffRare]))
+                            eStr = IM.allAdj[diffRare][thisAdj]
+                        else:
+                            thisAdj = None
+                            eStr = None
                         thisEnemy = thisType(thisName,swp,thisAdj)
                         thisEnemy.enhance(eStr)
                 else:       # add an item to the room
