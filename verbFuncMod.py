@@ -11,7 +11,7 @@
 import classMod as CM
 import itemMod as IM
 import roomMod as RM
-from launch import prettyPrint
+from launch import prettyPrint,victory
 #----------------------
 #	Verb Functions
 #----------------------
@@ -164,6 +164,8 @@ def hit(enemy = None,arg2 = None):
 				return "You killed {0}!".format(enemy.capitalize())
 			elif status == 0:
 				return "Attack strength too low. Failed to hit {}".format(enemy)
+			elif status == 99:
+				return victory(player,thingObj)
 		else:
 			return "There is no {0} in this room".format(enemy)
 	else:

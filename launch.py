@@ -24,6 +24,12 @@ def prettyIntro():
 
 def prettyPrint(inStr):
     """Print a string, centered, with some padding on each side"""
+    print(prettyString(inStr))
+    # will do a better job of making this pretty and sleek later
+
+
+def prettyString(inStr):
+    """Print a string, centered, with some padding on each side"""
     w = gameSpace
     pad = 2     # leave pad/2 spaces on each side of the string
     strLst = inStr.split()
@@ -37,7 +43,7 @@ def prettyPrint(inStr):
         else:
             outStr += " "+word
             char += len(word)+1
-    print(outStr)
+    return outStr
 
 
 def launchScreen():
@@ -70,12 +76,24 @@ def gameOver(enemyCls):
     else:
         raise SystemExit("Until next time, brave adventurer")
 
+
+def victory(player,boss):
+    vStr = "-+"*int(gameSpace/2)
+    vStr += "\nCONGRATULATIONS {0}!!! You have slain {1} and conquered this dungeon!".\
+        format(player.name.upper().rstrip(),boss.name+" the "+boss.className)
+    vStr += "\nYou deserve the praise of many generations, "+\
+        "and the drinks of a thousand kingdoms. You've earned it."
+    vStr += "\n"+"-+"*int(gameSpace/2)
+    print(prettyString(vStr))
+    dummy = input("Press enter to conclude your adventure: ")
+    raise SystemExit("")
+
 #--------
 # Game descriptions
 #-----------
-gameDesc = "A simple text-based game where you explore a maze,fight monsters, and obtain gear."
+gameDesc = "A simple text-based game where you explore a dungeon,fight monsters, and obtain gear."
 gameObjective = "Traverse through the dangerous dungeon to defeat the boss "+\
-    "located at the center. Defeat enemies as you encounter them, for they "+\
+    "located at the far corner. Defeat enemies as you encounter them, for they "+\
     "may be guarding valuable treasure. Enemies will become more difficult " +\
     "as you approach the center, but loot becomes more powerful as well. " +\
     "In combat, enemies will only attack you if you attack them first."
