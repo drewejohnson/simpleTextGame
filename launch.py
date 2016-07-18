@@ -18,7 +18,7 @@ def prettyIntro():
     lineList = [line1,line2,line3,line4,line5,line6,line7]
     for line in lineList:
         print("{str:^{spc}}".format(str = line,spc = gameSpace))
-        sleep(0.2)
+        # sleep(0.2)
     print("\n"+'+'*gameSpace)
 
 
@@ -50,9 +50,9 @@ def launchScreen():
     """Driver for the launch screen of the game. Prints rules and objectives"""
     prettyIntro()
     prettyPrint(gameDesc.replace('\n',' '))
-    sleep(0.5)
+    # sleep(0.5)
     prettyPrint(gameObjective.replace('\t',' '))
-    sleep(0.5)
+    # sleep(0.5)
 #    print(VFM.sortedVerbs)
     print("{s:^{w}}".format(s = "Commands: ",w = gameSpace))
 
