@@ -59,8 +59,26 @@ def examineTutorial():
     prettyPrint("These are the basics of the examine function. But looking at things isn't the point of the game. You're here to hit stuff. Let's talk about that next")
 
 
-
-
+def hitTutorial():
+    prettyPrint("The HIT command starts a tic-for-tac combat routine, where the enemy attacks you only if you attack first.")
+    prettyPrint("Type HIT GOBBLY to start combat")
+    while True:
+        e = input(": ")
+        if e.lower() == "hit gobbly":
+            print(VFM.hit('gobbly'))
+            break
+        else:
+            print("Type HIT GOBBLY")
+    prettyPrint("You will hit your target if your attack strength is greater than their defense. If not, there is still a chance to hit them based on luck.")
+    prettyPrint("Hit gobbly again to finish him off.")
+    while True:
+        e = input(": ")
+        if e.lower() == "hit gobbly":
+            print(VFM.hit('gobbly'))
+            break
+        else:
+            print("Type HIT GOBBLY")
+    prettyPrint("Congratulations! You just killed your first enemy! Now you are free to move around the dungeon and take loot.")
 
 
 def teachGame():
@@ -71,10 +89,11 @@ def teachGame():
     prettyPrint("Commands in the tutorial will be shown in all caps. However, your inputs need not be upper nor lower case.")
     prettyPrint("Let's learn about our brave adventurer, {0}. Type EXAMINE {1}".\
         format(VFM.player.name.capitalize(),VFM.player.name.upper()))
-    while True:
-        v = input(": ").split()
-        if v[0].lower() == 'examine' and (v[1].lower() == 'self' or v[1].lower() == VFM.player.name.lower()):
-            examineTutorial()
-            break
-        else:
-            prettyPrint("Type EXAMINE {0}".format(VFM.player.name.upper()))
+    # while True:
+    #     v = input(": ").split()
+    #     if v[0].lower() == 'examine' and (v[1].lower() == 'self' or v[1].lower() == VFM.player.name.lower()):
+    #         examineTutorial()
+    #         break
+    #     else:
+    #         prettyPrint("Type EXAMINE {0}".format(VFM.player.name.upper()))
+    hitTutorial()
