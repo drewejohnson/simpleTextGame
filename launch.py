@@ -24,7 +24,6 @@ def prettyIntro():
 
 def prettyPrint(inStr):
     """Print a string, centered, with some padding on each side"""
-    sleep(0.01)
     print(prettyString(inStr))
     # will do a better job of making this pretty and sleek later
 
