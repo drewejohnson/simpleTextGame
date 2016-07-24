@@ -102,7 +102,7 @@ class Goblin(GameCharacter):
 class Werewolf(GameCharacter):
 	def __init__(self,name,sweep,adj = None):
 		self.className = "werewolf"
-		wolfValues = [6,7,6]
+		wolfValues = [5,7,4]
 		super().__init__(name,sweep,wolfValues)
 		self._desc = "A ferocious wolf named "+self.name.capitalize()
 		if adj != None:
@@ -113,7 +113,7 @@ class Werewolf(GameCharacter):
 class Elf(GameCharacter):
 	def __init__(self,name,sweep,adj=None):
 		self.className = "elf"
-		elfValues = [7,7,7]
+		elfValues = [6,5,7]
 		super().__init__(name,sweep,elfValues)
 		self._desc = "An estranged elf named {}".format(self.name.capitalize())
 		if adj != None:

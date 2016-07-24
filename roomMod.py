@@ -111,7 +111,7 @@ def buildRoom(swp,diff):
                         enemyChoice[CM.Goblin] = CM.gobNames
                     if len(CM.elfNames) > 0:
                         enemyChoice[CM.Elf] = CM.elfNames
-                    if len(CM.wizNames) > 0:
+                    if diff > 1 and len(CM.wizNames) > 0:
                         enemyChoice[CM.Wizard] = CM.wizNames
                     if len(CM.wolfNames) > 0:
                         enemyChoice[CM.Werewolf] = CM.wolfNames
