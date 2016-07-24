@@ -70,7 +70,7 @@ def hitTutorial():
         else:
             print("Type HIT GOBBLY")
     prettyPrint("You will hit your target if your attack strength is greater than their defense. If not, there is still a chance to hit them based on luck.")
-    prettyPrint("Hit gobbly again to finish him off.")
+    prettyPrint("Hit Gobbly again to finish him off.")
     while True:
         e = input(": ")
         if e.lower() == "hit gobbly":
@@ -79,6 +79,21 @@ def hitTutorial():
         else:
             print("Type HIT GOBBLY")
     prettyPrint("Congratulations! You just killed your first enemy! Now you are free to move around the dungeon and take loot.")
+
+
+def moveTutorial():
+    mStr = "The main boss is located somewhere in this dungeon, and it is your task to defeat said monster."+\
+        " As you move through the dungeon, if you find yourself fighting more difficult monsters, you're going the right way!"
+    prettyPrint(mStr)
+    prettyPrint("Type MOVE to see the list of valid directions to move")
+    while True:
+        e = input(": ")
+        if e.lower() == "move":
+            print(VFM.move())
+            break
+        else:
+            print("Type MOVE")
+    prettyPrint("You can only move forward from a room if the room is free of enemies. You can retreat back to your previous room if the monsters are too difficult")
 
 
 def teachGame():
@@ -97,3 +112,4 @@ def teachGame():
     #     else:
     #         prettyPrint("Type EXAMINE {0}".format(VFM.player.name.upper()))
     hitTutorial()
+    moveTutorial()
