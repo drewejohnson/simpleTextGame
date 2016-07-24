@@ -26,8 +26,14 @@ RM.buildGame()
 
 
 dummy = input("Enter 'y' to begin a tutorial.\n: ")
-if dummy[0].lower() == 'y':
+if len(dummy) > 0 and dummy[0].lower() == 'y':
 	tutorial.teachGame()
 
+startStr = "Armed with their "+IM.startSword.itemName+' '+\
+	IM.startSword.itemType+' and '+IM.startShield.itemName+' '+\
+	IM.startShield.itemType+', '+VFM.player.name.capitalize()+\
+	' departed into the darkness of the dungeon.'
+
+launch.prettyPrint(startStr)
 while True:
 	VFM.getInput()

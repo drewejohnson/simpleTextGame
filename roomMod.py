@@ -66,27 +66,21 @@ def thisDiff(s):
 def buildRoom(swp,diff):
     """Add enemies and items to the room swp according to difficulty diff"""
     if diff == 0:       # player start room
-        # launch.launchScreen()
-        # print(VFM.help())
         VFM.pName = input("\nWhat is your name, brave adventurer: \n")
         VFM.player = CM.Player(VFM.pName,swp)
-        startSword = IM.Sword("trusty",swp)
-        startShield = IM.Shield("reliable",swp)
-        VFM.take(startSword.itemName,startSword.itemType)
-        VFM.take(startShield.itemName,startShield.itemType)
-        print(VFM.equip(startSword.itemName,startSword.itemType))
-        print(VFM.equip(startShield.itemName,startShield.itemType))
+        IM.startSword = IM.Sword("trusty",swp)
+        IM.startShield = IM.Shield("reliable",swp)
+        VFM.take(IM.startSword.itemName,IM.startSword.itemType)
+        VFM.take(IM.startShield.itemName,IM.startShield.itemType)
         startPotion = IM.Potion(0,swp)
         print(VFM.take("potion"))
         gobbly = CM.Goblin("gobbly",swp,"unlucky")
         gobbly.values = [5,1,2]
         del IM.swordAdj[1]["trusty"]
         del IM.shieldAdj[1]['reliable']
-        startStr = "Armed with their "+startSword.itemName+' '+\
-        	startSword.itemType+' and '+startShield.itemName+' '+\
-        	startShield.itemType+', '+VFM.player.name.capitalize()+\
-        	' departed into the darkness of the dungeon.'
-        return launch.prettyPrint(startStr)
+        print(VFM.equip(IM.startSword.itemName,IM.startSword.itemType))
+        print( VFM.equip(IM.startShield.itemName,IM.startShield.itemType))
+        return 0
     elif diff == 4:     # boss room
         boss = CM.Dragon(R.choice(CM.dragonNames),swp)
         return 0
@@ -102,8 +96,6 @@ def buildRoom(swp,diff):
                 diffRare = 3
             else:
                 diffRare = diff-1
-            # print("Room: {0}, Roll: {1},DiffRare: {2}".\
-            #     format(sweepFunc(swp),roll,diffRare))
             if diffRare > 0:
                 if rn2 > splitIE[diffRare]:  # add an enemy to the room
                     enemyChoice = {}
@@ -145,8 +137,6 @@ def buildRoom(swp,diff):
                         thisItem = thisType(thisAdj,swp)
                         del itemChoice[thisType][thisAdj]
         if len(rooms[swp].enemies)>len(rooms[swp].items):
-            # print(sweepFunc(swp),diffRare)
-            # print(len(rooms[swp].enemies),len(rooms[swp].items))
             for p in range(0,R.randint(1,diff)):
                 thisPotion = IM.Potion(diff-1,swp)
                 # print(p)
