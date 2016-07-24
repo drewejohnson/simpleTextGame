@@ -83,7 +83,10 @@ class GameCharacter:
 					other.values[0] = 0
 					return 2
 				else:
-					other.values[0] -= abs(combatDiff)*int(R.random())
+					val = abs(combatDiff)*int(R.random())
+					if val == 0:
+						val = 1
+					other.values[0] -= val
 					return 1
 			else:
 				return 0		# failed attack

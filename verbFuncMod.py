@@ -147,7 +147,7 @@ def hit(enemy = None,arg2 = None):
 			thingObj = RM.rooms[swp].enemies[enemy]
 			status = player.attack(thingObj)
 			if status == 1:		# successful attack. enemy strikes back
-				print("You struck {0}. {1}'s health: {2}".\
+				print("You struck {0}.\nHealth: {2}".\
 					format(enemy.capitalize(),enemy.capitalize(),thingObj.values[0]))
 				status2 = thingObj.attack(player)
 				if status2 == 1:
@@ -163,7 +163,7 @@ def hit(enemy = None,arg2 = None):
 				del RM.rooms[swp].enemies[enemy]
 				return "You killed {0}!".format(enemy.capitalize())
 			elif status == 0:
-				return "Attack strength too low. Failed to hit {}".format(enemy)
+				return "{} dodged your attack.".format(enemy)
 			elif status == 99:
 				return victory(player,thingObj)
 		else:
