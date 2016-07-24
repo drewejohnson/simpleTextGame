@@ -5,6 +5,7 @@
 #-----------------------
 from time import sleep
 gameSpace = 70
+sTime = 0.2
 def prettyIntro():
     """Launch screen visuals for text-based python game"""
     print('+'*gameSpace+"\n")
@@ -18,7 +19,7 @@ def prettyIntro():
     lineList = [line1,line2,line3,line4,line5,line6,line7]
     for line in lineList:
         print("{str:^{spc}}".format(str = line,spc = gameSpace))
-        # sleep(0.2)
+        sleep(sTime)
     print("\n"+'+'*gameSpace)
 
 

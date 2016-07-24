@@ -25,8 +25,7 @@ print(VFM.help())
 RM.buildGame()
 
 
-# dummy = input("Press 'y' to begin a tutorial.\n  Or type SKIP to start the game")
-dummy = 'y'
+dummy = input("Enter 'y' to begin a tutorial.\n: ")
 if dummy[0].lower() == 'y':
 	tutorial.teachGame()
 

@@ -117,7 +117,7 @@ def finalWords():
     for each in fStr:
         prettyPrint(each)
     prettyPrint("Thus concludes the tutorial. If you forget what the possible commands are, type HELP to see all possible commands.")
-    prettyPrint("Good luck brave traveller.")
+    prettyPrint("Good luck brave adventurer.")
 
 def teachGame():
     """Show a series of prompts teaching the player the basic moves of the game"""
